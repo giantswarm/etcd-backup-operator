@@ -4,8 +4,11 @@ package service
 
 import (
 	"context"
+	"github.com/giantswarm/etcd-backup-operator/service/controller/resource"
+	"github.com/giantswarm/etcd-backup-operator/service/controller/resource/etcdbackup/storage"
 	"sync"
 
+	backupv1alpha1 "github.com/giantswarm/apiextensions/pkg/apis/backup/v1alpha1"
 	"github.com/giantswarm/k8sclient"
 	"github.com/giantswarm/k8sclient/k8srestconfig"
 	"github.com/giantswarm/microendpoint/service/version"
@@ -15,10 +18,10 @@ import (
 	"github.com/spf13/viper"
 	"k8s.io/client-go/rest"
 
-	"github.com/giantswarm/template-operator/flag"
-	"github.com/giantswarm/template-operator/pkg/project"
-	"github.com/giantswarm/template-operator/service/collector"
-	"github.com/giantswarm/template-operator/service/controller"
+	"github.com/giantswarm/etcd-backup-operator/flag"
+	"github.com/giantswarm/etcd-backup-operator/pkg/project"
+	"github.com/giantswarm/etcd-backup-operator/service/collector"
+	"github.com/giantswarm/etcd-backup-operator/service/controller"
 )
 
 // Config represents the configuration used to create a new service.
@@ -32,9 +35,9 @@ type Config struct {
 type Service struct {
 	Version *version.Service
 
-	bootOnce          sync.Once
-	todoController    *controller.TODO
-	operatorCollector *collector.Set
+	bootOnce             sync.Once
+	etcdBackupController *controller.EtcdBackup
+	operatorCollector    *collector.Set
 }
 
 // New creates a new configured service object.
@@ -51,6 +54,12 @@ func New(config Config) (*Service, error) {
 		serviceAddress = config.Viper.GetString(config.Flag.Service.Kubernetes.Address)
 	} else {
 		serviceAddress = ""
+	}
+	if config.Viper.GetString(config.Flag.Service.S3.Bucket) == "" {
+		return nil, microerror.Maskf(invalidConfigError, "S3 bucket must not be empty.")
+	}
+	if config.Viper.GetString(config.Flag.Service.S3.Region) == "" {
+		return nil, microerror.Maskf(invalidConfigError, "S3 region must not be empty.")
 	}
 
 	// Dependencies.
@@ -85,10 +94,9 @@ func New(config Config) (*Service, error) {
 	{
 		c := k8sclient.ClientsConfig{
 			Logger: config.Logger,
-			// TODO: If you are watching a new CRD, include here the AddToScheme function from apiextensions.
-			// SchemeBuilder: k8sclient.SchemeBuilder{
-			//     corev1alpha1.AddToScheme,
-			// },
+			SchemeBuilder: k8sclient.SchemeBuilder{
+				backupv1alpha1.AddToScheme,
+			},
 			RestConfig: restConfig,
 		}
 
@@ -98,15 +106,31 @@ func New(config Config) (*Service, error) {
 		}
 	}
 
-	var todoController *controller.TODO
+	etcdBackupMetrics := collector.ETCDBackupMetrics{}
+
+	var etcdBackupController *controller.EtcdBackup
 	{
 
-		c := controller.TODOConfig{
+		c := controller.ETCDBackupConfig{
 			K8sClient: k8sClient,
 			Logger:    config.Logger,
+			S3Config: storage.S3{
+				Bucket: config.Viper.GetString(config.Flag.Service.S3.Bucket),
+				Region: config.Viper.GetString(config.Flag.Service.S3.Region),
+			},
+			ETCDv2Settings: resource.ETCDv2Settings{
+				DataDir: config.Viper.GetString(config.Flag.Service.ETCDv2.DataDir),
+			},
+			ETCDv3Settings: resource.ETCDv3Settings{
+				Endpoints: config.Viper.GetString(config.Flag.Service.ETCDv3.Endpoints),
+				CaCert:    config.Viper.GetString(config.Flag.Service.ETCDv3.CaCert),
+				Key:       config.Viper.GetString(config.Flag.Service.ETCDv3.Key),
+				Cert:      config.Viper.GetString(config.Flag.Service.ETCDv3.Cert),
+			},
+			ETCDBackupMetrics: &etcdBackupMetrics,
 		}
 
-		todoController, err = controller.NewTODO(c)
+		etcdBackupController, err = controller.NewETCDBackup(c)
 		if err != nil {
 			return nil, microerror.Mask(err)
 		}
@@ -115,8 +139,9 @@ func New(config Config) (*Service, error) {
 	var operatorCollector *collector.Set
 	{
 		c := collector.SetConfig{
-			K8sClient: k8sClient.K8sClient(),
-			Logger:    config.Logger,
+			K8sClient:         k8sClient.K8sClient(),
+			Logger:            config.Logger,
+			ETCDBackupMetrics: &etcdBackupMetrics,
 		}
 
 		operatorCollector, err = collector.NewSet(c)
@@ -145,9 +170,9 @@ func New(config Config) (*Service, error) {
 	s := &Service{
 		Version: versionService,
 
-		bootOnce:          sync.Once{},
-		todoController:    todoController,
-		operatorCollector: operatorCollector,
+		bootOnce:             sync.Once{},
+		etcdBackupController: etcdBackupController,
+		operatorCollector:    operatorCollector,
 	}
 
 	return s, nil
@@ -157,6 +182,6 @@ func (s *Service) Boot(ctx context.Context) {
 	s.bootOnce.Do(func() {
 		go s.operatorCollector.Boot(ctx)
 
-		go s.todoController.Boot(ctx)
+		go s.etcdBackupController.Boot(ctx)
 	})
 }

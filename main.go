@@ -10,10 +10,10 @@ import (
 	"github.com/giantswarm/versionbundle"
 	"github.com/spf13/viper"
 
-	"github.com/giantswarm/template-operator/flag"
-	"github.com/giantswarm/template-operator/pkg/project"
-	"github.com/giantswarm/template-operator/server"
-	"github.com/giantswarm/template-operator/service"
+	"github.com/giantswarm/etcd-backup-operator/flag"
+	"github.com/giantswarm/etcd-backup-operator/pkg/project"
+	"github.com/giantswarm/etcd-backup-operator/server"
+	"github.com/giantswarm/etcd-backup-operator/service"
 )
 
 var (
@@ -109,6 +109,13 @@ func mainE(ctx context.Context) error {
 	daemonCommand.PersistentFlags().String(f.Service.Kubernetes.TLS.CAFile, "", "Certificate authority file path to use to authenticate with Kubernetes.")
 	daemonCommand.PersistentFlags().String(f.Service.Kubernetes.TLS.CrtFile, "", "Certificate file path to use to authenticate with Kubernetes.")
 	daemonCommand.PersistentFlags().String(f.Service.Kubernetes.TLS.KeyFile, "", "Key file path to use to authenticate with Kubernetes.")
+	daemonCommand.PersistentFlags().String(f.Service.S3.Bucket, "", "AWS S3 Bucket name.")
+	daemonCommand.PersistentFlags().String(f.Service.S3.Region, "", "AWS S3 Region name.")
+	daemonCommand.PersistentFlags().String(f.Service.ETCDv2.DataDir, "", "ETCD v2 Data Dir path.")
+	daemonCommand.PersistentFlags().String(f.Service.ETCDv3.Cert, "", "Client certificate for ETCD v3 connection")
+	daemonCommand.PersistentFlags().String(f.Service.ETCDv3.CaCert, "", "Client CA certificate for ETCD v3 connection")
+	daemonCommand.PersistentFlags().String(f.Service.ETCDv3.Key, "", "Client private key for ETCD v3 connection")
+	daemonCommand.PersistentFlags().String(f.Service.ETCDv3.Endpoints, "", "Endpoints for ETCD v3 connection")
 
 	newCommand.CobraCommand().Execute()
 
