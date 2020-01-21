@@ -37,18 +37,8 @@ func (config *S3) Upload(fpath string) (int64, error) {
 		}
 	}
 
-	// todo remove the minio wiring
-	endpoint := "http://localhost:9000"
-	true := true
-	sess, err := session.NewSession(&aws.Config{
-		Endpoint:   &endpoint,
-		DisableSSL: &true,
-		S3ForcePathStyle: &true,
-	})
-	// end todo remove the minio wiring
-
 	// Login to AWS S3
-	// sess, err := session.NewSession()
+	sess, err := session.NewSession()
 	if err != nil {
 		return -1, microerror.Mask(err)
 	}
