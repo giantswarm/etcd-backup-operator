@@ -10,13 +10,13 @@ import (
 )
 
 const (
-	EnvAWSAccessKeyID = "AWS_ACCESS_KEY_ID"
+	EnvAWSAccessKeyID     = "AWS_ACCESS_KEY_ID"
 	EnvAWSSecretAccessKey = "AWS_SECRET_ACCESS_KEY"
 )
 
 type S3 struct {
-	Bucket          string
-	Region          string
+	Bucket string
+	Region string
 }
 
 func NewS3(bucket string, region string) *S3 {
@@ -31,8 +31,8 @@ func (config *S3) Upload(fpath string) (int64, error) {
 	// - AWS_ACCESS_KEY_ID
 	// - AWS_SECRET_ACCESS_KEY
 	required := []string{EnvAWSAccessKeyID, EnvAWSSecretAccessKey}
-	for _,varname := range required {
-		if ! IsEnvVariableDefined(varname) {
+	for _, varname := range required {
+		if !IsEnvVariableDefined(varname) {
 			return -1, microerror.Mask(newMissingRequiredEnvVariableError(varname))
 		}
 	}
