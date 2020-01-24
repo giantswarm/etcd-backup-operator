@@ -11,6 +11,7 @@ import (
 	"github.com/giantswarm/etcd-backup-operator/service/controller/resource/etcdbackup/giantnetes"
 	"github.com/giantswarm/etcd-backup/metrics"
 	"github.com/giantswarm/microerror"
+	"github.com/giantswarm/operatorkit/controller/context/reconciliationcanceledcontext"
 	"os"
 	"time"
 )
@@ -157,7 +158,10 @@ func (r *Resource) executeBackups(ctx context.Context, etcdBackup v1alpha1.ETCDB
 		return microerror.Mask(err)
 	}
 
-	r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Status persisted for %s.", etcdBackup.Name))
+	r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Status persisted."))
+
+	r.logger.LogCtx(ctx, "level", "debug", "message", "canceling reconciliation")
+	reconciliationcanceledcontext.SetCanceled(ctx)
 
 	return nil
 }
