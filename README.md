@@ -22,7 +22,7 @@ You can test locally using `kind`.
 export AWS_ACCESS_KEY_ID=...
 export AWS_SECRET_ACCESS_KEY=...
 go run -mod=vendor main.go daemon \
---service.kubernetes.kubeconfig=`kind get kubeconfig` \
+--service.kubernetes.kubeconfig="`kind get kubeconfig`" \
 --service.s3.bucket=etcd-backup \
 --service.s3.region=eu-west-1 \
 --service.etcdv2.datadir=<etcd storage dir for v2 backup> \

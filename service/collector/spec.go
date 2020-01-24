@@ -16,6 +16,7 @@ type singleEtcdBackupMetric struct {
 	BackupSize     int64
 	AttemptTS      int64
 	SuccessTS      int64
+	Sent           bool
 }
 
 type ETCDBackupMetrics struct {
@@ -36,6 +37,7 @@ func (m *ETCDBackupMetrics) Update(instanceName string, metrics *metrics.BackupM
 
 	now := time.Now().Unix()
 
+	current.Sent = false
 	current.AttemptTS = now
 	current.Attempts = current.Attempts + 1
 	if metrics.Successful {
