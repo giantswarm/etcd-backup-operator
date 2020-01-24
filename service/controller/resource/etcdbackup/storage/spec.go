@@ -1,5 +1,5 @@
 package storage
 
-type Interface interface {
+type Uploader interface {
 	Upload(string) (int64, error)
 }

@@ -56,10 +56,10 @@ func New(config Config) (*Service, error) {
 		serviceAddress = ""
 	}
 	if config.Viper.GetString(config.Flag.Service.S3.Bucket) == "" {
-		return nil, microerror.Maskf(invalidConfigError, "S3 bucket must not be empty.")
+		return nil, microerror.Maskf(invalidConfigError, "S3Uploader bucket must not be empty.")
 	}
 	if config.Viper.GetString(config.Flag.Service.S3.Region) == "" {
-		return nil, microerror.Maskf(invalidConfigError, "S3 region must not be empty.")
+		return nil, microerror.Maskf(invalidConfigError, "S3Uploader region must not be empty.")
 	}
 
 	// Dependencies.
@@ -114,7 +114,7 @@ func New(config Config) (*Service, error) {
 		c := controller.ETCDBackupConfig{
 			K8sClient: k8sClient,
 			Logger:    config.Logger,
-			S3Config: storage.S3{
+			S3Config: storage.S3Uploader{
 				Bucket: config.Viper.GetString(config.Flag.Service.S3.Bucket),
 				Region: config.Viper.GetString(config.Flag.Service.S3.Region),
 			},

@@ -16,7 +16,7 @@ const (
 type Config struct {
 	K8sClient         k8sclient.Interface
 	Logger            micrologger.Logger
-	S3Config          storage.S3
+	S3Config          storage.S3Uploader
 	ETCDv2Settings    resource.ETCDv2Settings
 	ETCDv3Settings    resource.ETCDv3Settings
 	ETCDBackupMetrics *collector.ETCDBackupMetrics
@@ -25,7 +25,7 @@ type Config struct {
 type Resource struct {
 	logger            micrologger.Logger
 	K8sClient         k8sclient.Interface
-	S3Config          storage.S3
+	S3Config          storage.S3Uploader
 	ETCDv2Settings    resource.ETCDv2Settings
 	ETCDv3Settings    resource.ETCDv3Settings
 	ETCDBackupMetrics *collector.ETCDBackupMetrics

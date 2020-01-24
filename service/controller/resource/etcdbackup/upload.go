@@ -8,10 +8,10 @@ import (
 )
 
 func (r *Resource) upload(ctx context.Context, filepath string) (int64, error) {
-	r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Upload strategy: S3"))
+	r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Upload strategy: S3Uploader"))
 
-	// Configure the Storage Interface to use for storing this backup
-	storageInterface := storage.NewS3(r.S3Config.Bucket, r.S3Config.Region)
+	// Configure the Storage Uploader to use for storing this backup
+	storageInterface := storage.NewS3Uploader(r.S3Config.Bucket, r.S3Config.Region)
 
 	// Upload
 	size, err := storageInterface.Upload(filepath)

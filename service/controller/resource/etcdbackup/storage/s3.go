@@ -14,19 +14,19 @@ const (
 	EnvAWSSecretAccessKey = "AWS_SECRET_ACCESS_KEY"
 )
 
-type S3 struct {
+type S3Uploader struct {
 	Bucket string
 	Region string
 }
 
-func NewS3(bucket string, region string) *S3 {
-	return &S3{
+func NewS3Uploader(bucket string, region string) *S3Uploader {
+	return &S3Uploader{
 		Bucket: bucket,
 		Region: region,
 	}
 }
 
-func (config *S3) Upload(fpath string) (int64, error) {
+func (config *S3Uploader) Upload(fpath string) (int64, error) {
 	// requires the following env variables to be set:
 	// - AWS_ACCESS_KEY_ID
 	// - AWS_SECRET_ACCESS_KEY
@@ -38,7 +38,7 @@ func (config *S3) Upload(fpath string) (int64, error) {
 		}
 	}
 
-	// Login to AWS S3
+	// Login to AWS S3Uploader
 	sess, err := session.NewSession()
 	if err != nil {
 		return -1, microerror.Mask(err)
@@ -73,7 +73,7 @@ func (config *S3) Upload(fpath string) (int64, error) {
 		ContentType:   aws.String("application/octet-stream"),
 	}
 
-	// Put object to S3.
+	// Put object to S3Uploader.
 	_, err = svc.PutObject(params)
 	if err != nil {
 		return -1, microerror.Mask(err)

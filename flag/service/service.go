@@ -9,7 +9,7 @@ import (
 // Service is an intermediate data structure for command line configuration flags.
 type Service struct {
 	Kubernetes kubernetes.Kubernetes
-	S3         storage.S3
+	S3         storage.S3Uploader
 	ETCDv2     resource.ETCDv2Settings
 	ETCDv3     resource.ETCDv3Settings
 }

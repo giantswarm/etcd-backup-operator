@@ -18,7 +18,7 @@ import (
 type etcdBackupResourceSetConfig struct {
 	K8sClient         k8sclient.Interface
 	Logger            micrologger.Logger
-	S3Config          storage.S3
+	S3Config          storage.S3Uploader
 	ETCDv2Settings    etcdresource.ETCDv2Settings
 	ETCDv3Settings    etcdresource.ETCDv3Settings
 	ETCDBackupMetrics *collector.ETCDBackupMetrics
