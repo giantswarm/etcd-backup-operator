@@ -2,3 +2,4 @@
 TODO
 !vendor/**
 !etcd-backup-operator
+/etcd-backup-operator

@@ -32,7 +32,8 @@ func (config *S3) Upload(fpath string) (int64, error) {
 	// - AWS_SECRET_ACCESS_KEY
 	required := []string{EnvAWSAccessKeyID, EnvAWSSecretAccessKey}
 	for _, varname := range required {
-		if !IsEnvVariableDefined(varname) {
+		_, defined := os.LookupEnv(varname)
+		if !defined {
 			return -1, microerror.Mask(newMissingRequiredEnvVariableError(varname))
 		}
 	}
