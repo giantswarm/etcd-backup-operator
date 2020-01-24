@@ -94,7 +94,7 @@ workflows:
               only: master
 
       - architect/push-to-app-catalog:
-          name: push-etcd-backup-operator-to-app-catalog
+          name: push-etcd-backup-operator-to-control-plane-app-catalog
           app_catalog: "control-plane-catalog"
           app_catalog_test: "control-plane-test-catalog"
           chart: "etcd-backup-operator"
