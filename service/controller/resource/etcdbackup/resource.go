@@ -16,19 +16,19 @@ const (
 type Config struct {
 	K8sClient         k8sclient.Interface
 	Logger            micrologger.Logger
-	S3Config          storage.S3Uploader
 	ETCDv2Settings    resource.ETCDv2Settings
 	ETCDv3Settings    resource.ETCDv3Settings
 	ETCDBackupMetrics *collector.ETCDBackupMetrics
+	Uploader          storage.Uploader
 }
 
 type Resource struct {
 	logger            micrologger.Logger
 	K8sClient         k8sclient.Interface
-	S3Config          storage.S3Uploader
 	ETCDv2Settings    resource.ETCDv2Settings
 	ETCDv3Settings    resource.ETCDv3Settings
 	ETCDBackupMetrics *collector.ETCDBackupMetrics
+	Uploader          storage.Uploader
 }
 
 func New(config Config) (*Resource, error) {
@@ -39,10 +39,10 @@ func New(config Config) (*Resource, error) {
 	r := &Resource{
 		logger:            config.Logger,
 		K8sClient:         config.K8sClient,
-		S3Config:          config.S3Config,
 		ETCDv2Settings:    config.ETCDv2Settings,
 		ETCDv3Settings:    config.ETCDv3Settings,
 		ETCDBackupMetrics: config.ETCDBackupMetrics,
+		Uploader:          config.Uploader,
 	}
 
 	return r, nil

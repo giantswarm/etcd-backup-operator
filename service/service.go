@@ -108,16 +108,17 @@ func New(config Config) (*Service, error) {
 
 	etcdBackupMetrics := collector.ETCDBackupMetrics{}
 
+	uploader := storage.NewS3Uploader(
+		config.Viper.GetString(config.Flag.Service.S3.Bucket),
+		config.Viper.GetString(config.Flag.Service.S3.Region),
+	)
+
 	var etcdBackupController *controller.EtcdBackup
 	{
 
 		c := controller.ETCDBackupConfig{
 			K8sClient: k8sClient,
 			Logger:    config.Logger,
-			S3Config: storage.S3Uploader{
-				Bucket: config.Viper.GetString(config.Flag.Service.S3.Bucket),
-				Region: config.Viper.GetString(config.Flag.Service.S3.Region),
-			},
 			ETCDv2Settings: resource.ETCDv2Settings{
 				DataDir: config.Viper.GetString(config.Flag.Service.ETCDv2.DataDir),
 			},
@@ -128,6 +129,7 @@ func New(config Config) (*Service, error) {
 				Cert:      config.Viper.GetString(config.Flag.Service.ETCDv3.Cert),
 			},
 			ETCDBackupMetrics: &etcdBackupMetrics,
+			Uploader:          uploader,
 		}
 
 		etcdBackupController, err = controller.NewETCDBackup(c)

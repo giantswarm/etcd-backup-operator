@@ -19,14 +19,14 @@ type S3Uploader struct {
 	Region string
 }
 
-func NewS3Uploader(bucket string, region string) *S3Uploader {
-	return &S3Uploader{
+func NewS3Uploader(bucket string, region string) S3Uploader {
+	return S3Uploader{
 		Bucket: bucket,
 		Region: region,
 	}
 }
 
-func (config *S3Uploader) Upload(fpath string) (int64, error) {
+func (config S3Uploader) Upload(fpath string) (int64, error) {
 	// requires the following env variables to be set:
 	// - AWS_ACCESS_KEY_ID
 	// - AWS_SECRET_ACCESS_KEY

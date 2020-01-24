@@ -18,10 +18,10 @@ import (
 type etcdBackupResourceSetConfig struct {
 	K8sClient         k8sclient.Interface
 	Logger            micrologger.Logger
-	S3Config          storage.S3Uploader
 	ETCDv2Settings    etcdresource.ETCDv2Settings
 	ETCDv3Settings    etcdresource.ETCDv3Settings
 	ETCDBackupMetrics *collector.ETCDBackupMetrics
+	Uploader          storage.Uploader
 }
 
 func newETCDBackupResourceSet(config etcdBackupResourceSetConfig) (*controller.ResourceSet, error) {
@@ -32,10 +32,10 @@ func newETCDBackupResourceSet(config etcdBackupResourceSetConfig) (*controller.R
 		c := etcdbackup.Config{
 			K8sClient:         config.K8sClient,
 			Logger:            config.Logger,
-			S3Config:          config.S3Config,
 			ETCDv2Settings:    config.ETCDv2Settings,
 			ETCDv3Settings:    config.ETCDv3Settings,
 			ETCDBackupMetrics: config.ETCDBackupMetrics,
+			Uploader:          config.Uploader,
 		}
 
 		etcdBackupResource, err = etcdbackup.New(c)
