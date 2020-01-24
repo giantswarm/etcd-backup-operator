@@ -92,7 +92,10 @@ func NewETCDBackup(config ETCDBackupConfig) (*ETCDBackup, error) {
 }
 
 func (r *ETCDBackup) Collect(ch chan<- prometheus.Metric) error {
-	for instance, metrics := range r.ETCDBackupMetrics.data {
+	r.ETCDBackupMetrics.mux.Lock()
+	data := r.ETCDBackupMetrics.data
+	r.ETCDBackupMetrics.mux.Unlock()
+	for instance, metrics := range data {
 		if metrics.CreationTime > 0 {
 			ch <- prometheus.MustNewConstMetric(
 				creationTimeDesc,

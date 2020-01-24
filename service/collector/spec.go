@@ -2,6 +2,7 @@ package collector
 
 import (
 	"github.com/giantswarm/etcd-backup/metrics"
+	"sync"
 	"time"
 )
 
@@ -19,9 +20,12 @@ type singleEtcdBackupMetric struct {
 
 type ETCDBackupMetrics struct {
 	data map[string]*singleEtcdBackupMetric
+	mux  sync.Mutex
 }
 
 func (m *ETCDBackupMetrics) Update(instanceName string, metrics *metrics.BackupMetrics) {
+	m.mux.Lock()
+	defer m.mux.Unlock()
 	if m.data == nil {
 		m.data = make(map[string]*singleEtcdBackupMetric)
 	}
