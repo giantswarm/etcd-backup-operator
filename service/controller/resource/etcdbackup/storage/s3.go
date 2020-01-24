@@ -79,7 +79,5 @@ func (config *S3) Upload(fpath string) (int64, error) {
 		return -1, microerror.Mask(err)
 	}
 
-	// logger.Log("level", "info", "msg", fmt.Sprintf("AWS S3: object %s successfully uploaded to bucket %s", path, config.Bucket))
-
 	return size, nil
 }
