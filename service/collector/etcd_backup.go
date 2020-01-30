@@ -95,79 +95,75 @@ func (r *ETCDBackup) Collect(ch chan<- prometheus.Metric) error {
 	r.ETCDBackupMetrics.mux.Lock()
 	defer r.ETCDBackupMetrics.mux.Unlock()
 	for instance, metrics := range r.ETCDBackupMetrics.data {
-		if !metrics.Sent {
-			if metrics.CreationTime > 0 {
-				ch <- prometheus.MustNewConstMetric(
-					creationTimeDesc,
-					prometheus.GaugeValue,
-					float64(metrics.CreationTime),
-					instance,
-				)
-			}
-
+		if metrics.CreationTime > 0 {
 			ch <- prometheus.MustNewConstMetric(
-				encryptionTimeDesc,
+				creationTimeDesc,
 				prometheus.GaugeValue,
-				float64(metrics.EncryptionTime),
+				float64(metrics.CreationTime),
 				instance,
 			)
+		}
 
-			if metrics.UploadTime > 0 {
-				ch <- prometheus.MustNewConstMetric(
-					uploadTimeDesc,
-					prometheus.GaugeValue,
-					float64(metrics.UploadTime),
-					instance,
-				)
-			}
+		ch <- prometheus.MustNewConstMetric(
+			encryptionTimeDesc,
+			prometheus.GaugeValue,
+			float64(metrics.EncryptionTime),
+			instance,
+		)
 
-			if metrics.BackupSize > 0 {
-				ch <- prometheus.MustNewConstMetric(
-					backupSizeDesc,
-					prometheus.GaugeValue,
-					float64(metrics.BackupSize),
-					instance,
-				)
-			}
-
+		if metrics.UploadTime > 0 {
 			ch <- prometheus.MustNewConstMetric(
-				attemptsCounterDesc,
-				prometheus.CounterValue,
-				float64(metrics.Attempts),
-				instance,
-			)
-
-			ch <- prometheus.MustNewConstMetric(
-				successCounterDesc,
-				prometheus.CounterValue,
-				float64(metrics.Successes),
-				instance,
-			)
-
-			ch <- prometheus.MustNewConstMetric(
-				failureCounterDesc,
-				prometheus.CounterValue,
-				float64(metrics.Failures),
-				instance,
-			)
-
-			ch <- prometheus.MustNewConstMetric(
-				latestAttemptTimestampDesc,
+				uploadTimeDesc,
 				prometheus.GaugeValue,
-				float64(metrics.AttemptTS),
+				float64(metrics.UploadTime),
 				instance,
 			)
+		}
 
-			if metrics.SuccessTS > 0 {
-				ch <- prometheus.MustNewConstMetric(
-					latestSuccessTimestampDesc,
-					prometheus.GaugeValue,
-					float64(metrics.SuccessTS),
-					instance,
-				)
-			}
+		if metrics.BackupSize > 0 {
+			ch <- prometheus.MustNewConstMetric(
+				backupSizeDesc,
+				prometheus.GaugeValue,
+				float64(metrics.BackupSize),
+				instance,
+			)
+		}
 
-			metrics.Sent = true
+		ch <- prometheus.MustNewConstMetric(
+			attemptsCounterDesc,
+			prometheus.CounterValue,
+			float64(metrics.Attempts),
+			instance,
+		)
+
+		ch <- prometheus.MustNewConstMetric(
+			successCounterDesc,
+			prometheus.CounterValue,
+			float64(metrics.Successes),
+			instance,
+		)
+
+		ch <- prometheus.MustNewConstMetric(
+			failureCounterDesc,
+			prometheus.CounterValue,
+			float64(metrics.Failures),
+			instance,
+		)
+
+		ch <- prometheus.MustNewConstMetric(
+			latestAttemptTimestampDesc,
+			prometheus.GaugeValue,
+			float64(metrics.AttemptTS),
+			instance,
+		)
+
+		if metrics.SuccessTS > 0 {
+			ch <- prometheus.MustNewConstMetric(
+				latestSuccessTimestampDesc,
+				prometheus.GaugeValue,
+				float64(metrics.SuccessTS),
+				instance,
+			)
 		}
 	}
 
