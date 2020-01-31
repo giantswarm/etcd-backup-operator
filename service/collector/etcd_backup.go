@@ -2,9 +2,13 @@ package collector
 
 import (
 	"github.com/prometheus/client_golang/prometheus"
+	"time"
 )
 
-const labelTenantClusterId = "tenant_cluster_id"
+const (
+	labelTenantClusterId  = "tenant_cluster_id"
+	metricExpirationHours = 24
+)
 
 var (
 	namespace                     = "etcd_backup"
@@ -95,6 +99,13 @@ func (r *ETCDBackup) Collect(ch chan<- prometheus.Metric) error {
 	r.ETCDBackupMetrics.mux.Lock()
 	defer r.ETCDBackupMetrics.mux.Unlock()
 	for instance, metrics := range r.ETCDBackupMetrics.data {
+		// Check if metric is expired.
+		// This is needed to avoid keep sending metrics for deleted tenant clusters.
+		diff := time.Now().Sub(metrics.MetricUpdateTS).Hours()
+		if diff > metricExpirationHours {
+			delete(r.ETCDBackupMetrics.data, instance)
+			continue
+		}
 		if metrics.CreationTime > 0 {
 			ch <- prometheus.MustNewConstMetric(
 				creationTimeDesc,

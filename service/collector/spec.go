@@ -8,14 +8,16 @@ import (
 
 type singleEtcdBackupMetric struct {
 	Attempts       int32
-	Successes      int32
-	Failures       int32
+	AttemptTS      int64
+	BackupSize     int64
 	CreationTime   int64
 	EncryptionTime int64
-	UploadTime     int64
-	BackupSize     int64
-	AttemptTS      int64
+	Failures       int32
+	Successes      int32
 	SuccessTS      int64
+	UploadTime     int64
+
+	MetricUpdateTS time.Time
 }
 
 type ETCDBackupMetrics struct {
@@ -48,6 +50,8 @@ func (m *ETCDBackupMetrics) Update(instanceName string, metrics *metrics.BackupM
 	} else {
 		current.Failures = current.Failures + 1
 	}
+
+	current.MetricUpdateTS = time.Now()
 
 	m.data[instanceName] = current
 }
