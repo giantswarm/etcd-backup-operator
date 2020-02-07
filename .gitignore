@@ -2,3 +2,4 @@
 TODO
 /template-operator
 !vendor/**
+/etcd-backup-operator
