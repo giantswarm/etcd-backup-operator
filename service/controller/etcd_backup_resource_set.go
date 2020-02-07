@@ -1,9 +1,6 @@
 package controller
 
 import (
-	"github.com/giantswarm/etcd-backup-operator/service/collector"
-	etcdresource "github.com/giantswarm/etcd-backup-operator/service/controller/resource"
-	"github.com/giantswarm/etcd-backup-operator/service/controller/resource/etcdbackup/storage"
 	"github.com/giantswarm/k8sclient"
 	"github.com/giantswarm/microerror"
 	"github.com/giantswarm/micrologger"
@@ -11,6 +8,10 @@ import (
 	"github.com/giantswarm/operatorkit/resource"
 	"github.com/giantswarm/operatorkit/resource/wrapper/metricsresource"
 	"github.com/giantswarm/operatorkit/resource/wrapper/retryresource"
+
+	"github.com/giantswarm/etcd-backup-operator/service/collector"
+	etcdresource "github.com/giantswarm/etcd-backup-operator/service/controller/resource"
+	"github.com/giantswarm/etcd-backup-operator/service/controller/resource/etcdbackup/storage"
 
 	"github.com/giantswarm/etcd-backup-operator/service/controller/resource/etcdbackup"
 )
@@ -26,6 +27,9 @@ type etcdBackupResourceSetConfig struct {
 
 func newETCDBackupResourceSet(config etcdBackupResourceSetConfig) (*controller.ResourceSet, error) {
 	var err error
+	if config.ETCDBackupMetrics == nil {
+		return nil, microerror.Maskf(invalidConfigError, "%T.ETCDBackupMetrics must not be empty", config)
+	}
 
 	var etcdBackupResource resource.Interface
 	{

@@ -2,14 +2,15 @@ package controller
 
 import (
 	backupv1alpha1 "github.com/giantswarm/apiextensions/pkg/apis/backup/v1alpha1"
-	"github.com/giantswarm/etcd-backup-operator/service/collector"
-	etcdresource "github.com/giantswarm/etcd-backup-operator/service/controller/resource"
-	"github.com/giantswarm/etcd-backup-operator/service/controller/resource/etcdbackup/storage"
 	"github.com/giantswarm/k8sclient"
 	"github.com/giantswarm/microerror"
 	"github.com/giantswarm/micrologger"
 	"github.com/giantswarm/operatorkit/controller"
 	"k8s.io/apimachinery/pkg/runtime"
+
+	"github.com/giantswarm/etcd-backup-operator/service/collector"
+	etcdresource "github.com/giantswarm/etcd-backup-operator/service/controller/resource"
+	"github.com/giantswarm/etcd-backup-operator/service/controller/resource/etcdbackup/storage"
 
 	"github.com/giantswarm/etcd-backup-operator/pkg/project"
 )
@@ -29,6 +30,9 @@ type EtcdBackup struct {
 
 func NewETCDBackup(config ETCDBackupConfig) (*EtcdBackup, error) {
 	var err error
+	if config.ETCDBackupMetrics == nil {
+		return nil, microerror.Maskf(invalidConfigError, "%T.ETCDBackupMetrics must not be empty", config)
+	}
 
 	resourceSets, err := newETCDBackupResourceSets(config)
 	if err != nil {
@@ -63,6 +67,9 @@ func NewETCDBackup(config ETCDBackupConfig) (*EtcdBackup, error) {
 
 func newETCDBackupResourceSets(config ETCDBackupConfig) ([]*controller.ResourceSet, error) {
 	var err error
+	if config.ETCDBackupMetrics == nil {
+		return nil, microerror.Maskf(invalidConfigError, "%T.ETCDBackupMetrics must not be empty", config)
+	}
 
 	var resourceSet *controller.ResourceSet
 	{

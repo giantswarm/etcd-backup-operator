@@ -35,6 +35,9 @@ func New(config Config) (*Resource, error) {
 	if config.Logger == nil {
 		return nil, microerror.Maskf(invalidConfigError, "%T.Logger must not be empty", config)
 	}
+	if config.ETCDBackupMetrics == nil {
+		return nil, microerror.Maskf(invalidConfigError, "%T.ETCDBackupMetrics must not be empty", config)
+	}
 
 	r := &Resource{
 		logger:            config.Logger,
