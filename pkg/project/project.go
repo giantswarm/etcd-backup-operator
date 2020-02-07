@@ -2,10 +2,10 @@ package project
 
 var (
 	bundleVersion = "0.0.1"
-	description   = "The template-operator does something."
+	description   = "The etcd-backup-operator does something."
 	gitSHA        = "n/a"
-	name          = "template-operator"
-	source        = "https://github.com/giantswarm/template-operator"
+	name          = "etcd-backup-operator"
+	source        = "https://github.com/giantswarm/etcd-backup-operator"
 	version       = "n/a"
 )
 

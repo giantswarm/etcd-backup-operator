@@ -76,16 +76,6 @@ github.com/giantswarm/operatorkit/resource/crud
 github.com/giantswarm/operatorkit/resource/wrapper/internal
 github.com/giantswarm/operatorkit/resource/wrapper/metricsresource
 github.com/giantswarm/operatorkit/resource/wrapper/retryresource
-# github.com/giantswarm/template-operator v0.0.0-20200203101643-d4326e418990
-github.com/giantswarm/template-operator/flag
-github.com/giantswarm/template-operator/flag/service
-github.com/giantswarm/template-operator/pkg/project
-github.com/giantswarm/template-operator/server
-github.com/giantswarm/template-operator/server/endpoint
-github.com/giantswarm/template-operator/service
-github.com/giantswarm/template-operator/service/collector
-github.com/giantswarm/template-operator/service/controller
-github.com/giantswarm/template-operator/service/controller/resource/test
 # github.com/giantswarm/to v0.0.0-20191022113953-f2078541ec95
 github.com/giantswarm/to
 # github.com/giantswarm/versionbundle v0.0.0-20191206123034-be95231628ae

@@ -15,7 +15,6 @@ require (
 	github.com/giantswarm/microkit v0.0.0-20191023091504-429e22e73d3e
 	github.com/giantswarm/micrologger v0.0.0-20191014091141-d866337f7393
 	github.com/giantswarm/operatorkit v0.0.0-20200116124438-aa7ed9599161
-	github.com/giantswarm/template-operator v0.0.0-20200203101643-d4326e418990
 	github.com/giantswarm/to v0.0.0-20191022113953-f2078541ec95 // indirect
 	github.com/giantswarm/versionbundle v0.0.0-20191206123034-be95231628ae
 	github.com/gogo/protobuf v1.3.1 // indirect

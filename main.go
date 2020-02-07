@@ -10,10 +10,10 @@ import (
 	"github.com/giantswarm/versionbundle"
 	"github.com/spf13/viper"
 
-	"github.com/giantswarm/template-operator/flag"
-	"github.com/giantswarm/template-operator/pkg/project"
-	"github.com/giantswarm/template-operator/server"
-	"github.com/giantswarm/template-operator/service"
+	"github.com/giantswarm/etcd-backup-operator/flag"
+	"github.com/giantswarm/etcd-backup-operator/pkg/project"
+	"github.com/giantswarm/etcd-backup-operator/server"
+	"github.com/giantswarm/etcd-backup-operator/service"
 )
 
 var (

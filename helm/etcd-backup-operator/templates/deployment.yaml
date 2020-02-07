@@ -1,0 +1,101 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ tpl .Values.resource.default.name  . }}
+  namespace: {{ tpl .Values.resource.default.namespace  . }}
+  labels:
+    app: {{ .Values.project.name }}
+    version: {{ .Values.project.version }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.project.name }}
+      version: {{ .Values.project.version }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.project.name }}
+        version: {{ .Values.project.version }}
+      annotations:
+        releasetime: {{ $.Release.Time }}
+    spec:
+      restartPolicy: Always
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      tolerations:
+        # Tolerate master taint
+        - key: node-role.kubernetes.io/master
+          operator: Exists
+          effect: NoSchedule
+        # Container creates etcd backups.
+        # Run container in host network mode on G8s masters
+        # to be able to use 127.0.0.1 as etcd address.
+        # For etcd v2 backups container should have access
+        # to etcd data directory. To achive that,
+        # mount /var/lib/etcd3 as a volume.
+      nodeSelector:
+        node-role.kubernetes.io/master: ""
+      volumes:
+      - name: {{ .Values.project.name }}-configmap
+        configMap:
+          name: {{ tpl .Values.resource.default.name  . }}
+          items:
+          - key: config.yml
+            path: config.yml
+      - name: etcd-datadir
+        hostPath:
+          path: {{ .Values.Installation.V1.Infra.EtcdBackup.EtcdDataDir }}
+      - name: etcd-certs
+        hostPath:
+          path: {{ .Values.Installation.V1.Infra.EtcdBackup.ClientCertsDir }}
+      serviceAccountName: {{ tpl .Values.resource.default.name  . }}
+      containers:
+      - name: {{ .Values.project.name }}
+        image: "{{ .Values.image.registry }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
+        args:
+        - daemon
+        - --config.dirs=/var/run/{{ .Values.project.name }}/configmap/
+        - --config.files=config
+        volumeMounts:
+        - mountPath: /var/lib/etcd
+          name: etcd-datadir
+        - mountPath: /certs
+          name: etcd-certs
+        - name: {{ .Values.project.name }}-configmap
+          mountPath: /var/run/{{ .Values.project.name }}/configmap/
+        env:
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: etcd-backup-operator
+                key: ETCDBACKUP_AWS_ACCESS_KEY
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: etcd-backup-operator
+                key: ETCDBACKUP_AWS_SECRET_KEY
+          - name: ETCDBACKUP_PASSPHRASE
+            valueFrom:
+              secretKeyRef:
+                name: etcd-backup-operator
+                key: ETCDBACKUP_PASSPHRASE
+          - name: FILENAME_PREFIX
+            value: "{{ .Values.Installation.V1.Infra.EtcdBackup.ClusterPrefix }}"
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8000
+          initialDelaySeconds: 30
+          timeoutSeconds: 1
+        resources:
+          requests:
+            cpu: 100m
+            memory: 300Mi
+          limits:
+            cpu: 100m
+            memory: 300Mi
+      imagePullSecrets:
+      - name: {{ tpl .Values.resource.pullSecret.name . }}
