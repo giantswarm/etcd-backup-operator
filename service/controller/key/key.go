@@ -10,7 +10,8 @@ import (
 const (
 	StatusEmpty     = ""
 	StatusPending   = "Pending"
-	StatusRunning   = "Running"
+	StatusRunningV2 = "RunningV2"
+	StatusRunningV3 = "RunningV3"
 	StatusFailed    = "Failed"
 	StatusCompleted = "Completed"
 

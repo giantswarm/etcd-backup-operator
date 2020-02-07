@@ -3,16 +3,18 @@ package giantnetes
 import (
 	"context"
 	"fmt"
+	"io/ioutil"
+
 	"github.com/coreos/go-semver/semver"
 	"github.com/giantswarm/apiextensions/pkg/apis/backup/v1alpha1"
 	"github.com/giantswarm/apiextensions/pkg/clientset/versioned"
-	"github.com/giantswarm/etcd-backup-operator/service/controller/resource"
 	"github.com/giantswarm/k8sclient"
 	"github.com/giantswarm/microerror"
 	"github.com/giantswarm/micrologger"
-	"io/ioutil"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
+
+	"github.com/giantswarm/etcd-backup-operator/service/controller/resource"
 )
 
 type Utils struct {

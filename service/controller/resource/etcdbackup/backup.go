@@ -3,17 +3,19 @@ package etcdbackup
 import (
 	"context"
 	"fmt"
+	"os"
+	"time"
+
 	"github.com/giantswarm/apiextensions/pkg/apis/backup/v1alpha1"
 	"github.com/giantswarm/backoff"
-	"github.com/giantswarm/etcd-backup-operator/service/controller/key"
-	"github.com/giantswarm/etcd-backup-operator/service/controller/resource"
-	"github.com/giantswarm/etcd-backup-operator/service/controller/resource/etcdbackup/backup"
-	"github.com/giantswarm/etcd-backup-operator/service/controller/resource/etcdbackup/giantnetes"
 	"github.com/giantswarm/etcd-backup/metrics"
 	"github.com/giantswarm/microerror"
 	"github.com/giantswarm/operatorkit/controller/context/reconciliationcanceledcontext"
-	"os"
-	"time"
+
+	"github.com/giantswarm/etcd-backup-operator/pkg/project/giantnetes"
+	"github.com/giantswarm/etcd-backup-operator/service/controller/key"
+	"github.com/giantswarm/etcd-backup-operator/service/controller/resource"
+	"github.com/giantswarm/etcd-backup-operator/service/controller/resource/etcdbackup/backup"
 )
 
 // Called when Status = Running.
@@ -75,9 +77,9 @@ func (r *Resource) executeBackups(ctx context.Context, etcdBackup v1alpha1.ETCDB
 			instanceStatus.StartedTimestamp = v1alpha1.DeepCopyTime{
 				Time: time.Now().UTC(),
 			}
-			instanceStatus.Status = key.StatusRunning
+			instanceStatus.Status = key.StatusRunningV2
 			r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Set status %s for instanceStatus %s", instanceStatus.Status, instanceStatus.Name))
-		case key.StatusRunning:
+		case key.StatusRunningV2:
 			anyWipInstances = true
 			if instanceStatus.Attempts < key.AllowedBackupAttempts {
 				var latestMetrics *metrics.BackupMetrics
@@ -86,7 +88,7 @@ func (r *Resource) executeBackups(ctx context.Context, etcdBackup v1alpha1.ETCDB
 					instanceStatus.Attempts = instanceStatus.Attempts + 1
 					r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Attempt number %d for instanceStatus %s", instanceStatus.Attempts, instanceStatus.Name))
 
-					err, backupMetrics := r.backupSingleInstance(ctx, etcdBackup, etcdinstance)
+					err, backupMetrics := r.backupV2(ctx, etcdBackup, etcdinstance)
 					latestMetrics = backupMetrics
 
 					if err != nil {
@@ -94,7 +96,55 @@ func (r *Resource) executeBackups(ctx context.Context, etcdBackup v1alpha1.ETCDB
 					}
 
 					r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Attempt number %d for instanceStatus %s was successful", instanceStatus.Attempts, instanceStatus.Name))
-					instanceStatus.Status = key.StatusCompleted
+					instanceStatus.Status = key.StatusRunningV3
+					instanceStatus.FinishedTimestamp = v1alpha1.DeepCopyTime{
+						Time: time.Now().UTC(),
+					}
+					// clear error message because we had a success so it's not useful anymore.
+					instanceStatus.LatestError = ""
+
+					return nil
+				}
+
+				b := backoff.NewMaxRetries(uint64(key.AllowedBackupAttempts-instanceStatus.Attempts), 20*time.Second)
+
+				err := backoff.Retry(o, b)
+
+				// success or failure, I send the backup metrics
+				if latestMetrics != nil {
+					r.ETCDBackupMetrics.Update(instanceStatus.Name, latestMetrics)
+				}
+
+				if err != nil {
+					r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Attempt number %d for instanceStatus %s failed with the following error: %s", instanceStatus.Attempts, instanceStatus.Name, err))
+					instanceStatus.LatestError = err.Error()
+				}
+			} else {
+				instanceStatus.Status = key.StatusFailed
+				instanceStatus.FinishedTimestamp = v1alpha1.DeepCopyTime{
+					Time: time.Now().UTC(),
+				}
+
+				r.logger.LogCtx(ctx, "level", "error", "message", fmt.Sprintf("All %d attempts are failed for instanceStatus %s. Backup failed.", key.AllowedBackupAttempts, instanceStatus.Name))
+			}
+		case key.StatusRunningV3:
+			anyWipInstances = true
+			if instanceStatus.Attempts < key.AllowedBackupAttempts {
+				var latestMetrics *metrics.BackupMetrics
+
+				o := func() error {
+					instanceStatus.Attempts = instanceStatus.Attempts + 1
+					r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Attempt number %d for instanceStatus %s", instanceStatus.Attempts, instanceStatus.Name))
+
+					err, backupMetrics := r.backupV2(ctx, etcdBackup, etcdinstance)
+					latestMetrics = backupMetrics
+
+					if err != nil {
+						return microerror.Mask(err)
+					}
+
+					r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Attempt number %d for instanceStatus %s was successful", instanceStatus.Attempts, instanceStatus.Name))
+					instanceStatus.Status = key.StatusRunningV3
 					instanceStatus.FinishedTimestamp = v1alpha1.DeepCopyTime{
 						Time: time.Now().UTC(),
 					}
@@ -166,13 +216,13 @@ func (r *Resource) executeBackups(ctx context.Context, etcdBackup v1alpha1.ETCDB
 	return nil
 }
 
-func (r *Resource) backupSingleInstance(ctx context.Context, etcdBackup v1alpha1.ETCDBackup, instance resource.ETCDInstance) (error, *metrics.BackupMetrics) {
+func (r *Resource) backupV2(ctx context.Context, etcdBackup v1alpha1.ETCDBackup, instance resource.ETCDInstance) (error, *metrics.BackupMetrics) {
 	r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Starting backup for instance %s.", instance.Name))
 
-	encPass := os.Getenv("ENCRYPTION_PASSWORD")
-
-	if len(instance.ETCDv2.DataDir) > 0 {
+	if instance.ETCDv2.AreComplete() {
 		r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Attempting V2 backup for instance %s.", instance.Name))
+
+		encPass := os.Getenv("ENCRYPTION_PASSWORD")
 
 		v2 := backup.EtcdBackupV2{
 			Datadir: instance.ETCDv2.DataDir,
@@ -186,29 +236,43 @@ func (r *Resource) backupSingleInstance(ctx context.Context, etcdBackup v1alpha1
 			return microerror.Mask(err), backupMetrics
 		}
 
+		return nil, backupMetrics
+
 		r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("V2 backup successful for instance %s.", instance.Name))
 	}
 
-	r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Attempting V3 backup for instance %s.", instance.Name))
+	return nil, nil
+}
 
-	v3 := backup.EtcdBackupV3{
-		CACert:    instance.ETCDv3.CaCert,
-		Cert:      instance.ETCDv3.Cert,
-		EncPass:   encPass,
-		Endpoints: instance.ETCDv3.Endpoints,
-		Logger:    r.logger,
-		Key:       instance.ETCDv3.Key,
-		Prefix:    key.GetPrefix(instance.Name),
+func (r *Resource) backupV3(ctx context.Context, etcdBackup v1alpha1.ETCDBackup, instance resource.ETCDInstance) (error, *metrics.BackupMetrics) {
+	r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Starting V3 backup for instance %s.", instance.Name))
+
+	if instance.ETCDv3.AreComplete() {
+		r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Attempting V3 backup for instance %s.", instance.Name))
+
+		encPass := os.Getenv("ENCRYPTION_PASSWORD")
+
+		v3 := backup.EtcdBackupV3{
+			CACert:    instance.ETCDv3.CaCert,
+			Cert:      instance.ETCDv3.Cert,
+			EncPass:   encPass,
+			Endpoints: instance.ETCDv3.Endpoints,
+			Logger:    r.logger,
+			Key:       instance.ETCDv3.Key,
+			Prefix:    key.GetPrefix(instance.Name),
+		}
+
+		err, backupMetrics := r.performV2orV3Backup(ctx, &v3)
+		if err != nil {
+			return microerror.Mask(err), backupMetrics
+		}
+
+		r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("V3 backup successful for instance %s.", instance.Name))
+
+		return nil, backupMetrics
 	}
 
-	err, backupMetrics := r.performV2orV3Backup(ctx, &v3)
-	if err != nil {
-		return microerror.Mask(err), backupMetrics
-	}
-
-	r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("V3 backup successful for instance %s.", instance.Name))
-
-	return nil, backupMetrics
+	return nil, nil
 }
 
 func (r *Resource) performV2orV3Backup(ctx context.Context, b backup.BackupInterface) (error, *metrics.BackupMetrics) {

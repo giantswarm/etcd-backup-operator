@@ -136,7 +136,6 @@ func New(config Config) (*Service, error) {
 
 	var etcdBackupController *controller.EtcdBackup
 	{
-
 		c := controller.ETCDBackupConfig{
 			K8sClient: k8sClient,
 			Logger:    config.Logger,
