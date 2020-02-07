@@ -12,8 +12,9 @@ github.com/evanphx/json-patch
 github.com/fsnotify/fsnotify
 # github.com/ghodss/yaml v1.0.1-0.20190212211648-25d852aebe32
 github.com/ghodss/yaml
-# github.com/giantswarm/apiextensions v0.0.0-20191213075442-71155aa0f5b7
+# github.com/giantswarm/apiextensions v0.0.0-20200207112243-2a2d71e5388c
 github.com/giantswarm/apiextensions/pkg/apis/application/v1alpha1
+github.com/giantswarm/apiextensions/pkg/apis/backup/v1alpha1
 github.com/giantswarm/apiextensions/pkg/apis/core/v1alpha1
 github.com/giantswarm/apiextensions/pkg/apis/example/v1alpha1
 github.com/giantswarm/apiextensions/pkg/apis/infrastructure/v1alpha2
@@ -22,6 +23,7 @@ github.com/giantswarm/apiextensions/pkg/apis/release/v1alpha1
 github.com/giantswarm/apiextensions/pkg/clientset/versioned
 github.com/giantswarm/apiextensions/pkg/clientset/versioned/scheme
 github.com/giantswarm/apiextensions/pkg/clientset/versioned/typed/application/v1alpha1
+github.com/giantswarm/apiextensions/pkg/clientset/versioned/typed/backup/v1alpha1
 github.com/giantswarm/apiextensions/pkg/clientset/versioned/typed/core/v1alpha1
 github.com/giantswarm/apiextensions/pkg/clientset/versioned/typed/example/v1alpha1
 github.com/giantswarm/apiextensions/pkg/clientset/versioned/typed/infrastructure/v1alpha2
@@ -233,9 +235,9 @@ gopkg.in/inf.v0
 gopkg.in/ini.v1
 # gopkg.in/resty.v1 v1.12.0
 gopkg.in/resty.v1
-# gopkg.in/yaml.v2 v2.2.7
+# gopkg.in/yaml.v2 v2.2.8
 gopkg.in/yaml.v2
-# k8s.io/api v0.0.0-20191114100352-16d7abae0d2a
+# k8s.io/api v0.17.0 => k8s.io/api v0.0.0-20200131193051-d9adff57e763
 k8s.io/api/admission/v1beta1
 k8s.io/api/admissionregistration/v1
 k8s.io/api/admissionregistration/v1beta1
@@ -258,8 +260,10 @@ k8s.io/api/coordination/v1
 k8s.io/api/coordination/v1beta1
 k8s.io/api/core/v1
 k8s.io/api/discovery/v1alpha1
+k8s.io/api/discovery/v1beta1
 k8s.io/api/events/v1beta1
 k8s.io/api/extensions/v1beta1
+k8s.io/api/flowcontrol/v1alpha1
 k8s.io/api/networking/v1
 k8s.io/api/networking/v1beta1
 k8s.io/api/node/v1alpha1
@@ -275,7 +279,7 @@ k8s.io/api/settings/v1alpha1
 k8s.io/api/storage/v1
 k8s.io/api/storage/v1alpha1
 k8s.io/api/storage/v1beta1
-# k8s.io/apiextensions-apiserver v0.0.0-20191114105449-027877536833
+# k8s.io/apiextensions-apiserver v0.0.0 => k8s.io/apiextensions-apiserver v0.0.0-20200131201446-6910daba737d
 k8s.io/apiextensions-apiserver/pkg/apis/apiextensions
 k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1
 k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1
@@ -283,7 +287,7 @@ k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset
 k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset/scheme
 k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset/typed/apiextensions/v1
 k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset/typed/apiextensions/v1beta1
-# k8s.io/apimachinery v0.16.5-beta.1
+# k8s.io/apimachinery v0.17.0 => k8s.io/apimachinery v0.17.3-beta.0.0.20200131192631-731dcecc2054
 k8s.io/apimachinery/pkg/api/equality
 k8s.io/apimachinery/pkg/api/errors
 k8s.io/apimachinery/pkg/api/meta
@@ -328,7 +332,7 @@ k8s.io/apimachinery/pkg/version
 k8s.io/apimachinery/pkg/watch
 k8s.io/apimachinery/third_party/forked/golang/json
 k8s.io/apimachinery/third_party/forked/golang/reflect
-# k8s.io/client-go v0.0.0-20191114101535-6c5935290e33
+# k8s.io/client-go v0.0.0 => k8s.io/client-go v0.17.0
 k8s.io/client-go/discovery
 k8s.io/client-go/dynamic
 k8s.io/client-go/kubernetes
@@ -354,8 +358,10 @@ k8s.io/client-go/kubernetes/typed/coordination/v1
 k8s.io/client-go/kubernetes/typed/coordination/v1beta1
 k8s.io/client-go/kubernetes/typed/core/v1
 k8s.io/client-go/kubernetes/typed/discovery/v1alpha1
+k8s.io/client-go/kubernetes/typed/discovery/v1beta1
 k8s.io/client-go/kubernetes/typed/events/v1beta1
 k8s.io/client-go/kubernetes/typed/extensions/v1beta1
+k8s.io/client-go/kubernetes/typed/flowcontrol/v1alpha1
 k8s.io/client-go/kubernetes/typed/networking/v1
 k8s.io/client-go/kubernetes/typed/networking/v1beta1
 k8s.io/client-go/kubernetes/typed/node/v1alpha1
@@ -404,6 +410,8 @@ k8s.io/client-go/util/workqueue
 k8s.io/klog
 # k8s.io/kube-openapi v0.0.0-20191107075043-30be4d16710a
 k8s.io/kube-openapi/pkg/util/proto
+# k8s.io/kubernetes v1.17.2
+k8s.io/kubernetes/pkg/apis/core
 # k8s.io/utils v0.0.0-20191114200735-6ca3b61696b6
 k8s.io/utils/buffer
 k8s.io/utils/integer

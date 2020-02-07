@@ -9,32 +9,40 @@ import (
 	"github.com/giantswarm/operatorkit/resource/wrapper/metricsresource"
 	"github.com/giantswarm/operatorkit/resource/wrapper/retryresource"
 
-	"github.com/giantswarm/etcd-backup-operator/service/controller/resource/test"
+	"github.com/giantswarm/etcd-backup-operator/service/controller/resource/etcdbackup"
 )
 
-type todoResourceSetConfig struct {
+type etcdBackupResourceSetConfig struct {
 	K8sClient k8sclient.Interface
 	Logger    micrologger.Logger
 }
 
-func newTODOResourceSet(config todoResourceSetConfig) (*controller.ResourceSet, error) {
-	var err error
+func validateEtcdBackupResourceSetConfigConfig(config etcdBackupResourceSetConfig) error {
+	return nil
+}
 
-	var testResource resource.Interface
+func newETCDBackupResourceSet(config etcdBackupResourceSetConfig) (*controller.ResourceSet, error) {
+	var err error
+	err = validateEtcdBackupResourceSetConfigConfig(config)
+	if err != nil {
+		return nil, microerror.Mask(err)
+	}
+
+	var etcdBackupResource resource.Interface
 	{
-		c := test.Config{
+		c := etcdbackup.Config{
 			K8sClient: config.K8sClient,
 			Logger:    config.Logger,
 		}
 
-		testResource, err = test.New(c)
+		etcdBackupResource, err = etcdbackup.New(c)
 		if err != nil {
 			return nil, microerror.Mask(err)
 		}
 	}
 
 	resources := []resource.Interface{
-		testResource,
+		etcdBackupResource,
 	}
 
 	{
@@ -59,7 +67,7 @@ func newTODOResourceSet(config todoResourceSetConfig) (*controller.ResourceSet, 
 
 	// handlesFunc defines which objects you want to get into your controller, e.g. which objects you want to watch.
 	handlesFunc := func(obj interface{}) bool {
-		// TODO: By default this will handle all objects of the type your controller is watching.
+		// EtcdBackup: By default this will handle all objects of the type your controller is watching.
 		// Your controller is watching a certain kubernetes type, so why do we need to check again?
 		// Because there might be a change in the object structure - e.g. the type `AWSConfig` object might have the field
 		// availabilityZones recently, but older ones don't, and you don't want to handle those.
