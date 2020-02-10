@@ -1,0 +1,27 @@
+apiVersion: batch/v2alpha1
+kind: CronJob
+metadata:
+  name: {{ tpl .Values.resource.default.name  . }}-scheduler
+  namespace: {{ tpl .Values.resource.default.namespace  . }}
+  labels:
+    app: {{ .Values.project.name }}
+    version: {{ .Values.project.version }}
+spec:
+  # Run every six hours.
+  schedule: "0 */6 * * *"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 5
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: {{ tpl .Values.resource.default.name  . }}
+          containers:
+          - name: etcd-backup
+            image: "{{ .Values.image.registry }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
+            command:
+            - "/bin/create-cr.sh"
+            - "{{ not .Values.Installation.V1.Infra.TestingEnvironment }}"
+          restartPolicy: Never
+          imagePullSecrets:
+          - name: {{ tpl .Values.resource.pullSecret.name . }}

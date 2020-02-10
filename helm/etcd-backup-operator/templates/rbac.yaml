@@ -1,0 +1,78 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ tpl .Values.resource.default.name  . }}
+rules:
+  - apiGroups:
+      - "backup.giantswarm.io"
+    resources:
+      - etcdbackups
+      - etcdbackups/status
+    verbs:
+      - "*"
+  - apiGroups:
+      - "provider.giantswarm.io"
+    resources:
+      - kvmconfigs
+      - azureconfigs
+      - awsconfigs
+    verbs:
+      - list
+      - get
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - get
+  - apiGroups:
+      - apiextensions.k8s.io
+    resources:
+      - customresourcedefinitions
+    verbs:
+      - "*"
+  - nonResourceURLs:
+      - "/"
+      - "/healthz"
+    verbs:
+      - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ tpl .Values.resource.default.name  . }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ tpl .Values.resource.default.name  . }}
+    namespace: {{ tpl .Values.resource.default.namespace  . }}
+roleRef:
+  kind: ClusterRole
+  name: {{ tpl .Values.resource.default.name  . }}
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ tpl .Values.resource.psp.name . }}
+rules:
+  - apiGroups:
+      - extensions
+    resources:
+      - podsecuritypolicies
+    verbs:
+      - use
+    resourceNames:
+      - {{ tpl .Values.resource.psp.name . }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ tpl .Values.resource.psp.name . }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ tpl .Values.resource.default.name  . }}
+    namespace: {{ tpl .Values.resource.default.namespace  . }}
+roleRef:
+  kind: ClusterRole
+  name: {{ tpl .Values.resource.psp.name . }}
+  apiGroup: rbac.authorization.k8s.io

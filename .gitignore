@@ -1,4 +1,5 @@
 *.swp
 TODO
-/template-operator
+/etcd-backup-operator
 !vendor/**
+/etcd-backup-operator

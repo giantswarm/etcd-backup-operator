@@ -10,7 +10,7 @@ import (
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 
-	"github.com/giantswarm/template-operator/pkg/project"
+	"github.com/giantswarm/etcd-backup-operator/pkg/project"
 )
 
 type TODOConfig struct {
@@ -43,7 +43,7 @@ func NewTODO(config TODOConfig) (*TODO, error) {
 			},
 
 			// Name is used to compute finalizer names. This here results in something
-			// like operatorkit.giantswarm.io/template-operator-todo-controller.
+			// like operatorkit.giantswarm.io/etcd-backup-operator-todo-controller.
 			Name: project.Name() + "-todo-controller",
 		}
 
