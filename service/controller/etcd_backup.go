@@ -1,31 +1,37 @@
 package controller
 
 import (
-	// If your operator watches a CRD import it here.
-	// "github.com/giantswarm/apiextensions/pkg/apis/application/v1alpha1"
+	backupv1alpha1 "github.com/giantswarm/apiextensions/pkg/apis/backup/v1alpha1"
 	"github.com/giantswarm/k8sclient"
 	"github.com/giantswarm/microerror"
 	"github.com/giantswarm/micrologger"
 	"github.com/giantswarm/operatorkit/controller"
-	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 
 	"github.com/giantswarm/etcd-backup-operator/pkg/project"
 )
 
-type TODOConfig struct {
+type ETCDBackupConfig struct {
 	K8sClient k8sclient.Interface
 	Logger    micrologger.Logger
 }
 
-type TODO struct {
+type ETCDBackup struct {
 	*controller.Controller
 }
 
-func NewTODO(config TODOConfig) (*TODO, error) {
-	var err error
+func validateETCDBackupConfig(config ETCDBackupConfig) error {
+	return nil
+}
 
-	resourceSets, err := newTODOResourceSets(config)
+func NewETCDBackup(config ETCDBackupConfig) (*ETCDBackup, error) {
+	var err error
+	err = validateETCDBackupConfig(config)
+	if err != nil {
+		return nil, microerror.Mask(err)
+	}
+
+	resourceSets, err := newETCDBackupResourceSets(config)
 	if err != nil {
 		return nil, microerror.Mask(err)
 	}
@@ -33,18 +39,14 @@ func NewTODO(config TODOConfig) (*TODO, error) {
 	var operatorkitController *controller.Controller
 	{
 		c := controller.Config{
-			// If your operator watches a CRD add it here.
-			// CRD:       v1alpha1.NewAppCRD(),
+			CRD:          backupv1alpha1.NewETCDBackupCRD(),
 			K8sClient:    config.K8sClient,
 			Logger:       config.Logger,
 			ResourceSets: resourceSets,
 			NewRuntimeObjectFunc: func() runtime.Object {
-				return new(corev1.Pod)
+				return new(backupv1alpha1.ETCDBackup)
 			},
-
-			// Name is used to compute finalizer names. This here results in something
-			// like operatorkit.giantswarm.io/etcd-backup-operator-todo-controller.
-			Name: project.Name() + "-todo-controller",
+			Name: project.Name() + "-etcd-backup-controller",
 		}
 
 		operatorkitController, err = controller.New(c)
@@ -53,24 +55,28 @@ func NewTODO(config TODOConfig) (*TODO, error) {
 		}
 	}
 
-	c := &TODO{
+	c := &ETCDBackup{
 		Controller: operatorkitController,
 	}
 
 	return c, nil
 }
 
-func newTODOResourceSets(config TODOConfig) ([]*controller.ResourceSet, error) {
+func newETCDBackupResourceSets(config ETCDBackupConfig) ([]*controller.ResourceSet, error) {
 	var err error
+	err = validateETCDBackupConfig(config)
+	if err != nil {
+		return nil, microerror.Mask(err)
+	}
 
 	var resourceSet *controller.ResourceSet
 	{
-		c := todoResourceSetConfig{
+		c := etcdBackupResourceSetConfig{
 			K8sClient: config.K8sClient,
 			Logger:    config.Logger,
 		}
 
-		resourceSet, err = newTODOResourceSet(c)
+		resourceSet, err = newETCDBackupResourceSet(c)
 		if err != nil {
 			return nil, microerror.Mask(err)
 		}

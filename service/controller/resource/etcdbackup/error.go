@@ -1,4 +1,4 @@
-package test
+package etcdbackup
 
 import (
 	"github.com/giantswarm/microerror"
