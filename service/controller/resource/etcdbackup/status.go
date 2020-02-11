@@ -12,6 +12,10 @@ func (r *Resource) getGlobalStatus(customObject backupv1alpha1.ETCDBackup) (stri
 func (r *Resource) setGlobalStatus(customObject backupv1alpha1.ETCDBackup, updatedStatus string) error {
 	customObject.Status.Status = updatedStatus
 
+	return r.persistCustomObject(customObject)
+}
+
+func (r *Resource) persistCustomObject(customObject backupv1alpha1.ETCDBackup) error {
 	_, err := r.k8sClient.G8sClient().BackupV1alpha1().ETCDBackups().UpdateStatus(&customObject)
 	if err != nil {
 		return microerror.Mask(err)
