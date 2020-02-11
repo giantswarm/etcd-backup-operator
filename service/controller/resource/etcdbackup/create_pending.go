@@ -6,6 +6,6 @@ import (
 	"github.com/giantswarm/etcd-backup-operator/service/controller/resource/etcdbackup/internal/state"
 )
 
-func (r *Resource) pendingTransition(ctx context.Context, obj interface{}, currentState state.State) (state.State, error) {
+func (r *Resource) globalBackupPendingTransition(ctx context.Context, obj interface{}, currentState state.State) (state.State, error) {
 	return GlobalBackupStatePending, nil
 }

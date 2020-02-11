@@ -23,10 +23,10 @@ const (
 // EnsureCreated.
 func (r *Resource) configureStateMachine() {
 	sm := state.Machine{
-		GlobalBackupStatePending:   r.pendingTransition,
-		GlobalBackupStateRunning:   r.runningTransition,
-		GlobalBackupStateCompleted: r.completedTransition,
-		GlobalBackupSateFailed:     r.failedTransition,
+		GlobalBackupStatePending:   r.globalBackupPendingTransition,
+		GlobalBackupStateRunning:   r.globalBackupRunningTransition,
+		GlobalBackupStateCompleted: r.globalBackupCompletedTransition,
+		GlobalBackupSateFailed:     r.globalBackupFailedTransition,
 	}
 
 	r.stateMachine = sm
