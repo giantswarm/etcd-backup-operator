@@ -7,12 +7,12 @@ import (
 
 func ToCustomObject(v interface{}) (backupv1alpha1.ETCDBackup, error) {
 	if v == nil {
-		return backupv1alpha1.ETCDBackup{}, microerror.Maskf(wrongTypeError, "expected '%T', got '%T'", &backupv1alpha1.ETCDBackup{}, v)
+		return backupv1alpha1.ETCDBackup{}, microerror.Maskf(executionFailedError, "expected '%T', got '%T'", &backupv1alpha1.ETCDBackup{}, v)
 	}
 
 	customObjectPointer, ok := v.(*backupv1alpha1.ETCDBackup)
 	if !ok {
-		return backupv1alpha1.ETCDBackup{}, microerror.Maskf(wrongTypeError, "expected '%T', got '%T'", &backupv1alpha1.ETCDBackup{}, v)
+		return backupv1alpha1.ETCDBackup{}, microerror.Maskf(executionFailedError, "expected '%T', got '%T'", &backupv1alpha1.ETCDBackup{}, v)
 	}
 	customObject := *customObjectPointer
 
