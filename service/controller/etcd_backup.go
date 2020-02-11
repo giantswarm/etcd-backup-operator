@@ -16,7 +16,7 @@ type ETCDBackupConfig struct {
 	Logger    micrologger.Logger
 }
 
-type EtcdBackup struct {
+type ETCDBackup struct {
 	*controller.Controller
 }
 
@@ -24,7 +24,7 @@ func validateETCDBackupConfig(config ETCDBackupConfig) error {
 	return nil
 }
 
-func NewETCDBackup(config ETCDBackupConfig) (*EtcdBackup, error) {
+func NewETCDBackup(config ETCDBackupConfig) (*ETCDBackup, error) {
 	var err error
 	err = validateETCDBackupConfig(config)
 	if err != nil {
@@ -39,7 +39,7 @@ func NewETCDBackup(config ETCDBackupConfig) (*EtcdBackup, error) {
 	var operatorkitController *controller.Controller
 	{
 		c := controller.Config{
-			CRD:          backupv1alpha1.NewEtcdBackupCRD(),
+			CRD:          backupv1alpha1.NewETCDBackupCRD(),
 			K8sClient:    config.K8sClient,
 			Logger:       config.Logger,
 			ResourceSets: resourceSets,
@@ -55,7 +55,7 @@ func NewETCDBackup(config ETCDBackupConfig) (*EtcdBackup, error) {
 		}
 	}
 
-	c := &EtcdBackup{
+	c := &ETCDBackup{
 		Controller: operatorkitController,
 	}
 

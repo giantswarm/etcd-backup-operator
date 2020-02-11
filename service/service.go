@@ -34,7 +34,7 @@ type Service struct {
 	Version *version.Service
 
 	bootOnce             sync.Once
-	etcdBackupController *controller.EtcdBackup
+	etcdBackupController *controller.ETCDBackup
 	operatorCollector    *collector.Set
 }
 
@@ -125,7 +125,7 @@ func New(config Config) (*Service, error) {
 		}
 	}
 
-	var etcdBackupController *controller.EtcdBackup
+	var etcdBackupController *controller.ETCDBackup
 	{
 		c := controller.ETCDBackupConfig{
 			K8sClient: k8sClient,

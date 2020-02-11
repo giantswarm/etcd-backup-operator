@@ -130,7 +130,7 @@ func init() {
 	}
 }
 
-func NewEtcdBackupCRD() *apiextensionsv1beta1.CustomResourceDefinition {
+func NewETCDBackupCRD() *apiextensionsv1beta1.CustomResourceDefinition {
 	return etcdBackupCRD.DeepCopy()
 }
 
