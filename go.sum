@@ -141,6 +141,8 @@ github.com/giantswarm/apiextensions v0.0.0-20200207112243-2a2d71e5388c h1:B6AmrV
 github.com/giantswarm/apiextensions v0.0.0-20200207112243-2a2d71e5388c/go.mod h1:zHLSgCszRMdZUzwmfOibzcyfRC89ygwAQlpXcukgZuc=
 github.com/giantswarm/apiextensions v0.0.0-20200211090659-4337e1909701 h1:ryqpO9SsOiJUUDrK2ujr5B2FMDGWi2P7rIr2QdBYcwI=
 github.com/giantswarm/apiextensions v0.0.0-20200211090659-4337e1909701/go.mod h1:zHLSgCszRMdZUzwmfOibzcyfRC89ygwAQlpXcukgZuc=
+github.com/giantswarm/apiextensions v0.0.0-20200211092019-ff651911df1e h1:2VEyrHIe2brplLBajIL6gAmEuiWrTSLZGfqSijVhhhA=
+github.com/giantswarm/apiextensions v0.0.0-20200211092019-ff651911df1e/go.mod h1:zHLSgCszRMdZUzwmfOibzcyfRC89ygwAQlpXcukgZuc=
 github.com/giantswarm/backoff v0.0.0-20190913091243-4dd491125192 h1:jguq2nu1gbvP6OQIqmkUlbl4ekpwSRUPiXUWlF8InyQ=
 github.com/giantswarm/backoff v0.0.0-20190913091243-4dd491125192/go.mod h1:kjItv/iHgl/xsprYgbnCOme1pVTiiiaZeR2ybsN4ab0=
 github.com/giantswarm/exporterkit v0.0.0-20190619131829-9749deade60f h1:k5IxVNqFYdi2sMmnF8/fHu/udi2BylmBpWgMQFKwIyQ=
