@@ -75,7 +75,7 @@ spec:
                     required:
                     - attempts
                     - status
-				  v3:
+                  v3:
                     type: object
                     properties:
                       attempts:

@@ -6,7 +6,7 @@ require (
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cenkalti/backoff v2.2.1+incompatible // indirect
 	github.com/ghodss/yaml v1.0.1-0.20190212211648-25d852aebe32 // indirect
-	github.com/giantswarm/apiextensions v0.0.0-20200211090659-4337e1909701
+	github.com/giantswarm/apiextensions v0.0.0-20200211092019-ff651911df1e
 	github.com/giantswarm/backoff v0.0.0-20190913091243-4dd491125192 // indirect
 	github.com/giantswarm/exporterkit v0.0.0-20190619131829-9749deade60f
 	github.com/giantswarm/k8sclient v0.0.0-20191213144452-f75fead2ae06
@@ -19,6 +19,7 @@ require (
 	github.com/giantswarm/versionbundle v0.0.0-20191206123034-be95231628ae
 	github.com/gogo/protobuf v1.3.1 // indirect
 	github.com/golang/groupcache v0.0.0-20191027212112-611e8accdfc9 // indirect
+	github.com/google/go-cmp v0.3.1
 	github.com/gorilla/mux v1.7.3 // indirect
 	github.com/hashicorp/golang-lru v0.5.3 // indirect
 	github.com/imdario/mergo v0.3.8 // indirect
