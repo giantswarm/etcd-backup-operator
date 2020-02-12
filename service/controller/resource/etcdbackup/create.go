@@ -17,6 +17,9 @@ const (
 	GlobalBackupStateRunning   = "Running"
 	GlobalBackupStateCompleted = "Completed"
 	GlobalBackupSateFailed     = "Failed"
+
+	// Default values
+	CRKeepTimeoutSeconds = 7 * 24 * 60 * 60
 )
 
 // configureStateMachine configures and returns state machine that is driven by
