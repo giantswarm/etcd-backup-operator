@@ -21,5 +21,5 @@ func (r *Resource) globalBackupFailedTransition(ctx context.Context, obj interfa
 		return "", microerror.Mask(err)
 	}
 
-	return GlobalBackupSateFailed, nil
+	return GlobalBackupStateFailed, nil
 }

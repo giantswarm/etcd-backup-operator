@@ -12,11 +12,12 @@ import (
 )
 
 const (
-	// States
+	// Global States
+	GlobalBackupStateEmpty     = ""
 	GlobalBackupStatePending   = "Pending"
 	GlobalBackupStateRunning   = "Running"
 	GlobalBackupStateCompleted = "Completed"
-	GlobalBackupSateFailed     = "Failed"
+	GlobalBackupStateFailed    = "Failed"
 
 	// Default values
 	CRKeepTimeoutSeconds = 7 * 24 * 60 * 60
@@ -26,10 +27,11 @@ const (
 // EnsureCreated.
 func (r *Resource) configureStateMachine() {
 	sm := state.Machine{
+		GlobalBackupStateEmpty:     r.globalBackupEmptyTransition,
 		GlobalBackupStatePending:   r.globalBackupPendingTransition,
 		GlobalBackupStateRunning:   r.globalBackupRunningTransition,
 		GlobalBackupStateCompleted: r.globalBackupCompletedTransition,
-		GlobalBackupSateFailed:     r.globalBackupFailedTransition,
+		GlobalBackupStateFailed:    r.globalBackupFailedTransition,
 	}
 
 	r.stateMachine = sm
@@ -50,16 +52,10 @@ func (r *Resource) EnsureCreated(ctx context.Context, obj interface{}) error {
 		}
 		currentState = state.State(s)
 
-		if currentState == "" {
-			// GlobalBackupStatePending is the initial state for instance resource.
-			newState = GlobalBackupStatePending
-			r.logger.LogCtx(ctx, "level", "debug", "message", "no current state present")
-		} else {
-			r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("current state: %s", currentState))
-			newState, err = r.stateMachine.Execute(ctx, obj, currentState)
-			if err != nil {
-				return microerror.Mask(err)
-			}
+		r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("current state: %s", currentState))
+		newState, err = r.stateMachine.Execute(ctx, obj, currentState)
+		if err != nil {
+			return microerror.Mask(err)
 		}
 	}
 
