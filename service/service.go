@@ -17,6 +17,7 @@ import (
 	"k8s.io/client-go/rest"
 
 	"github.com/giantswarm/etcd-backup-operator/flag"
+	"github.com/giantswarm/etcd-backup-operator/pkg/giantnetes"
 	"github.com/giantswarm/etcd-backup-operator/pkg/project"
 	"github.com/giantswarm/etcd-backup-operator/service/collector"
 	"github.com/giantswarm/etcd-backup-operator/service/controller"
@@ -130,6 +131,15 @@ func New(config Config) (*Service, error) {
 		c := controller.ETCDBackupConfig{
 			K8sClient: k8sClient,
 			Logger:    config.Logger,
+			ETCDv2Settings: giantnetes.ETCDv2Settings{
+				DataDir: config.Viper.GetString(config.Flag.Service.ETCDv2.DataDir),
+			},
+			ETCDv3Settings: giantnetes.ETCDv3Settings{
+				Endpoints: config.Viper.GetString(config.Flag.Service.ETCDv3.Endpoints),
+				CaCert:    config.Viper.GetString(config.Flag.Service.ETCDv3.CaCert),
+				Key:       config.Viper.GetString(config.Flag.Service.ETCDv3.Key),
+				Cert:      config.Viper.GetString(config.Flag.Service.ETCDv3.Cert),
+			},
 		}
 
 		etcdBackupController, err = controller.NewETCDBackup(c)

@@ -5,6 +5,7 @@ go 1.13
 require (
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cenkalti/backoff v2.2.1+incompatible // indirect
+	github.com/coreos/go-semver v0.3.0
 	github.com/ghodss/yaml v1.0.1-0.20190212211648-25d852aebe32 // indirect
 	github.com/giantswarm/apiextensions v0.0.0-20200211160119-e3c4f1f4f27d
 	github.com/giantswarm/backoff v0.0.0-20190913091243-4dd491125192 // indirect

@@ -19,6 +19,13 @@ const (
 	GlobalBackupStateCompleted = "Completed"
 	GlobalBackupStateFailed    = "Failed"
 
+	// Instance States
+	InstanceBackupStateEmpty     = ""
+	InstanceBackupStatePending   = "Pending"
+	InstanceBackupStateRunning   = "Running"
+	InstanceBackupStateCompleted = "Completed"
+	InstanceBackupStateFailed    = "Failed"
+
 	// Default values
 	CRKeepTimeoutSeconds = 7 * 24 * 60 * 60
 )

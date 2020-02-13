@@ -8,12 +8,15 @@ import (
 	"github.com/giantswarm/operatorkit/controller"
 	"k8s.io/apimachinery/pkg/runtime"
 
+	"github.com/giantswarm/etcd-backup-operator/pkg/giantnetes"
 	"github.com/giantswarm/etcd-backup-operator/pkg/project"
 )
 
 type ETCDBackupConfig struct {
-	K8sClient k8sclient.Interface
-	Logger    micrologger.Logger
+	K8sClient      k8sclient.Interface
+	Logger         micrologger.Logger
+	ETCDv2Settings giantnetes.ETCDv2Settings
+	ETCDv3Settings giantnetes.ETCDv3Settings
 }
 
 type ETCDBackup struct {
@@ -21,6 +24,9 @@ type ETCDBackup struct {
 }
 
 func validateETCDBackupConfig(config ETCDBackupConfig) error {
+	if !config.ETCDv2Settings.AreComplete() && !config.ETCDv3Settings.AreComplete() {
+		return microerror.Maskf(invalidConfigError, "Either %T.ETCDv2Settings or %T.ETCDv3Settings must be defined", config, config)
+	}
 	return nil
 }
 
@@ -72,8 +78,10 @@ func newETCDBackupResourceSets(config ETCDBackupConfig) ([]*controller.ResourceS
 	var resourceSet *controller.ResourceSet
 	{
 		c := etcdBackupResourceSetConfig{
-			K8sClient: config.K8sClient,
-			Logger:    config.Logger,
+			K8sClient:      config.K8sClient,
+			Logger:         config.Logger,
+			ETCDv2Settings: config.ETCDv2Settings,
+			ETCDv3Settings: config.ETCDv3Settings,
 		}
 
 		resourceSet, err = newETCDBackupResourceSet(c)
