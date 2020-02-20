@@ -56,31 +56,31 @@ func (u *Utils) GetTenantClusters(ctx context.Context, backup v1alpha1.ETCDBacku
 		// check if the cluster release version has support for etcd backup
 		versionSupported, err := u.checkClusterVersionSupport(cluster, crdClient)
 		if err != nil {
-			u.logger.Log("level", "error", "msg", "Failed to check release version for cluster "+cluster.clusterID, "reason", err)
+			u.logger.LogCtx(ctx, "level", "error", "msg", "Failed to check release version for cluster "+cluster.clusterID, "reason", err)
 			continue
 		}
 		if !versionSupported {
-			u.logger.Log("level", "warning", "msg", "Cluster "+cluster.clusterID+" is too old for etcd backup. Skipping.")
+			u.logger.LogCtx(ctx, "level", "warning", "msg", "Cluster "+cluster.clusterID+" is too old for etcd backup. Skipping.")
 			continue
 		}
 
 		// fetch etcd certs
 		certs, err := u.fetchCerts(cluster.clusterID, u.K8sClient.K8sClient())
 		if err != nil {
-			u.logger.Log("level", "error", "msg", "Failed to fetch etcd certs for cluster "+cluster.clusterID, "reason", err)
+			u.logger.LogCtx(ctx, "level", "error", "msg", "Failed to fetch etcd certs for cluster "+cluster.clusterID, "reason", err)
 			continue
 		}
 		// write etcd certs to tmpdir
 		err = u.createCertFiles(cluster.clusterID, certs)
 		if err != nil {
-			u.logger.Log("level", "error", "msg", "Failed to write etcd certs to tmpdir for cluster "+cluster.clusterID, "reason", err)
+			u.logger.LogCtx(ctx, "level", "error", "msg", "Failed to write etcd certs to tmpdir for cluster "+cluster.clusterID, "reason", err)
 			continue
 		}
 
 		// fetch etcd endpoint
 		etcdEndpoint, err := u.getEtcdEndpoint(cluster, crdClient)
 		if err != nil {
-			u.logger.Log("level", "error", "msg", "Failed to fetch etcd endpoint for cluster "+cluster.clusterID, "reason", err)
+			u.logger.LogCtx(ctx, "level", "error", "msg", "Failed to fetch etcd endpoint for cluster "+cluster.clusterID, "reason", err)
 			continue
 		}
 
