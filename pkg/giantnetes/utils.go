@@ -108,18 +108,7 @@ func (u *Utils) checkClusterVersionSupport(cluster clusterWithProvider) (bool, e
 			if err != nil {
 				return false, microerror.Maskf(err, fmt.Sprintf("failed to get aws crd %s", cluster.clusterID))
 			}
-			crdVersionStr := crd.Spec.VersionBundle.Version
-			if crdVersionStr == "" {
-				crdVersionStr = "0.0.0"
-			}
-			crdVersion := semver.New(crdVersionStr)
-			if crdVersion.Compare(*awsSupportFrom) >= 0 {
-				// Version has support.
-				return true, nil
-			} else {
-				// Version doesn't have support.
-				return false, nil
-			}
+			return stringVersionCmp(crd.Spec.VersionBundle.Version, semver.New("0.0.0"), awsSupportFrom)
 		}
 	case azure:
 		{
@@ -127,18 +116,7 @@ func (u *Utils) checkClusterVersionSupport(cluster clusterWithProvider) (bool, e
 			if err != nil {
 				return false, microerror.Maskf(err, fmt.Sprintf("failed to get azure crd %s", cluster.clusterID))
 			}
-			crdVersionStr := crd.Spec.VersionBundle.Version
-			if crdVersionStr == "" {
-				crdVersionStr = "0.0.0"
-			}
-			crdVersion := semver.New(crdVersionStr)
-			if crdVersion.Compare(*azureSupportFrom) >= 0 {
-				// Version has support.
-				return true, nil
-			} else {
-				// Version doesn't have support.
-				return false, nil
-			}
+			return stringVersionCmp(crd.Spec.VersionBundle.Version, semver.New("0.0.0"), awsSupportFrom)
 		}
 	case kvm:
 		{
@@ -300,4 +278,23 @@ func (u *Utils) getAllGuestClusters(ctx context.Context, crdCLient versioned.Int
 
 	// At least one provider check was successful (but possibly no tenant clusters were found).
 	return clusterList, nil
+}
+
+func stringVersionCmp(versionStr string, def *semver.Version, reference *semver.Version) (bool, error) {
+	var version *semver.Version
+	var err error
+	if versionStr == "" {
+		version = def
+	} else {
+		version, err = semver.NewVersion(versionStr)
+		if err != nil {
+			return false, err
+		}
+	}
+
+	if version.Compare(*reference) >= 0 {
+		return true, nil
+	}
+
+	return false, nil
 }
