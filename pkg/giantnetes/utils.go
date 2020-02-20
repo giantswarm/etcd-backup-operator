@@ -53,7 +53,7 @@ func (u *Utils) GetTenantClusters(ctx context.Context, backup v1alpha1.ETCDBacku
 	for _, cluster := range clusterList {
 		u.logger.LogCtx(ctx, "level", "debug", fmt.Sprintf("Preparing instance entry for tenant clusters %s", cluster.clusterID))
 
-		// check if the cluster release version has support for etcd backup
+		// Check if the cluster release version has support for ETCD backup.
 		versionSupported, err := u.checkClusterVersionSupport(cluster, crdClient)
 		if err != nil {
 			u.logger.LogCtx(ctx, "level", "error", "msg", "Failed to check release version for cluster "+cluster.clusterID, "reason", err)
@@ -64,20 +64,20 @@ func (u *Utils) GetTenantClusters(ctx context.Context, backup v1alpha1.ETCDBacku
 			continue
 		}
 
-		// fetch etcd certs
+		// Fetch ETCD certs.
 		certs, err := u.fetchCerts(cluster.clusterID, u.K8sClient.K8sClient())
 		if err != nil {
 			u.logger.LogCtx(ctx, "level", "error", "msg", "Failed to fetch etcd certs for cluster "+cluster.clusterID, "reason", err)
 			continue
 		}
-		// write etcd certs to tmpdir
+		// Write ETCD certs to tmpdir.
 		err = u.createCertFiles(cluster.clusterID, certs)
 		if err != nil {
 			u.logger.LogCtx(ctx, "level", "error", "msg", "Failed to write etcd certs to tmpdir for cluster "+cluster.clusterID, "reason", err)
 			continue
 		}
 
-		// fetch etcd endpoint
+		// Fetch ETCD endpoint.
 		etcdEndpoint, err := u.getEtcdEndpoint(cluster, crdClient)
 		if err != nil {
 			u.logger.LogCtx(ctx, "level", "error", "msg", "Failed to fetch etcd endpoint for cluster "+cluster.clusterID, "reason", err)
@@ -98,7 +98,7 @@ func (u *Utils) GetTenantClusters(ctx context.Context, backup v1alpha1.ETCDBacku
 	return instances, nil
 }
 
-// check if cluster release version has guest cluster backup support
+// Check if cluster release version has guest cluster backup support.
 func (u *Utils) checkClusterVersionSupport(cluster clusterWithProvider, crdCLient versioned.Interface) (bool, error) {
 	getOpts := metav1.GetOptions{}
 
@@ -115,10 +115,10 @@ func (u *Utils) checkClusterVersionSupport(cluster clusterWithProvider, crdCLien
 			}
 			crdVersion := semver.New(crdVersionStr)
 			if crdVersion.Compare(*awsSupportFrom) >= 0 {
-				// version has support
+				// Version has support.
 				return true, nil
 			} else {
-				// version doesnt have support
+				// Version doesn't have support.
 				return false, nil
 			}
 		}
@@ -134,23 +134,23 @@ func (u *Utils) checkClusterVersionSupport(cluster clusterWithProvider, crdCLien
 			}
 			crdVersion := semver.New(crdVersionStr)
 			if crdVersion.Compare(*azureSupportFrom) >= 0 {
-				// version has support
+				// Version has support.
 				return true, nil
 			} else {
-				// version doesnt have support
+				// Version doesn't have support.
 				return false, nil
 			}
 		}
 	case kvm:
 		{
-			// kvm backups are always supported
+			// KVM backups are always supported.
 			return true, nil
 		}
 	}
 	return false, nil
 }
 
-// fetch etcd client certs
+// Fetch ETCD client certs.
 func (u *Utils) fetchCerts(clusterID string, k8sClient kubernetes.Interface) (*TLSClientConfig, error) {
 
 	getOpts := metav1.GetOptions{}
@@ -168,7 +168,7 @@ func (u *Utils) fetchCerts(clusterID string, k8sClient kubernetes.Interface) (*T
 	return certs, nil
 }
 
-// fetch guest cluster etcd endpoint
+// Fetch guest cluster ETCD endpoint.
 func (u *Utils) getEtcdEndpoint(cluster clusterWithProvider, crdCLient versioned.Interface) (string, error) {
 	getOpts := metav1.GetOptions{}
 	var etcdEndpoint string
@@ -203,11 +203,11 @@ func (u *Utils) getEtcdEndpoint(cluster clusterWithProvider, crdCLient versioned
 		}
 	}
 
-	// we already check for unknown provider at the start
+	// We already check for unknown provider at the start.
 	return etcdEndpoint, nil
 }
 
-// create cert files in tmp dir from certConfig and saves filenames back
+// Create cert files in tmp dir from certConfig and saves filenames back.
 func (u *Utils) createCertFiles(clusterID string, certConfig *TLSClientConfig) error {
 	tmpDir, err := ioutil.TempDir("", clusterID)
 	if err != nil {
@@ -238,20 +238,20 @@ func (u *Utils) createCertFiles(clusterID string, certConfig *TLSClientConfig) e
 	return nil
 }
 
-// fetch all guest clusters ids in host cluster
+// Fetch all guest clusters IDs in host cluster.
 func (u *Utils) getAllGuestClusters(ctx context.Context, crdCLient versioned.Interface) ([]clusterWithProvider, error) {
 	var clusterList []clusterWithProvider
 	listOpt := metav1.ListOptions{}
 
 	any := false
 
-	// aws
+	// AWS
 	{
 		crdList, err := crdCLient.ProviderV1alpha1().AWSConfigs(metav1.NamespaceAll).List(listOpt)
 		if err == nil {
 			any = true
 			for _, awsConfig := range crdList.Items {
-				// only backup cluster if it was not marked for delete
+				// Only backup cluster if it was not marked for delete.
 				if awsConfig.DeletionTimestamp == nil {
 					clusterList = append(clusterList, clusterWithProvider{awsConfig.Name, aws})
 				}
@@ -261,13 +261,13 @@ func (u *Utils) getAllGuestClusters(ctx context.Context, crdCLient versioned.Int
 		}
 	}
 
-	// azure
+	// Azure
 	{
 		crdList, err := crdCLient.ProviderV1alpha1().AzureConfigs(metav1.NamespaceAll).List(listOpt)
 		if err == nil {
 			any = true
 			for _, azureConfig := range crdList.Items {
-				// only backup cluster if it was not marked for delete
+				// Only backup cluster if it was not marked for delete.
 				if azureConfig.DeletionTimestamp == nil {
 					clusterList = append(clusterList, clusterWithProvider{azureConfig.Name, azure})
 				}
@@ -277,13 +277,13 @@ func (u *Utils) getAllGuestClusters(ctx context.Context, crdCLient versioned.Int
 		}
 	}
 
-	// kvm
+	// KVM
 	{
 		crdList, err := crdCLient.ProviderV1alpha1().KVMConfigs(metav1.NamespaceAll).List(listOpt)
 		if err == nil {
 			any = true
 			for _, kvmConfig := range crdList.Items {
-				// only backup cluster if it was not marked for delete
+				// Only backup cluster if it was not marked for delete.
 				if kvmConfig.DeletionTimestamp == nil {
 					clusterList = append(clusterList, clusterWithProvider{kvmConfig.Name, kvm})
 				}
@@ -294,10 +294,10 @@ func (u *Utils) getAllGuestClusters(ctx context.Context, crdCLient versioned.Int
 	}
 
 	if !any {
-		// no provider check was successful, raise an error
+		// No provider check was successful, raise an error.
 		return clusterList, unableToGetTenantClustersError
 	}
 
-	// at least one provider check was successful (but possibly no tenant clusters were found
+	// At least one provider check was successful (but possibly no tenant clusters were found).
 	return clusterList, nil
 }

@@ -14,7 +14,7 @@ import (
 )
 
 func (r *Resource) doNothingTransition(ctx context.Context, obj interface{}, currentState state.State) (state.State, error) {
-	// Todo this transition does nothing and will be implemented in a future PR
+	// Todo this transition does nothing and will be implemented in a future PR.
 	return "", nil
 }
 
@@ -54,7 +54,7 @@ func (r *Resource) globalBackupRunningTransition(ctx context.Context, obj interf
 		return "", microerror.Mask(err)
 	}
 
-	// control plane
+	// Control plane.
 	instances := []giantnetes.ETCDInstance{
 		{
 			Name:   "ControlPlane",
@@ -64,7 +64,7 @@ func (r *Resource) globalBackupRunningTransition(ctx context.Context, obj interf
 	}
 
 	if customObject.Spec.GuestBackup {
-		// tenant clusters
+		// Tenant clusters.
 		guestInstances, err := utils.GetTenantClusters(ctx, customObject)
 		if err != nil {
 			return "", microerror.Mask(err)

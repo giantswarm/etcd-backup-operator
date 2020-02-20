@@ -64,7 +64,7 @@ func Test_StateMachine(t *testing.T) {
 
 			switch {
 			case err == nil && tc.errorMatcher == nil:
-				// correct; carry on
+				// Correct; carry on.
 			case err != nil && tc.errorMatcher == nil:
 				t.Fatalf("error == %#v, want nil", err)
 			case err == nil && tc.errorMatcher != nil:

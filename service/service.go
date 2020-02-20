@@ -60,7 +60,7 @@ func New(config Config) (*Service, error) {
 	if config.Viper.GetString(config.Flag.Service.S3.Region) == "" {
 		return nil, microerror.Maskf(invalidConfigError, "S3Uploader region must not be empty.")
 	}
-	// If ETCDv2 data dir is empty, all the ETCDv3 settings must be specified
+	// If ETCDv2 data dir is empty, all the ETCDv3 settings must be specified.
 	if config.Viper.GetString(config.Flag.Service.ETCDv2.DataDir) == "" {
 		if config.Viper.GetString(config.Flag.Service.ETCDv3.Endpoints) == "" ||
 			config.Viper.GetString(config.Flag.Service.ETCDv3.Key) == "" ||
