@@ -56,31 +56,31 @@ func (u *Utils) GetTenantClusters(ctx context.Context, backup v1alpha1.ETCDBacku
 		// Check if the cluster release version has support for ETCD backup.
 		versionSupported, err := u.checkClusterVersionSupport(cluster, crdClient)
 		if err != nil {
-			u.logger.LogCtx(ctx, "level", "error", "msg", "Failed to check release version for cluster "+cluster.clusterID, "reason", err)
+			u.logger.LogCtx(ctx, "level", "error", "msg", fmt.Sprintf("Failed to check release version for cluster %s", cluster.clusterID), "reason", err)
 			continue
 		}
 		if !versionSupported {
-			u.logger.LogCtx(ctx, "level", "warning", "msg", "Cluster "+cluster.clusterID+" is too old for etcd backup. Skipping.")
+			u.logger.LogCtx(ctx, "level", "warning", "msg", fmt.Sprintf("Cluster %s is too old for etcd backup. Skipping.", cluster.clusterID))
 			continue
 		}
 
 		// Fetch ETCD certs.
 		certs, err := u.fetchCerts(cluster.clusterID, u.K8sClient.K8sClient())
 		if err != nil {
-			u.logger.LogCtx(ctx, "level", "error", "msg", "Failed to fetch etcd certs for cluster "+cluster.clusterID, "reason", err)
+			u.logger.LogCtx(ctx, "level", "error", "msg", fmt.Sprintf("Failed to fetch etcd certs for cluster %s", cluster.clusterID), "reason", err)
 			continue
 		}
 		// Write ETCD certs to tmpdir.
 		err = u.createCertFiles(cluster.clusterID, certs)
 		if err != nil {
-			u.logger.LogCtx(ctx, "level", "error", "msg", "Failed to write etcd certs to tmpdir for cluster "+cluster.clusterID, "reason", err)
+			u.logger.LogCtx(ctx, "level", "error", "msg", fmt.Sprintf("Failed to write etcd certs to tmpdir for cluster %s", cluster.clusterID), "reason", err)
 			continue
 		}
 
 		// Fetch ETCD endpoint.
 		etcdEndpoint, err := u.getEtcdEndpoint(cluster, crdClient)
 		if err != nil {
-			u.logger.LogCtx(ctx, "level", "error", "msg", "Failed to fetch etcd endpoint for cluster "+cluster.clusterID, "reason", err)
+			u.logger.LogCtx(ctx, "level", "error", "msg", fmt.Sprintf("Failed to fetch etcd endpoint for cluster %s", cluster.clusterID), "reason", err)
 			continue
 		}
 
@@ -107,7 +107,7 @@ func (u *Utils) checkClusterVersionSupport(cluster clusterWithProvider, crdCLien
 		{
 			crd, err := crdCLient.ProviderV1alpha1().AWSConfigs(crdNamespace).Get(cluster.clusterID, getOpts)
 			if err != nil {
-				return false, microerror.Maskf(err, "failed to get aws crd"+cluster.clusterID)
+				return false, microerror.Maskf(err, fmt.Sprintf("failed to get aws crd %s", cluster.clusterID))
 			}
 			crdVersionStr := crd.Spec.VersionBundle.Version
 			if crdVersionStr == "" {
@@ -126,7 +126,7 @@ func (u *Utils) checkClusterVersionSupport(cluster clusterWithProvider, crdCLien
 		{
 			crd, err := crdCLient.ProviderV1alpha1().AzureConfigs(crdNamespace).Get(cluster.clusterID, getOpts)
 			if err != nil {
-				return false, microerror.Maskf(err, "failed to get azure crd "+cluster.clusterID)
+				return false, microerror.Maskf(err, fmt.Sprintf("failed to get azure crd %s", cluster.clusterID))
 			}
 			crdVersionStr := crd.Spec.VersionBundle.Version
 			if crdVersionStr == "" {
@@ -154,7 +154,7 @@ func (u *Utils) checkClusterVersionSupport(cluster clusterWithProvider, crdCLien
 func (u *Utils) fetchCerts(clusterID string, k8sClient kubernetes.Interface) (*TLSClientConfig, error) {
 
 	getOpts := metav1.GetOptions{}
-	secret, err := k8sClient.CoreV1().Secrets(secretNamespace).Get(clusterID+"-etcd", getOpts)
+	secret, err := k8sClient.CoreV1().Secrets(secretNamespace).Get(fmt.Sprintf("%s-etcd", clusterID), getOpts)
 	if err != nil {
 		return nil, microerror.Maskf(err, "error getting etcd client certificates for guest cluster %s", clusterID)
 	}
@@ -217,21 +217,21 @@ func (u *Utils) createCertFiles(clusterID string, certConfig *TLSClientConfig) e
 	// cert
 	err = ioutil.WriteFile(CertFile(clusterID, tmpDir), certConfig.CrtData, fileMode)
 	if err != nil {
-		return microerror.Maskf(err, "Failed to write crt file "+CertFile(clusterID, tmpDir))
+		return microerror.Maskf(err, fmt.Sprintf("Failed to write crt file %s", CertFile(clusterID, tmpDir)))
 	}
 	certConfig.CrtFile = CertFile(clusterID, tmpDir)
 
 	// key
 	err = ioutil.WriteFile(KeyFile(clusterID, tmpDir), certConfig.KeyData, fileMode)
 	if err != nil {
-		return microerror.Maskf(err, "Failed to write key file "+KeyFile(clusterID, tmpDir))
+		return microerror.Maskf(err, fmt.Sprintf("Failed to write key file %s", KeyFile(clusterID, tmpDir)))
 	}
 	certConfig.KeyFile = KeyFile(clusterID, tmpDir)
 
 	// ca
 	err = ioutil.WriteFile(CAFile(clusterID, tmpDir), certConfig.CAData, fileMode)
 	if err != nil {
-		return microerror.Maskf(err, "Failed to write ca file "+CAFile(clusterID, tmpDir))
+		return microerror.Maskf(err, fmt.Sprintf("Failed to write ca file %s", CAFile(clusterID, tmpDir)))
 	}
 	certConfig.CAFile = CAFile(clusterID, tmpDir)
 
