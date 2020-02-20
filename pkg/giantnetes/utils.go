@@ -247,7 +247,7 @@ func (u *Utils) getAllGuestClusters(ctx context.Context, crdCLient versioned.Int
 
 	// aws
 	{
-		crdList, err := crdCLient.ProviderV1alpha1().AWSConfigs(crdNamespace).List(listOpt)
+		crdList, err := crdCLient.ProviderV1alpha1().AWSConfigs(metav1.NamespaceAll).List(listOpt)
 		if err == nil {
 			any = true
 			for _, awsConfig := range crdList.Items {
@@ -263,7 +263,7 @@ func (u *Utils) getAllGuestClusters(ctx context.Context, crdCLient versioned.Int
 
 	// azure
 	{
-		crdList, err := crdCLient.ProviderV1alpha1().AzureConfigs(crdNamespace).List(listOpt)
+		crdList, err := crdCLient.ProviderV1alpha1().AzureConfigs(metav1.NamespaceAll).List(listOpt)
 		if err == nil {
 			any = true
 			for _, azureConfig := range crdList.Items {
@@ -279,7 +279,7 @@ func (u *Utils) getAllGuestClusters(ctx context.Context, crdCLient versioned.Int
 
 	// kvm
 	{
-		crdList, err := crdCLient.ProviderV1alpha1().KVMConfigs(crdNamespace).List(listOpt)
+		crdList, err := crdCLient.ProviderV1alpha1().KVMConfigs(metav1.NamespaceAll).List(listOpt)
 		if err == nil {
 			any = true
 			for _, kvmConfig := range crdList.Items {
