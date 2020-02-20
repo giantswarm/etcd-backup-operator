@@ -63,7 +63,7 @@ func (u *Utils) GetTenantClusters(ctx context.Context, backup v1alpha1.ETCDBacku
 		}
 
 		// Fetch ETCD certs.
-		certs, err := u.fetchCerts(cluster.clusterID)
+		certs, err := u.getEtcdTLSCfg(cluster.clusterID)
 		if err != nil {
 			u.logger.LogCtx(ctx, "level", "error", "msg", fmt.Sprintf("Failed to fetch etcd certs for cluster %s", cluster.clusterID), "reason", err)
 			continue
@@ -128,7 +128,7 @@ func (u *Utils) checkClusterVersionSupport(cluster clusterWithProvider) (bool, e
 }
 
 // Fetch ETCD client certs.
-func (u *Utils) fetchCerts(clusterID string) (*TLSClientConfig, error) {
+func (u *Utils) getEtcdTLSCfg(clusterID string) (*TLSClientConfig, error) {
 	k8sClient := u.K8sClient.K8sClient()
 	getOpts := metav1.GetOptions{}
 	secret, err := k8sClient.CoreV1().Secrets(secretNamespace).Get(fmt.Sprintf("%s-etcd", clusterID), getOpts)
@@ -221,13 +221,13 @@ func (u *Utils) getAllGuestClusters(ctx context.Context, crdCLient versioned.Int
 	var clusterList []clusterWithProvider
 	listOpt := metav1.ListOptions{}
 
-	any := false
+	anySuccess := false
 
 	// AWS
 	{
 		crdList, err := crdCLient.ProviderV1alpha1().AWSConfigs(metav1.NamespaceAll).List(listOpt)
 		if err == nil {
-			any = true
+			anySuccess = true
 			for _, awsConfig := range crdList.Items {
 				// Only backup cluster if it was not marked for delete.
 				if awsConfig.DeletionTimestamp == nil {
@@ -243,7 +243,7 @@ func (u *Utils) getAllGuestClusters(ctx context.Context, crdCLient versioned.Int
 	{
 		crdList, err := crdCLient.ProviderV1alpha1().AzureConfigs(metav1.NamespaceAll).List(listOpt)
 		if err == nil {
-			any = true
+			anySuccess = true
 			for _, azureConfig := range crdList.Items {
 				// Only backup cluster if it was not marked for delete.
 				if azureConfig.DeletionTimestamp == nil {
@@ -259,7 +259,7 @@ func (u *Utils) getAllGuestClusters(ctx context.Context, crdCLient versioned.Int
 	{
 		crdList, err := crdCLient.ProviderV1alpha1().KVMConfigs(metav1.NamespaceAll).List(listOpt)
 		if err == nil {
-			any = true
+			anySuccess = true
 			for _, kvmConfig := range crdList.Items {
 				// Only backup cluster if it was not marked for delete.
 				if kvmConfig.DeletionTimestamp == nil {
@@ -271,7 +271,7 @@ func (u *Utils) getAllGuestClusters(ctx context.Context, crdCLient versioned.Int
 		}
 	}
 
-	if !any {
+	if !anySuccess {
 		// No provider check was successful, raise an error.
 		return clusterList, unableToGetTenantClustersError
 	}
