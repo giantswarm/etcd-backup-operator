@@ -25,11 +25,18 @@ type clusterWithProvider struct {
 	provider  string
 }
 
-func NewUtils(logger micrologger.Logger, client k8sclient.Interface) *Utils {
+func NewUtils(logger micrologger.Logger, client k8sclient.Interface) (*Utils, error) {
+	if logger == nil {
+		return nil, microerror.Mask(microerror.New("logger can't be nil"))
+	}
+	if client == nil {
+		return nil, microerror.Mask(microerror.New("client can't be nil"))
+	}
+
 	return &Utils{
 		logger:    logger,
 		K8sClient: client,
-	}
+	}, nil
 }
 
 func (u *Utils) GetTenantClusters(ctx context.Context, backup v1alpha1.ETCDBackup) ([]ETCDInstance, error) {

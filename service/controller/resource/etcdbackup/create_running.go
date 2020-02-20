@@ -49,7 +49,10 @@ func (r *Resource) globalBackupRunningTransition(ctx context.Context, obj interf
 		return "", microerror.Mask(err)
 	}
 
-	utils := giantnetes.NewUtils(r.logger, r.k8sClient)
+	utils, err := giantnetes.NewUtils(r.logger, r.k8sClient)
+	if err != nil {
+		return "", microerror.Mask(err)
+	}
 
 	// control plane
 	instances := []giantnetes.ETCDInstance{
