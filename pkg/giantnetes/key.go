@@ -8,15 +8,15 @@ import (
 )
 
 const (
-	// crd names for each provider
+	// CRD names for each provider.
 	aws   = "aws"
 	azure = "azure"
 	kvm   = "kvm"
 
-	// namespace where secrets are located
+	// Namespace where secrets are located.
 	secretNamespace = "default"
 
-	// namespace where crds are located
+	// Namespace where CRDs are located.
 	crdNamespace = "default"
 
 	fileMode = 0600
