@@ -1,14 +1,5 @@
 package giantnetes
 
-type TLSClientConfig struct {
-	CAData  []byte
-	KeyData []byte
-	CrtData []byte
-	CAFile  string
-	CrtFile string
-	KeyFile string
-}
-
 type ETCDv2Settings struct {
 	DataDir string
 }
@@ -24,6 +15,15 @@ type ETCDInstance struct {
 	Name   string
 	ETCDv2 ETCDv2Settings
 	ETCDv3 ETCDv3Settings
+}
+
+type TLSClientConfig struct {
+	CAData  []byte
+	KeyData []byte
+	CrtData []byte
+	CAFile  string
+	CrtFile string
+	KeyFile string
 }
 
 func (s ETCDv2Settings) AreComplete() bool {
