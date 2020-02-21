@@ -50,6 +50,10 @@ func (r *Resource) findOrInitializeInstanceStatus(ctx context.Context, etcdBacku
 	return newStatus
 }
 
+func isTerminalInstaceState(state string) bool {
+	return state == InstanceBackupStateCompleted || state == InstanceBackupStateFailed
+}
+
 func (r *Resource) setInstanceV2Status(ctx context.Context, customObject backupv1alpha1.ETCDBackup, instanceName string, newStatus string) error {
 	status, found := customObject.Status.Instances[instanceName]
 	if !found {

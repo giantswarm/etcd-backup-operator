@@ -13,7 +13,7 @@ import (
 
 // Sets the StartedTimestamp for the global reconciliation and initializes the Status->Instances field.
 // Then, it moves to the Running stage.
-func (r *Resource) globalBackupPendingTransition(ctx context.Context, obj interface{}, currentState state.State) (state.State, error) {
+func (r *Resource) backupPendingTransition(ctx context.Context, obj interface{}, currentState state.State) (state.State, error) {
 	customObject, err := key.ToCustomObject(obj)
 	if err != nil {
 		return "", microerror.Mask(err)
@@ -34,5 +34,5 @@ func (r *Resource) globalBackupPendingTransition(ctx context.Context, obj interf
 
 	// No need to cancel the reconciliation: the state is changing so this will be done in EnsureCreated.
 
-	return GlobalBackupStateRunning, nil
+	return BackupStateRunningV2BackupRunning, nil
 }

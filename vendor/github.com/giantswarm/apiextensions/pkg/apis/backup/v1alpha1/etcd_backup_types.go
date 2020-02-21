@@ -37,8 +37,10 @@ spec:
             status:
               enum:
               - Pending
-              - Running
-              - Completed
+              - V2BackupRunning
+              - V2BackupCompleted
+              - V3BackupRunning
+              - V3BackupCompleted
               - Failed
             startedTimestamp:
               type: string

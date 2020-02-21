@@ -7,7 +7,7 @@ require (
 	github.com/cenkalti/backoff v2.2.1+incompatible // indirect
 	github.com/coreos/go-semver v0.3.0
 	github.com/ghodss/yaml v1.0.1-0.20190212211648-25d852aebe32 // indirect
-	github.com/giantswarm/apiextensions v0.0.0-20200211160119-e3c4f1f4f27d
+	github.com/giantswarm/apiextensions v0.0.0-20200221154321-e6bad3d9cb89
 	github.com/giantswarm/backoff v0.0.0-20190913091243-4dd491125192 // indirect
 	github.com/giantswarm/exporterkit v0.0.0-20190619131829-9749deade60f
 	github.com/giantswarm/k8sclient v0.0.0-20191213144452-f75fead2ae06

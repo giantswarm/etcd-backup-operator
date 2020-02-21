@@ -13,16 +13,17 @@ import (
 
 const (
 	// Global States.
-	GlobalBackupStateEmpty     = ""
-	GlobalBackupStatePending   = "Pending"
-	GlobalBackupStateRunning   = "Running"
-	GlobalBackupStateCompleted = "Completed"
-	GlobalBackupStateFailed    = "Failed"
+	BackupStateEmpty                    = ""
+	BackupStatePending                  = "Pending"
+	BackupStateRunningV2BackupRunning   = "V2BackupRunning"
+	BackupStateRunningV2BackupCompleted = "V2BackupCompleted"
+	BackupStateRunningV3BackupRunning   = "RunningV3Backup"
+	BackupStateRunningV3BackupCompleted = "V3BackupCompleted"
+	BackupStateCompleted                = "Completed"
+	BackupStateFailed                   = "Failed"
 
 	// Instance States.
-	InstanceBackupStateEmpty     = ""
 	InstanceBackupStatePending   = "Pending"
-	InstanceBackupStateRunning   = "Running"
 	InstanceBackupStateCompleted = "Completed"
 	InstanceBackupStateFailed    = "Failed"
 
@@ -34,11 +35,14 @@ const (
 // EnsureCreated.
 func (r *Resource) configureStateMachine() {
 	sm := state.Machine{
-		GlobalBackupStateEmpty:     r.globalBackupEmptyTransition,
-		GlobalBackupStatePending:   r.globalBackupPendingTransition,
-		GlobalBackupStateRunning:   r.globalBackupRunningTransition,
-		GlobalBackupStateCompleted: r.globalBackupCompletedTransition,
-		GlobalBackupStateFailed:    r.globalBackupFailedTransition,
+		BackupStateEmpty:                    r.backupEmptyTransition,
+		BackupStatePending:                  r.backupPendingTransition,
+		BackupStateRunningV2BackupRunning:   r.backupRunningV2BackupRunningTransition,
+		BackupStateRunningV2BackupCompleted: r.backupRunningV2BackupCompletedTransition,
+		BackupStateRunningV3BackupRunning:   r.backupRunningV3BackupRunningTransition,
+		BackupStateRunningV3BackupCompleted: r.backupRunningV3BackupCompletedTransition,
+		BackupStateCompleted:                r.backupCompletedTransition,
+		BackupStateFailed:                   r.backupFailedTransition,
 	}
 
 	r.stateMachine = sm
