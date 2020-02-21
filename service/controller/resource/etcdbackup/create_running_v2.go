@@ -42,12 +42,12 @@ func (r *Resource) backupRunningV2BackupRunningTransition(ctx context.Context, o
 		instances = append(instances, guestInstances...)
 	}
 
-	for _, etcdinstance := range instances {
-		instanceStatus := r.findOrInitializeInstanceStatus(ctx, customObject, etcdinstance)
+	for _, etcdInstance := range instances {
+		instanceStatus := r.findOrInitializeInstanceStatus(ctx, customObject, etcdInstance)
 
-		r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Starting working on instance %s", etcdinstance))
+		r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Starting working on instance %s", etcdInstance))
 
-		newStatus, err := r.performETCDv2Backup(ctx, etcdinstance.ETCDv2, instanceStatus.V2)
+		newStatus, err := r.performETCDv2Backup(ctx, etcdInstance.ETCDv2, instanceStatus.V2)
 		if err != nil {
 			return "", microerror.Mask(err)
 		}
@@ -55,11 +55,11 @@ func (r *Resource) backupRunningV2BackupRunningTransition(ctx context.Context, o
 		if newStatus != instanceStatus.V2.Status {
 			r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("new state: %s", newStatus))
 			r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("setting instance status to '%s'", newStatus))
-			err = r.setInstanceV2Status(ctx, customObject, etcdinstance.Name, string(newStatus))
+			err = r.setInstanceV2Status(ctx, customObject, etcdInstance.Name, string(newStatus))
 			if err != nil {
 				return "", microerror.Mask(err)
 			}
-			r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("set resource status to '%s'", etcdinstance.Name))
+			r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("set resource status to '%s'", etcdInstance.Name))
 			r.logger.LogCtx(ctx, "level", "debug", "message", "canceling reconciliation")
 			reconciliationcanceledcontext.SetCanceled(ctx)
 			return BackupStateRunningV2BackupRunning, nil
