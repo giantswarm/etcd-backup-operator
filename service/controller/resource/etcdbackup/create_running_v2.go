@@ -92,38 +92,6 @@ func (r *Resource) backupRunningV2BackupRunningTransition(ctx context.Context, o
 	return BackupStateRunningV2BackupCompleted, nil
 }
 
-func (r *Resource) performETCDv2Backup(ctx context.Context, etcdSettings giantnetes.ETCDv2Settings, instanceName string) error {
-	if !etcdSettings.AreComplete() {
-		return microerror.Mask(microerror.New("EtcdV2 settings missing unexpectedly."))
-	}
-
-	attempts := 0
-
-	o := func() error {
-		attempts = attempts + 1
-		r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Attempt number %d for %s", attempts, instanceName))
-
-		err := r.backupV2Attempt(ctx, etcdSettings, instanceName)
-		if err != nil {
-			r.logger.LogCtx(ctx, "level", "warning", "message", fmt.Sprintf("Backup attempt #%d failed for %s. Latest error was: %s", attempts, instanceName, err))
-			return microerror.Mask(err)
-		}
-
-		r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Attempt number %d for %s was successful", attempts, instanceName))
-
-		return nil
-	}
-	b := backoff.NewMaxRetries(uint64(AllowedBackupAttempts), 20*time.Second)
-
-	err := backoff.Retry(o, b)
-	if err != nil {
-		r.logger.LogCtx(ctx, "level", "warning", "message", fmt.Sprintf("All backup attempts failed for %s. Latest error was: %s", instanceName, err))
-		return err
-	}
-
-	return nil
-}
-
 func (r *Resource) backupV2Attempt(ctx context.Context, etcdSettings giantnetes.ETCDv2Settings, instanceName string) error {
 	encPass := os.Getenv("ENCRYPTION_PASSWORD")
 
@@ -157,6 +125,38 @@ func (r *Resource) backupV2Attempt(ctx context.Context, etcdSettings giantnetes.
 
 	r.logger.LogCtx(ctx, "level", "debug", "message", "Cleaning up")
 	b.Cleanup()
+
+	return nil
+}
+
+func (r *Resource) performETCDv2Backup(ctx context.Context, etcdSettings giantnetes.ETCDv2Settings, instanceName string) error {
+	if !etcdSettings.AreComplete() {
+		return microerror.Mask(microerror.New("EtcdV2 settings missing unexpectedly."))
+	}
+
+	attempts := 0
+
+	o := func() error {
+		attempts = attempts + 1
+		r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Attempt number %d for %s", attempts, instanceName))
+
+		err := r.backupV2Attempt(ctx, etcdSettings, instanceName)
+		if err != nil {
+			r.logger.LogCtx(ctx, "level", "warning", "message", fmt.Sprintf("Backup attempt #%d failed for %s. Latest error was: %s", attempts, instanceName, err))
+			return microerror.Mask(err)
+		}
+
+		r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Attempt number %d for %s was successful", attempts, instanceName))
+
+		return nil
+	}
+	b := backoff.NewMaxRetries(uint64(AllowedBackupAttempts), 20*time.Second)
+
+	err := backoff.Retry(o, b)
+	if err != nil {
+		r.logger.LogCtx(ctx, "level", "warning", "message", fmt.Sprintf("All backup attempts failed for %s. Latest error was: %s", instanceName, err))
+		return err
+	}
 
 	return nil
 }
