@@ -9,15 +9,21 @@ import (
 	"github.com/giantswarm/operatorkit/resource/wrapper/metricsresource"
 	"github.com/giantswarm/operatorkit/resource/wrapper/retryresource"
 
+	"github.com/giantswarm/etcd-backup-operator/pkg/giantnetes"
 	"github.com/giantswarm/etcd-backup-operator/service/controller/resource/etcdbackup"
 )
 
 type etcdBackupResourceSetConfig struct {
-	K8sClient k8sclient.Interface
-	Logger    micrologger.Logger
+	K8sClient      k8sclient.Interface
+	Logger         micrologger.Logger
+	ETCDv2Settings giantnetes.ETCDv2Settings
+	ETCDv3Settings giantnetes.ETCDv3Settings
 }
 
 func validateETCDBackupResourceSetConfigConfig(config etcdBackupResourceSetConfig) error {
+	if !config.ETCDv2Settings.AreComplete() && !config.ETCDv3Settings.AreComplete() {
+		return microerror.Maskf(invalidConfigError, "Either %T.ETCDv2Settings or %T.ETCDv3Settings must be defined", config, config)
+	}
 	return nil
 }
 
@@ -31,8 +37,10 @@ func newETCDBackupResourceSet(config etcdBackupResourceSetConfig) (*controller.R
 	var etcdBackupResource resource.Interface
 	{
 		c := etcdbackup.Config{
-			K8sClient: config.K8sClient,
-			Logger:    config.Logger,
+			K8sClient:      config.K8sClient,
+			Logger:         config.Logger,
+			ETCDv2Settings: config.ETCDv2Settings,
+			ETCDv3Settings: config.ETCDv3Settings,
 		}
 
 		etcdBackupResource, err = etcdbackup.New(c)

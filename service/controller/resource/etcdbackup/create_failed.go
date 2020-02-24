@@ -10,7 +10,7 @@ import (
 )
 
 // Deletes the ETCDBackup if it's older than the threshold.
-func (r *Resource) globalBackupFailedTransition(ctx context.Context, obj interface{}, currentState state.State) (state.State, error) {
+func (r *Resource) backupFailedTransition(ctx context.Context, obj interface{}, currentState state.State) (state.State, error) {
 	customObject, err := key.ToCustomObject(obj)
 	if err != nil {
 		return "", microerror.Mask(err)
@@ -21,5 +21,5 @@ func (r *Resource) globalBackupFailedTransition(ctx context.Context, obj interfa
 		return "", microerror.Mask(err)
 	}
 
-	return GlobalBackupStateFailed, nil
+	return BackupStateFailed, nil
 }

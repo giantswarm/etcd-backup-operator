@@ -17,6 +17,7 @@ import (
 	"k8s.io/client-go/rest"
 
 	"github.com/giantswarm/etcd-backup-operator/flag"
+	"github.com/giantswarm/etcd-backup-operator/pkg/giantnetes"
 	"github.com/giantswarm/etcd-backup-operator/pkg/project"
 	"github.com/giantswarm/etcd-backup-operator/service/collector"
 	"github.com/giantswarm/etcd-backup-operator/service/controller"
@@ -59,7 +60,7 @@ func New(config Config) (*Service, error) {
 	if config.Viper.GetString(config.Flag.Service.S3.Region) == "" {
 		return nil, microerror.Maskf(invalidConfigError, "S3Uploader region must not be empty.")
 	}
-	// If ETCDv2 data dir is empty, all the ETCDv3 settings must be specified
+	// If ETCDv2 data dir is empty, all the ETCDv3 settings must be specified.
 	if config.Viper.GetString(config.Flag.Service.ETCDv2.DataDir) == "" {
 		if config.Viper.GetString(config.Flag.Service.ETCDv3.Endpoints) == "" ||
 			config.Viper.GetString(config.Flag.Service.ETCDv3.Key) == "" ||
@@ -130,6 +131,15 @@ func New(config Config) (*Service, error) {
 		c := controller.ETCDBackupConfig{
 			K8sClient: k8sClient,
 			Logger:    config.Logger,
+			ETCDv2Settings: giantnetes.ETCDv2Settings{
+				DataDir: config.Viper.GetString(config.Flag.Service.ETCDv2.DataDir),
+			},
+			ETCDv3Settings: giantnetes.ETCDv3Settings{
+				Endpoints: config.Viper.GetString(config.Flag.Service.ETCDv3.Endpoints),
+				CaCert:    config.Viper.GetString(config.Flag.Service.ETCDv3.CaCert),
+				Key:       config.Viper.GetString(config.Flag.Service.ETCDv3.Key),
+				Cert:      config.Viper.GetString(config.Flag.Service.ETCDv3.Cert),
+			},
 		}
 
 		etcdBackupController, err = controller.NewETCDBackup(c)
