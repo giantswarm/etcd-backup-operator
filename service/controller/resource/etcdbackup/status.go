@@ -29,20 +29,22 @@ func (r *Resource) findOrInitializeInstanceStatus(ctx context.Context, etcdBacku
 
 	r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Initializing new ETCDInstanceBackupStatus for %s", instance.Name))
 
+	now := time.Now().UTC()
+
 	newStatus := backupv1alpha1.ETCDInstanceBackupStatusIndex{
 		Name: instance.Name,
 		V2: backupv1alpha1.ETCDInstanceBackupStatus{
 			Status:   InstanceBackupStatePending,
 			Attempts: 0,
 			StartedTimestamp: backupv1alpha1.DeepCopyTime{
-				Time: time.Now().UTC(),
+				Time: now,
 			},
 		},
 		V3: backupv1alpha1.ETCDInstanceBackupStatus{
 			Status:   InstanceBackupStatePending,
 			Attempts: 0,
 			StartedTimestamp: backupv1alpha1.DeepCopyTime{
-				Time: time.Now().UTC(),
+				Time: now,
 			},
 		},
 	}
