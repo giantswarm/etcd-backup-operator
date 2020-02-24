@@ -6,9 +6,10 @@ require (
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cenkalti/backoff v2.2.1+incompatible // indirect
 	github.com/coreos/go-semver v0.3.0
+	github.com/dsnet/compress v0.0.1 // indirect
 	github.com/ghodss/yaml v1.0.1-0.20190212211648-25d852aebe32 // indirect
-	github.com/giantswarm/apiextensions v0.0.0-20200221154321-e6bad3d9cb89
-	github.com/giantswarm/backoff v0.0.0-20190913091243-4dd491125192 // indirect
+	github.com/giantswarm/apiextensions v0.0.0-20200224110558-b7aa57c62ffb
+	github.com/giantswarm/backoff v0.0.0-20190913091243-4dd491125192
 	github.com/giantswarm/exporterkit v0.0.0-20190619131829-9749deade60f
 	github.com/giantswarm/k8sclient v0.0.0-20191213144452-f75fead2ae06
 	github.com/giantswarm/microendpoint v0.0.0-20191121160659-e991deac2653
@@ -20,19 +21,25 @@ require (
 	github.com/giantswarm/versionbundle v0.0.0-20191206123034-be95231628ae
 	github.com/gogo/protobuf v1.3.1 // indirect
 	github.com/golang/groupcache v0.0.0-20191027212112-611e8accdfc9 // indirect
+	github.com/golang/snappy v0.0.1 // indirect
 	github.com/google/go-cmp v0.3.1
 	github.com/gorilla/mux v1.7.3 // indirect
 	github.com/hashicorp/golang-lru v0.5.3 // indirect
 	github.com/imdario/mergo v0.3.8 // indirect
 	github.com/juju/errgo v0.0.0-20140925100237-08cceb5d0b53 // indirect
+	github.com/mholt/archiver v3.1.1+incompatible
+	github.com/nwaples/rardecode v1.1.0 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
 	github.com/pelletier/go-toml v1.6.0 // indirect
+	github.com/pierrec/lz4 v2.4.1+incompatible // indirect
 	github.com/prometheus/client_golang v1.0.0
 	github.com/prometheus/client_model v0.1.0 // indirect
 	github.com/prometheus/common v0.7.0 // indirect
 	github.com/prometheus/procfs v0.0.8 // indirect
 	github.com/spf13/viper v1.6.1
-	golang.org/x/crypto v0.0.0-20191206172530-e9b2fee46413 // indirect
+	github.com/ulikunitz/xz v0.5.7 // indirect
+	github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8 // indirect
+	golang.org/x/crypto v0.0.0-20191206172530-e9b2fee46413
 	golang.org/x/net v0.0.0-20191209160850-c0dbc17a3553 // indirect
 	golang.org/x/oauth2 v0.0.0-20191202225959-858c2ad4c8b6 // indirect
 	golang.org/x/sys v0.0.0-20191210023423-ac6580df4449 // indirect

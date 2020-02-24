@@ -26,6 +26,10 @@ const (
 	InstanceBackupStatePending   = "Pending"
 	InstanceBackupStateCompleted = "Completed"
 	InstanceBackupStateFailed    = "Failed"
+	InstanceBackupStateSkipped   = "Skipped"
+
+	// Various settings.
+	AllowedBackupAttempts = int8(3)
 
 	// Default values.
 	CRKeepTimeoutSeconds = 7 * 24 * 60 * 60

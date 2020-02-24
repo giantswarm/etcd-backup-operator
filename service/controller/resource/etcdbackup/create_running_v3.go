@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/giantswarm/apiextensions/pkg/apis/backup/v1alpha1"
 	"github.com/giantswarm/microerror"
 	"github.com/giantswarm/operatorkit/controller/context/reconciliationcanceledcontext"
 
@@ -27,7 +26,7 @@ func (r *Resource) backupRunningV3BackupRunningTransition(ctx context.Context, o
 	// Control plane.
 	instances := []giantnetes.ETCDInstance{
 		{
-			Name:   "ControlPlane",
+			Name:   key.ControlPlane,
 			ETCDv2: r.etcdV2Settings,
 			ETCDv3: r.etcdV3Settings,
 		},

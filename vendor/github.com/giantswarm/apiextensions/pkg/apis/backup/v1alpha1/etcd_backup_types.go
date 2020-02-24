@@ -123,8 +123,6 @@ type ETCDInstanceBackupStatusIndex struct {
 type ETCDInstanceBackupStatus struct {
 	// Status of this isntance's backup job (can be 'Pending', 'Running'. 'Completed', 'Failed')
 	Status string `json:"status" yaml:"status"`
-	// Attempts number of backup attempts made
-	Attempts int8 `json:"attempts" yaml:"attempts"`
 	// Timestamp when the first attempt was made
 	StartedTimestamp DeepCopyTime `json:"startedTimestamp,omitempty" yaml:"startedTimestamp"`
 	// Timestamp when the last (final) attempt was made (when the Phase became either 'Completed' or 'Failed'
