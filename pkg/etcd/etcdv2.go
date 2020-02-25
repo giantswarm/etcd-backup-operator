@@ -22,12 +22,12 @@ type V2Backupper struct {
 }
 
 // Clear temporary directory.
-func (b *V2Backupper) Cleanup() {
+func (b V2Backupper) Cleanup() {
 	os.RemoveAll(b.getTmpDir())
 }
 
 // Create etcd in temporary directory, tar and compress.
-func (b *V2Backupper) Create() (string, error) {
+func (b V2Backupper) Create() (string, error) {
 	// Filename.
 	b.Filename = b.Prefix + "-etcd-etcd-v2-" + getTimeStamp()
 
@@ -62,7 +62,7 @@ func (b *V2Backupper) Create() (string, error) {
 }
 
 // Encrypts the backup file.
-func (b *V2Backupper) Encrypt() (string, error) {
+func (b V2Backupper) Encrypt() (string, error) {
 	// Full path to file.
 	fpath := filepath.Join(b.getTmpDir(), b.Filename)
 
@@ -85,11 +85,11 @@ func (b *V2Backupper) Encrypt() (string, error) {
 	return fpath, nil
 }
 
-func (b *V2Backupper) Version() string {
+func (b V2Backupper) Version() string {
 	return "v2"
 }
 
-func (b *V2Backupper) getTmpDir() string {
+func (b V2Backupper) getTmpDir() string {
 	if len(b.TmpDir) == 0 {
 		tmpDir, err := ioutil.TempDir("", "")
 		if err != nil {

@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/giantswarm/apiextensions/pkg/apis/backup/v1alpha1"
-	"github.com/giantswarm/backoff"
 	"github.com/giantswarm/microerror"
 	"github.com/giantswarm/operatorkit/controller/context/reconciliationcanceledcontext"
 
@@ -57,7 +56,16 @@ func (r *Resource) backupRunningV2BackupRunningTransition(ctx context.Context, o
 
 			r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Starting v2 backup on instance %s", etcdInstance.Name))
 
-			err := r.performETCDv2Backup(ctx, etcdInstance.ETCDv2, instanceStatus.Name)
+			encPass := os.Getenv("ENCRYPTION_PASSWORD")
+
+			backupper := etcd.V2Backupper{
+				Datadir: etcdInstance.ETCDv2.DataDir,
+				EncPass: encPass,
+				Logger:  r.logger,
+				Prefix:  key.GetPrefix(instanceStatus.Name),
+			}
+
+			err := r.performBackup(ctx, backupper, instanceStatus.Name)
 			if err == nil {
 				// Backup was successful.
 				instanceStatus.V2.LatestError = ""
@@ -90,78 +98,4 @@ func (r *Resource) backupRunningV2BackupRunningTransition(ctx context.Context, o
 
 	// No status changes have happened within any of the instances, backup is completed.
 	return BackupStateRunningV2BackupCompleted, nil
-}
-
-func (r *Resource) backupV2Attempt(ctx context.Context, etcdSettings giantnetes.ETCDv2Settings, instanceName string) error {
-	encPass := os.Getenv("ENCRYPTION_PASSWORD")
-
-	b := etcd.V2Backupper{
-		Datadir: etcdSettings.DataDir,
-		EncPass: encPass,
-		Logger:  r.logger,
-		Prefix:  key.GetPrefix(instanceName),
-	}
-
-	var err error
-	version := b.Version()
-
-	r.logger.LogCtx(ctx, "level", "debug", "message", "Creating backup file")
-	_, err = b.Create()
-	if err != nil {
-		return microerror.Maskf(err, "Etcd %s creation failed: %s", version, err)
-	}
-
-	r.logger.LogCtx(ctx, "level", "debug", "message", "Encrypting backup file")
-	filepath, err := b.Encrypt()
-	if err != nil {
-		return microerror.Maskf(err, "Etcd %s encryption failed: %s", version, err)
-	}
-
-	r.logger.LogCtx(ctx, "level", "debug", "message", "Uploading backup file")
-	_, err = r.upload(ctx, filepath)
-	if err != nil {
-		return microerror.Maskf(err, "Etcd %s upload failed: %s", version, err)
-	}
-
-	r.logger.LogCtx(ctx, "level", "debug", "message", "Cleaning up")
-	b.Cleanup()
-
-	return nil
-}
-
-func (r *Resource) performETCDv2Backup(ctx context.Context, etcdSettings giantnetes.ETCDv2Settings, instanceName string) error {
-	if !etcdSettings.AreComplete() {
-		return microerror.Mask(microerror.New("EtcdV2 settings missing unexpectedly."))
-	}
-
-	attempts := 0
-
-	o := func() error {
-		attempts = attempts + 1
-		r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Attempt number %d for %s", attempts, instanceName))
-
-		err := r.backupV2Attempt(ctx, etcdSettings, instanceName)
-		if err != nil {
-			r.logger.LogCtx(ctx, "level", "warning", "message", fmt.Sprintf("Backup attempt #%d failed for %s. Latest error was: %s", attempts, instanceName, err))
-			return microerror.Mask(err)
-		}
-
-		r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Attempt number %d for %s was successful", attempts, instanceName))
-
-		return nil
-	}
-	b := backoff.NewMaxRetries(uint64(AllowedBackupAttempts), 20*time.Second)
-
-	err := backoff.Retry(o, b)
-	if err != nil {
-		r.logger.LogCtx(ctx, "level", "warning", "message", fmt.Sprintf("All backup attempts failed for %s. Latest error was: %s", instanceName, err))
-		return err
-	}
-
-	return nil
-}
-
-func (r *Resource) upload(ctx context.Context, filepath string) (int64, error) {
-	// TODO to be implemented in a future PR
-	return 0, nil
 }
