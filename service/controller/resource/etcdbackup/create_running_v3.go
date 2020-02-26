@@ -56,25 +56,25 @@ func (r *Resource) backupRunningV3BackupRunningTransition(ctx context.Context, o
 
 			r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Starting v3 backup on instance %s", etcdInstance.Name))
 
-			backupper := etcd.V3Backupper{
+			backupper := etcd.V3Backup{
 				CACert:    etcdInstance.ETCDv3.CaCert,
 				Cert:      etcdInstance.ETCDv3.Cert,
 				EncPass:   os.Getenv("ENCRYPTION_PASSWORD"),
 				Endpoints: etcdInstance.ETCDv3.Endpoints,
 				Logger:    r.logger,
 				Key:       etcdInstance.ETCDv3.Key,
-				Prefix:    key.GetPrefix(instanceStatus.Name),
+				Prefix:    key.FilenamePrefix(instanceStatus.Name),
 			}
 
 			err := r.performBackup(ctx, backupper, instanceStatus.Name)
 			if err == nil {
 				// Backup was successful.
 				instanceStatus.V3.LatestError = ""
-				instanceStatus.V3.Status = InstanceBackupStateCompleted
+				instanceStatus.V3.Status = instanceBackupStateCompleted
 			} else {
 				// Backup was unsuccessful.
 				instanceStatus.V3.LatestError = err.Error()
-				instanceStatus.V3.Status = InstanceBackupStateFailed
+				instanceStatus.V3.Status = instanceBackupStateFailed
 			}
 
 			instanceStatus.V3.FinishedTimestamp = v1alpha1.DeepCopyTime{
@@ -82,7 +82,7 @@ func (r *Resource) backupRunningV3BackupRunningTransition(ctx context.Context, o
 			}
 		} else {
 			r.logger.LogCtx(ctx, "level", "info", "message", "V3 backup skipped for %s because ETCD V3 setting are not set.", etcdInstance.Name)
-			instanceStatus.V3.Status = InstanceBackupStateSkipped
+			instanceStatus.V3.Status = instanceBackupStateSkipped
 		}
 
 		customObject.Status.Instances[etcdInstance.Name] = instanceStatus
@@ -94,7 +94,7 @@ func (r *Resource) backupRunningV3BackupRunningTransition(ctx context.Context, o
 		r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("set resource status to '%s'", etcdInstance.Name))
 		r.logger.LogCtx(ctx, "level", "debug", "message", "canceling reconciliation")
 		reconciliationcanceledcontext.SetCanceled(ctx)
-		return BackupStateRunningV3BackupRunning, nil
+		return backupStateRunningV3BackupRunning, nil
 	}
 
 	// No status changes have happened within any of the instances, backup is completed.

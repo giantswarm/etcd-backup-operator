@@ -6,13 +6,18 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/giantswarm/microerror"
 	"github.com/giantswarm/micrologger"
 	"github.com/mholt/archiver"
+
+	"github.com/giantswarm/etcd-backup-operator/pkg/etcd/internal/encrypt"
+	"github.com/giantswarm/etcd-backup-operator/pkg/etcd/internal/exec"
+	"github.com/giantswarm/etcd-backup-operator/pkg/etcd/key"
 )
 
-type V3Backupper struct {
+type V3Backup struct {
 	CACert    string
 	Cert      string
 	EncPass   string
@@ -25,14 +30,14 @@ type V3Backupper struct {
 }
 
 //clear temporary directory
-func (b V3Backupper) Cleanup() {
+func (b V3Backup) Cleanup() {
 	os.RemoveAll(b.getTmpDir())
 }
 
 // Create etcd in temporary directory.
-func (b V3Backupper) Create() (string, error) {
+func (b V3Backup) Create() (string, error) {
 	// Filename
-	b.Filename = b.Prefix + "-backup-etcd-v3-" + getTimeStamp() + dbExt
+	b.Filename = b.Prefix + "-backup-etcd-v3-" + time.Now().Format(key.TsFormat) + key.DbExt
 
 	// Full path to file.
 	fpath := filepath.Join(b.getTmpDir(), b.Filename)
@@ -58,19 +63,19 @@ func (b V3Backupper) Create() (string, error) {
 	}
 
 	// Create a etcd.
-	_, err := execCmd(etcdctlCmd, etcdctlArgs, etcdctlEnvs, b.Logger)
+	_, err := exec.Cmd(key.EtcdctlCmd, etcdctlArgs, etcdctlEnvs, b.Logger)
 	if err != nil {
 		return "", microerror.Mask(err)
 	}
 
 	// Create tar.gz.
-	err = archiver.Archive([]string{fpath}, fpath+tgzExt)
+	err = archiver.Archive([]string{fpath}, fpath+key.TgzExt)
 	if err != nil {
 		return "", microerror.Mask(err)
 	}
 
 	// Update Filename in etcd object.
-	b.Filename = b.Filename + tgzExt
+	b.Filename = b.Filename + key.TgzExt
 	fpath = filepath.Join(b.getTmpDir(), b.Filename)
 
 	b.Logger.Log("level", "info", "msg", "Etcd v3 backup created successfully")
@@ -78,7 +83,7 @@ func (b V3Backupper) Create() (string, error) {
 }
 
 // Encrypt backup.
-func (b V3Backupper) Encrypt() (string, error) {
+func (b V3Backup) Encrypt() (string, error) {
 	// Full path to file.
 	fpath := filepath.Join(b.getTmpDir(), b.Filename)
 
@@ -88,24 +93,24 @@ func (b V3Backupper) Encrypt() (string, error) {
 	}
 
 	// Encrypt etcd.
-	err := encryptFile(fpath, fpath+encExt, b.EncPass)
+	err := encrypt.File(fpath, fpath+key.EncExt, b.EncPass)
 	if err != nil {
 		return "", microerror.Mask(err)
 	}
 
 	// Update Filename in etcd object.
-	b.Filename = b.Filename + encExt
+	b.Filename = b.Filename + key.EncExt
 	fpath = filepath.Join(b.getTmpDir(), b.Filename)
 
 	b.Logger.Log("level", "info", "msg", "Etcd v3 backup encrypted successfully")
 	return fpath, nil
 }
 
-func (b V3Backupper) Version() string {
+func (b V3Backup) Version() string {
 	return "v3"
 }
 
-func (b V3Backupper) getTmpDir() string {
+func (b V3Backup) getTmpDir() string {
 	if len(b.TmpDir) == 0 {
 		tmpDir, err := ioutil.TempDir("", "")
 		if err != nil {
