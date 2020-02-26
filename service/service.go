@@ -4,6 +4,7 @@ package service
 
 import (
 	"context"
+	"os"
 	"sync"
 
 	backupv1alpha1 "github.com/giantswarm/apiextensions/pkg/apis/backup/v1alpha1"
@@ -140,6 +141,7 @@ func New(config Config) (*Service, error) {
 				Key:       config.Viper.GetString(config.Flag.Service.ETCDv3.Key),
 				Cert:      config.Viper.GetString(config.Flag.Service.ETCDv3.Cert),
 			},
+			EncryptionPwd: os.Getenv("ENCRYPTION_PASSWORD"),
 		}
 
 		etcdBackupController, err = controller.NewETCDBackup(c)

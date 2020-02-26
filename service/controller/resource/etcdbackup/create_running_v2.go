@@ -3,7 +3,6 @@ package etcdbackup
 import (
 	"context"
 	"fmt"
-	"os"
 	"time"
 
 	"github.com/giantswarm/apiextensions/pkg/apis/backup/v1alpha1"
@@ -56,11 +55,9 @@ func (r *Resource) backupRunningV2BackupRunningTransition(ctx context.Context, o
 
 			r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Starting v2 backup on instance %s", etcdInstance.Name))
 
-			encPass := os.Getenv("ENCRYPTION_PASSWORD")
-
 			backupper := etcd.V2Backup{
 				Datadir: etcdInstance.ETCDv2.DataDir,
-				EncPass: encPass,
+				EncPass: r.encryptionPwd,
 				Logger:  r.logger,
 				Prefix:  key.FilenamePrefix(instanceStatus.Name),
 			}

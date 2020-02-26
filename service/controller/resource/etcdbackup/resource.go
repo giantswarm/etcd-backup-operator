@@ -18,6 +18,7 @@ type Config struct {
 	Logger         micrologger.Logger
 	ETCDv2Settings giantnetes.ETCDv2Settings
 	ETCDv3Settings giantnetes.ETCDv3Settings
+	EncryptionPwd  string
 }
 
 type Resource struct {
@@ -26,6 +27,7 @@ type Resource struct {
 	stateMachine   state.Machine
 	etcdV2Settings giantnetes.ETCDv2Settings
 	etcdV3Settings giantnetes.ETCDv3Settings
+	encryptionPwd  string
 }
 
 func New(config Config) (*Resource, error) {
@@ -44,6 +46,7 @@ func New(config Config) (*Resource, error) {
 		k8sClient:      config.K8sClient,
 		etcdV2Settings: config.ETCDv2Settings,
 		etcdV3Settings: config.ETCDv3Settings,
+		encryptionPwd:  config.EncryptionPwd,
 	}
 
 	r.configureStateMachine()

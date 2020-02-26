@@ -17,6 +17,7 @@ type ETCDBackupConfig struct {
 	Logger         micrologger.Logger
 	ETCDv2Settings giantnetes.ETCDv2Settings
 	ETCDv3Settings giantnetes.ETCDv3Settings
+	EncryptionPwd  string
 }
 
 type ETCDBackup struct {
@@ -82,6 +83,7 @@ func newETCDBackupResourceSets(config ETCDBackupConfig) ([]*controller.ResourceS
 			Logger:         config.Logger,
 			ETCDv2Settings: config.ETCDv2Settings,
 			ETCDv3Settings: config.ETCDv3Settings,
+			EncryptionPwd:  config.EncryptionPwd,
 		}
 
 		resourceSet, err = newETCDBackupResourceSet(c)
