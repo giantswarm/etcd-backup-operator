@@ -26,6 +26,10 @@ type TLSClientConfig struct {
 	KeyFile string
 }
 
+type BaseETCDSettings interface {
+	AreComplete() bool
+}
+
 func (s ETCDv2Settings) AreComplete() bool {
 	return s.DataDir != ""
 }
