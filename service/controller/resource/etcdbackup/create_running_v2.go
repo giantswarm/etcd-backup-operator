@@ -3,11 +3,13 @@ package etcdbackup
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/giantswarm/apiextensions/pkg/apis/backup/v1alpha1"
 	"github.com/giantswarm/microerror"
 	"github.com/giantswarm/operatorkit/controller/context/reconciliationcanceledcontext"
 
+	"github.com/giantswarm/etcd-backup-operator/pkg/etcd"
 	"github.com/giantswarm/etcd-backup-operator/pkg/giantnetes"
 	"github.com/giantswarm/etcd-backup-operator/service/controller/key"
 	"github.com/giantswarm/etcd-backup-operator/service/controller/resource/etcdbackup/internal/state"
@@ -27,7 +29,7 @@ func (r *Resource) backupRunningV2BackupRunningTransition(ctx context.Context, o
 	// Control plane.
 	instances := []giantnetes.ETCDInstance{
 		{
-			Name:   "ControlPlane",
+			Name:   key.ControlPlane,
 			ETCDv2: r.etcdV2Settings,
 			ETCDv3: r.etcdV3Settings,
 		},
@@ -45,40 +47,52 @@ func (r *Resource) backupRunningV2BackupRunningTransition(ctx context.Context, o
 	for _, etcdInstance := range instances {
 		instanceStatus := r.findOrInitializeInstanceStatus(ctx, customObject, etcdInstance)
 
-		r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Starting working on instance %s", etcdInstance))
+		if etcdInstance.ETCDv2.AreComplete() {
+			// If state is terminal, there's nothing else we can do on this instance, so just skip to next one.
+			if isTerminalInstaceState(instanceStatus.V2.Status) {
+				continue
+			}
 
-		newStatus, err := r.performETCDv2Backup(ctx, etcdInstance.ETCDv2, instanceStatus.V2)
+			r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Starting v2 backup on instance %s", etcdInstance.Name))
+
+			backupper := etcd.V2Backup{
+				Datadir: etcdInstance.ETCDv2.DataDir,
+				EncPass: r.encryptionPwd,
+				Logger:  r.logger,
+				Prefix:  key.FilenamePrefix(instanceStatus.Name),
+			}
+
+			err := r.performBackup(ctx, backupper, instanceStatus.Name)
+			if err == nil {
+				// Backup was successful.
+				instanceStatus.V2.LatestError = ""
+				instanceStatus.V2.Status = instanceBackupStateCompleted
+			} else {
+				// Backup was unsuccessful.
+				instanceStatus.V2.LatestError = err.Error()
+				instanceStatus.V2.Status = instanceBackupStateFailed
+			}
+
+			instanceStatus.V2.FinishedTimestamp = v1alpha1.DeepCopyTime{
+				Time: time.Now().UTC(),
+			}
+		} else {
+			r.logger.LogCtx(ctx, "level", "info", "message", "V2 backup skipped for %s because ETCD V2 setting are not set.", etcdInstance.Name)
+			instanceStatus.V2.Status = instanceBackupStateSkipped
+		}
+
+		customObject.Status.Instances[etcdInstance.Name] = instanceStatus
+
+		err = r.persistCustomObject(customObject)
 		if err != nil {
 			return "", microerror.Mask(err)
 		}
-
-		if newStatus != instanceStatus.V2.Status {
-			r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("new state: %s", newStatus))
-			r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("setting instance status to '%s'", newStatus))
-			err = r.setInstanceV2Status(ctx, customObject, etcdInstance.Name, string(newStatus))
-			if err != nil {
-				return "", microerror.Mask(err)
-			}
-			r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("set resource status to '%s'", etcdInstance.Name))
-			r.logger.LogCtx(ctx, "level", "debug", "message", "canceling reconciliation")
-			reconciliationcanceledcontext.SetCanceled(ctx)
-			return BackupStateRunningV2BackupRunning, nil
-		} else {
-			r.logger.LogCtx(ctx, "level", "debug", "message", "no state change")
-		}
+		r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("set resource status to '%s'", etcdInstance.Name))
+		r.logger.LogCtx(ctx, "level", "debug", "message", "canceling reconciliation")
+		reconciliationcanceledcontext.SetCanceled(ctx)
+		return backupStateRunningV2BackupRunning, nil
 	}
 
 	// No status changes have happened within any of the instances, backup is completed.
-	return BackupStateRunningV2BackupCompleted, nil
-}
-
-func (r *Resource) performETCDv2Backup(ctx context.Context, etcdinstance giantnetes.ETCDv2Settings, status v1alpha1.ETCDInstanceBackupStatus) (string, error) {
-	// If state is terminal, there's nothing else we can do on this instance, so just return the current state.
-	if isTerminalInstaceState(status.Status) {
-		return status.Status, nil
-	}
-
-	// TODO Try to do the backup.
-
-	return InstanceBackupStateCompleted, nil
+	return backupStateRunningV2BackupCompleted, nil
 }

@@ -7,5 +7,5 @@ import (
 )
 
 func (r *Resource) backupRunningV2BackupCompletedTransition(ctx context.Context, obj interface{}, currentState state.State) (state.State, error) {
-	return BackupStateRunningV3BackupRunning, nil
+	return backupStateRunningV3BackupRunning, nil
 }

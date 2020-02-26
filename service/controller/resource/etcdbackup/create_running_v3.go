@@ -27,7 +27,7 @@ func (r *Resource) backupRunningV3BackupRunningTransition(ctx context.Context, o
 	// Control plane.
 	instances := []giantnetes.ETCDInstance{
 		{
-			Name:   "ControlPlane",
+			Name:   key.ControlPlane,
 			ETCDv2: r.etcdV2Settings,
 			ETCDv3: r.etcdV3Settings,
 		},
@@ -59,14 +59,14 @@ func (r *Resource) backupRunningV3BackupRunningTransition(ctx context.Context, o
 			r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("set resource status to '%s'", etcdInstance.Name))
 			r.logger.LogCtx(ctx, "level", "debug", "message", "canceling reconciliation")
 			reconciliationcanceledcontext.SetCanceled(ctx)
-			return BackupStateRunningV3BackupRunning, nil
+			return backupStateRunningV3BackupRunning, nil
 		} else {
 			r.logger.LogCtx(ctx, "level", "debug", "message", "no state change")
 		}
 	}
 
 	// No status changes have happened within any of the instances, backup is completed.
-	return BackupStateRunningV3BackupCompleted, nil
+	return backupStateRunningV3BackupCompleted, nil
 }
 
 func (r *Resource) performETCDv3Backup(ctx context.Context, etcdinstance giantnetes.ETCDv3Settings, status v1alpha1.ETCDInstanceBackupStatus) (string, error) {
@@ -77,5 +77,5 @@ func (r *Resource) performETCDv3Backup(ctx context.Context, etcdinstance giantne
 
 	// TODO Try to do the backup.
 
-	return InstanceBackupStateCompleted, nil
+	return instanceBackupStateCompleted, nil
 }

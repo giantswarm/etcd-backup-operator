@@ -1,8 +1,18 @@
 package key
 
 import (
+	"fmt"
+	"os"
+
 	backupv1alpha1 "github.com/giantswarm/apiextensions/pkg/apis/backup/v1alpha1"
 	"github.com/giantswarm/microerror"
+)
+
+const (
+	ControlPlane = "Control Plane"
+
+	EnvFilenamePrefix = "FILENAME_PREFIX"
+	DefaultPrefix     = "etcd-backup"
 )
 
 func ToCustomObject(v interface{}) (backupv1alpha1.ETCDBackup, error) {
@@ -17,4 +27,16 @@ func ToCustomObject(v interface{}) (backupv1alpha1.ETCDBackup, error) {
 	customObject := *customObjectPointer
 
 	return customObject, nil
+}
+
+func FilenamePrefix(instanceName string) string {
+	globalPrefix := os.Getenv(EnvFilenamePrefix)
+	if len(globalPrefix) == 0 {
+		globalPrefix = DefaultPrefix
+	}
+
+	if instanceName == ControlPlane {
+		return globalPrefix
+	}
+	return fmt.Sprintf("%s-%s", globalPrefix, instanceName)
 }

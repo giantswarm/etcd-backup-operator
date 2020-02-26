@@ -21,5 +21,5 @@ func (r *Resource) backupFailedTransition(ctx context.Context, obj interface{}, 
 		return "", microerror.Mask(err)
 	}
 
-	return BackupStateFailed, nil
+	return backupStateFailed, nil
 }
