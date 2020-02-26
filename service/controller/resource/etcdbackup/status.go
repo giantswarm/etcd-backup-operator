@@ -34,13 +34,13 @@ func (r *Resource) findOrInitializeInstanceStatus(ctx context.Context, etcdBacku
 	newStatus := backupv1alpha1.ETCDInstanceBackupStatusIndex{
 		Name: instance.Name,
 		V2: backupv1alpha1.ETCDInstanceBackupStatus{
-			Status: InstanceBackupStatePending,
+			Status: instanceBackupStatePending,
 			StartedTimestamp: backupv1alpha1.DeepCopyTime{
 				Time: now,
 			},
 		},
 		V3: backupv1alpha1.ETCDInstanceBackupStatus{
-			Status: InstanceBackupStatePending,
+			Status: instanceBackupStatePending,
 			StartedTimestamp: backupv1alpha1.DeepCopyTime{
 				Time: now,
 			},
@@ -51,7 +51,7 @@ func (r *Resource) findOrInitializeInstanceStatus(ctx context.Context, etcdBacku
 }
 
 func isTerminalInstaceState(state string) bool {
-	return state == InstanceBackupStateCompleted || state == InstanceBackupStateFailed || state == InstanceBackupStateSkipped
+	return state == instanceBackupStateCompleted || state == instanceBackupStateFailed || state == instanceBackupStateSkipped
 }
 
 func (r *Resource) setInstanceV2Status(ctx context.Context, customObject backupv1alpha1.ETCDBackup, instanceName string, newStatus string) error {

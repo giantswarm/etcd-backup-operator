@@ -13,40 +13,40 @@ import (
 
 const (
 	// Global States.
-	BackupStateEmpty                    = ""
-	BackupStatePending                  = "Pending"
-	BackupStateRunningV2BackupRunning   = "V2BackupRunning"
-	BackupStateRunningV2BackupCompleted = "V2BackupCompleted"
-	BackupStateRunningV3BackupRunning   = "RunningV3Backup"
-	BackupStateRunningV3BackupCompleted = "V3BackupCompleted"
-	BackupStateCompleted                = "Completed"
-	BackupStateFailed                   = "Failed"
+	backupStateEmpty                    = ""
+	backupStatePending                  = "Pending"
+	backupStateRunningV2BackupRunning   = "V2BackupRunning"
+	backupStateRunningV2BackupCompleted = "V2BackupCompleted"
+	backupStateRunningV3BackupRunning   = "RunningV3Backup"
+	backupStateRunningV3BackupCompleted = "V3BackupCompleted"
+	backupStateCompleted                = "Completed"
+	backupStateFailed                   = "Failed"
 
 	// Instance States.
-	InstanceBackupStatePending   = "Pending"
-	InstanceBackupStateCompleted = "Completed"
-	InstanceBackupStateFailed    = "Failed"
-	InstanceBackupStateSkipped   = "Skipped"
+	instanceBackupStatePending   = "Pending"
+	instanceBackupStateCompleted = "Completed"
+	instanceBackupStateFailed    = "Failed"
+	instanceBackupStateSkipped   = "Skipped"
 
 	// Various settings.
-	AllowedBackupAttempts = int8(3)
+	maxBackupAttempts = int8(3)
 
 	// Default values.
-	CRKeepTimeoutSeconds = 7 * 24 * 60 * 60
+	crKeepTimeoutSeconds = 7 * 24 * 60 * 60
 )
 
 // configureStateMachine configures and returns state machine that is driven by
 // EnsureCreated.
 func (r *Resource) configureStateMachine() {
 	sm := state.Machine{
-		BackupStateEmpty:                    r.backupEmptyTransition,
-		BackupStatePending:                  r.backupPendingTransition,
-		BackupStateRunningV2BackupRunning:   r.backupRunningV2BackupRunningTransition,
-		BackupStateRunningV2BackupCompleted: r.backupRunningV2BackupCompletedTransition,
-		BackupStateRunningV3BackupRunning:   r.backupRunningV3BackupRunningTransition,
-		BackupStateRunningV3BackupCompleted: r.backupRunningV3BackupCompletedTransition,
-		BackupStateCompleted:                r.backupCompletedTransition,
-		BackupStateFailed:                   r.backupFailedTransition,
+		backupStateEmpty:                    r.backupEmptyTransition,
+		backupStatePending:                  r.backupPendingTransition,
+		backupStateRunningV2BackupRunning:   r.backupRunningV2BackupRunningTransition,
+		backupStateRunningV2BackupCompleted: r.backupRunningV2BackupCompletedTransition,
+		backupStateRunningV3BackupRunning:   r.backupRunningV3BackupRunningTransition,
+		backupStateRunningV3BackupCompleted: r.backupRunningV3BackupCompletedTransition,
+		backupStateCompleted:                r.backupCompletedTransition,
+		backupStateFailed:                   r.backupFailedTransition,
 	}
 
 	r.stateMachine = sm

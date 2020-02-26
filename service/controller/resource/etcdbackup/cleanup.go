@@ -11,9 +11,9 @@ import (
 )
 
 func (r *Resource) cleanup(ctx context.Context, etcdBackup v1alpha1.ETCDBackup) error {
-	r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Looking for completed ETCDBackup resources older than %d seconds", CRKeepTimeoutSeconds))
+	r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Looking for completed ETCDBackup resources older than %d seconds", crKeepTimeoutSeconds))
 	diff := time.Now().UTC().Sub(etcdBackup.Status.FinishedTimestamp.Time).Seconds()
-	if diff > CRKeepTimeoutSeconds {
+	if diff > crKeepTimeoutSeconds {
 		r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Deleting (state %s, %f seconds old)", etcdBackup.Status.Status, diff))
 		err := r.k8sClient.G8sClient().BackupV1alpha1().ETCDBackups().Delete(etcdBackup.Name, &v1.DeleteOptions{})
 		if err != nil {

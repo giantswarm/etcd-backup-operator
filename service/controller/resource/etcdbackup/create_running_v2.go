@@ -69,11 +69,11 @@ func (r *Resource) backupRunningV2BackupRunningTransition(ctx context.Context, o
 			if err == nil {
 				// Backup was successful.
 				instanceStatus.V2.LatestError = ""
-				instanceStatus.V2.Status = InstanceBackupStateCompleted
+				instanceStatus.V2.Status = instanceBackupStateCompleted
 			} else {
 				// Backup was unsuccessful.
 				instanceStatus.V2.LatestError = err.Error()
-				instanceStatus.V2.Status = InstanceBackupStateFailed
+				instanceStatus.V2.Status = instanceBackupStateFailed
 			}
 
 			instanceStatus.V2.FinishedTimestamp = v1alpha1.DeepCopyTime{
@@ -81,7 +81,7 @@ func (r *Resource) backupRunningV2BackupRunningTransition(ctx context.Context, o
 			}
 		} else {
 			r.logger.LogCtx(ctx, "level", "info", "message", "V2 backup skipped for %s because ETCD V2 setting are not set.", etcdInstance.Name)
-			instanceStatus.V2.Status = InstanceBackupStateSkipped
+			instanceStatus.V2.Status = instanceBackupStateSkipped
 		}
 
 		customObject.Status.Instances[etcdInstance.Name] = instanceStatus
@@ -93,9 +93,9 @@ func (r *Resource) backupRunningV2BackupRunningTransition(ctx context.Context, o
 		r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("set resource status to '%s'", etcdInstance.Name))
 		r.logger.LogCtx(ctx, "level", "debug", "message", "canceling reconciliation")
 		reconciliationcanceledcontext.SetCanceled(ctx)
-		return BackupStateRunningV2BackupRunning, nil
+		return backupStateRunningV2BackupRunning, nil
 	}
 
 	// No status changes have happened within any of the instances, backup is completed.
-	return BackupStateRunningV2BackupCompleted, nil
+	return backupStateRunningV2BackupCompleted, nil
 }

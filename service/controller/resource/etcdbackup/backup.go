@@ -28,7 +28,7 @@ func (r *Resource) performBackup(ctx context.Context, backupper etcd.Backupper, 
 
 		return nil
 	}
-	b := backoff.NewMaxRetries(uint64(AllowedBackupAttempts), 20*time.Second)
+	b := backoff.NewMaxRetries(uint64(maxBackupAttempts), 20*time.Second)
 
 	err := backoff.Retry(o, b)
 	if err != nil {
