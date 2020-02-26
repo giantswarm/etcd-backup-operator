@@ -58,7 +58,7 @@ func (r *Resource) backupRunningV2BackupRunningTransition(ctx context.Context, o
 
 			encPass := os.Getenv("ENCRYPTION_PASSWORD")
 
-			backupper := etcd.V2Backupper{
+			backupper := etcd.V2Backup{
 				Datadir: etcdInstance.ETCDv2.DataDir,
 				EncPass: encPass,
 				Logger:  r.logger,

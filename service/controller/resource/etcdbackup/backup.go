@@ -11,7 +11,7 @@ import (
 	"github.com/giantswarm/etcd-backup-operator/pkg/etcd"
 )
 
-func (r *Resource) performBackup(ctx context.Context, backupper etcd.BackupInterface, instanceName string) error {
+func (r *Resource) performBackup(ctx context.Context, backupper etcd.Backupper, instanceName string) error {
 	attempts := 0
 
 	o := func() error {
@@ -39,7 +39,7 @@ func (r *Resource) performBackup(ctx context.Context, backupper etcd.BackupInter
 	return nil
 }
 
-func (r *Resource) backupAttempt(ctx context.Context, b etcd.BackupInterface) error {
+func (r *Resource) backupAttempt(ctx context.Context, b etcd.Backupper) error {
 	var err error
 	version := b.Version()
 

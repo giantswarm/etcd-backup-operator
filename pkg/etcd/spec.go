@@ -1,6 +1,6 @@
 package etcd
 
-type BackupInterface interface {
+type Backupper interface {
 	Create() (string, error)
 	Cleanup()
 	Encrypt() (string, error)
