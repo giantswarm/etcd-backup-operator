@@ -29,7 +29,7 @@ func ToCustomObject(v interface{}) (backupv1alpha1.ETCDBackup, error) {
 	return customObject, nil
 }
 
-func GetPrefix(instanceName string) string {
+func FilenamePrefix(instanceName string) string {
 	globalPrefix := os.Getenv(EnvFilenamePrefix)
 	if len(globalPrefix) == 0 {
 		globalPrefix = DefaultPrefix

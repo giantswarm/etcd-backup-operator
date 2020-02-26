@@ -62,7 +62,7 @@ func (r *Resource) backupRunningV2BackupRunningTransition(ctx context.Context, o
 				Datadir: etcdInstance.ETCDv2.DataDir,
 				EncPass: encPass,
 				Logger:  r.logger,
-				Prefix:  key.GetPrefix(instanceStatus.Name),
+				Prefix:  key.FilenamePrefix(instanceStatus.Name),
 			}
 
 			err := r.performBackup(ctx, backupper, instanceStatus.Name)
