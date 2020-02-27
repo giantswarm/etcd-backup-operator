@@ -10,6 +10,7 @@ import (
 	"github.com/giantswarm/operatorkit/resource/wrapper/retryresource"
 
 	"github.com/giantswarm/etcd-backup-operator/pkg/giantnetes"
+	"github.com/giantswarm/etcd-backup-operator/pkg/storage"
 	"github.com/giantswarm/etcd-backup-operator/service/controller/resource/etcdbackup"
 )
 
@@ -19,11 +20,15 @@ type etcdBackupResourceSetConfig struct {
 	ETCDv2Settings giantnetes.ETCDv2Settings
 	ETCDv3Settings giantnetes.ETCDv3Settings
 	EncryptionPwd  string
+	Uploader       storage.Uploader
 }
 
 func validateETCDBackupResourceSetConfigConfig(config etcdBackupResourceSetConfig) error {
 	if !config.ETCDv2Settings.AreComplete() && !config.ETCDv3Settings.AreComplete() {
 		return microerror.Maskf(invalidConfigError, "Either %T.ETCDv2Settings or %T.ETCDv3Settings must be defined", config, config)
+	}
+	if config.Uploader == nil {
+		return microerror.Maskf(invalidConfigError, "%T.Uploader must be defined", config)
 	}
 	return nil
 }
@@ -43,6 +48,7 @@ func newETCDBackupResourceSet(config etcdBackupResourceSetConfig) (*controller.R
 			ETCDv2Settings: config.ETCDv2Settings,
 			ETCDv3Settings: config.ETCDv3Settings,
 			EncryptionPwd:  config.EncryptionPwd,
+			Uploader:       config.Uploader,
 		}
 
 		etcdBackupResource, err = etcdbackup.New(c)

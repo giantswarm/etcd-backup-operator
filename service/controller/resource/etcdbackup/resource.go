@@ -6,6 +6,7 @@ import (
 	"github.com/giantswarm/micrologger"
 
 	"github.com/giantswarm/etcd-backup-operator/pkg/giantnetes"
+	"github.com/giantswarm/etcd-backup-operator/pkg/storage"
 	"github.com/giantswarm/etcd-backup-operator/service/controller/resource/etcdbackup/internal/state"
 )
 
@@ -19,6 +20,7 @@ type Config struct {
 	ETCDv2Settings giantnetes.ETCDv2Settings
 	ETCDv3Settings giantnetes.ETCDv3Settings
 	EncryptionPwd  string
+	Uploader       storage.Uploader
 }
 
 type Resource struct {
@@ -28,6 +30,7 @@ type Resource struct {
 	etcdV2Settings giantnetes.ETCDv2Settings
 	etcdV3Settings giantnetes.ETCDv3Settings
 	encryptionPwd  string
+	uploader       storage.Uploader
 }
 
 func New(config Config) (*Resource, error) {
@@ -40,6 +43,9 @@ func New(config Config) (*Resource, error) {
 	if !config.ETCDv2Settings.AreComplete() && !config.ETCDv3Settings.AreComplete() {
 		return nil, microerror.Maskf(invalidConfigError, "Either %T.ETCDv2Settings or %T.ETCDv3Settings must be defined", config, config)
 	}
+	if config.Uploader == nil {
+		return nil, microerror.Maskf(invalidConfigError, "%T.Uploader must not be empty", config)
+	}
 
 	r := &Resource{
 		logger:         config.Logger,
@@ -47,6 +53,7 @@ func New(config Config) (*Resource, error) {
 		etcdV2Settings: config.ETCDv2Settings,
 		etcdV3Settings: config.ETCDv3Settings,
 		encryptionPwd:  config.EncryptionPwd,
+		uploader:       config.Uploader,
 	}
 
 	r.configureStateMachine()

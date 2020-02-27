@@ -13,6 +13,11 @@ const (
 
 	EnvFilenamePrefix = "FILENAME_PREFIX"
 	DefaultPrefix     = "etcd-backup"
+
+	// Environment variables.
+	EnvAWSAccessKeyID     = "AWS_ACCESS_KEY_ID"
+	EnvAWSSecretAccessKey = "AWS_SECRET_ACCESS_KEY"
+	EncryptionPassword    = "ENCRYPTION_PASSWORD"
 )
 
 func ToCustomObject(v interface{}) (backupv1alpha1.ETCDBackup, error) {
