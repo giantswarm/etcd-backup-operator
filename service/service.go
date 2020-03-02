@@ -18,6 +18,7 @@ import (
 	"k8s.io/client-go/rest"
 
 	"github.com/giantswarm/etcd-backup-operator/flag"
+	"github.com/giantswarm/etcd-backup-operator/pkg/etcd/metrics"
 	"github.com/giantswarm/etcd-backup-operator/pkg/giantnetes"
 	"github.com/giantswarm/etcd-backup-operator/pkg/project"
 	"github.com/giantswarm/etcd-backup-operator/pkg/storage"
@@ -129,6 +130,11 @@ func New(config Config) (*Service, error) {
 		}
 	}
 
+	metricsHolder, err := metrics.NewMetricsHolder()
+	if err != nil {
+		return nil, microerror.Mask(err)
+	}
+
 	var etcdBackupController *controller.ETCDBackup
 	{
 		uploader, err := storage.NewS3Upload(storage.S3Config{
@@ -166,8 +172,9 @@ func New(config Config) (*Service, error) {
 	var operatorCollector *collector.Set
 	{
 		c := collector.SetConfig{
-			K8sClient: k8sClient.K8sClient(),
-			Logger:    config.Logger,
+			K8sClient:     k8sClient.K8sClient(),
+			Logger:        config.Logger,
+			MetricsHolder: metricsHolder,
 		}
 
 		operatorCollector, err = collector.NewSet(c)

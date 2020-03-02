@@ -5,12 +5,14 @@ import (
 	"github.com/giantswarm/microerror"
 	"github.com/giantswarm/micrologger"
 	"k8s.io/client-go/kubernetes"
+
+	"github.com/giantswarm/etcd-backup-operator/pkg/etcd/metrics"
 )
 
 type SetConfig struct {
-	K8sClient         kubernetes.Interface
-	Logger            micrologger.Logger
-	ETCDBackupMetrics *ETCDBackupMetrics
+	K8sClient     kubernetes.Interface
+	Logger        micrologger.Logger
+	MetricsHolder *metrics.Holder
 }
 
 // Set is basically only a wrapper for the operator's collector implementations.
@@ -22,10 +24,18 @@ type Set struct {
 }
 
 func NewSet(config SetConfig) (*Set, error) {
-	var err error
+	if config.K8sClient == nil {
+		return nil, microerror.Maskf(invalidConfigError, "%T.K8sClient must be defined", config)
+	}
+	if config.Logger == nil {
+		return nil, microerror.Maskf(invalidConfigError, "%T.Logger must be defined", config)
+	}
+	if config.MetricsHolder == nil {
+		return nil, microerror.Maskf(invalidConfigError, "%T.MetricsHolder must be defined", config)
+	}
 
 	etcdBackup, err := NewETCDBackup(ETCDBackupConfig{
-		ETCDBackupMetrics: config.ETCDBackupMetrics,
+		MetricsHolder: config.MetricsHolder,
 	})
 	if err != nil {
 		return nil, microerror.Mask(err)

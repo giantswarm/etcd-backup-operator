@@ -1,7 +1,10 @@
 package collector
 
 import (
+	"github.com/giantswarm/microerror"
 	"github.com/prometheus/client_golang/prometheus"
+
+	"github.com/giantswarm/etcd-backup-operator/pkg/etcd/metrics"
 )
 
 const (
@@ -64,107 +67,108 @@ var (
 
 	latestAttemptTimestampDesc = prometheus.NewDesc(
 		prometheus.BuildFQName(namespace, "", "latest_attempt"),
-		"Timestamp of the latest attempted scrape",
+		"Timestamp of the latest backup attempt",
 		labels,
 		constLabels,
 	)
 
 	latestSuccessTimestampDesc = prometheus.NewDesc(
 		prometheus.BuildFQName(namespace, "", "latest_success"),
-		"Timestamp of the latest successful scrape",
+		"Timestamp of the latest backup succeeded",
 		labels,
 		constLabels,
 	)
 )
 
 type ETCDBackupConfig struct {
-	ETCDBackupMetrics *ETCDBackupMetrics
+	MetricsHolder *metrics.Holder
 }
 
 type ETCDBackup struct {
-	ETCDBackupMetrics *ETCDBackupMetrics
+	metricsHolder *metrics.Holder
 }
 
 func NewETCDBackup(config ETCDBackupConfig) (*ETCDBackup, error) {
+	if config.MetricsHolder == nil {
+		return nil, microerror.Maskf(invalidConfigError, "%T.MetricsHolder must be defined", config)
+	}
 	r := &ETCDBackup{
-		ETCDBackupMetrics: config.ETCDBackupMetrics,
+		metricsHolder: config.MetricsHolder,
 	}
 
 	return r, nil
 }
 
 func (r *ETCDBackup) Collect(ch chan<- prometheus.Metric) error {
-	r.ETCDBackupMetrics.mux.Lock()
-	defer r.ETCDBackupMetrics.mux.Unlock()
-	for instance, metrics := range r.ETCDBackupMetrics.data {
-		if metrics.CreationTime > 0 {
+	for _, backupMetrics := range r.metricsHolder.GetData() {
+		if backupMetrics.CreationTime > 0 {
 			ch <- prometheus.MustNewConstMetric(
 				creationTimeDesc,
 				prometheus.GaugeValue,
-				float64(metrics.CreationTime),
-				instance,
+				float64(backupMetrics.CreationTime),
+				backupMetrics.InstanceName,
 			)
 		}
 
 		ch <- prometheus.MustNewConstMetric(
 			encryptionTimeDesc,
 			prometheus.GaugeValue,
-			float64(metrics.EncryptionTime),
-			instance,
+			float64(backupMetrics.EncryptionTime),
+			backupMetrics.InstanceName,
 		)
 
-		if metrics.UploadTime > 0 {
+		if backupMetrics.UploadTime > 0 {
 			ch <- prometheus.MustNewConstMetric(
 				uploadTimeDesc,
 				prometheus.GaugeValue,
-				float64(metrics.UploadTime),
-				instance,
+				float64(backupMetrics.UploadTime),
+				backupMetrics.InstanceName,
 			)
 		}
 
-		if metrics.BackupSize > 0 {
+		if backupMetrics.BackupSize > 0 {
 			ch <- prometheus.MustNewConstMetric(
 				backupSizeDesc,
 				prometheus.GaugeValue,
-				float64(metrics.BackupSize),
-				instance,
+				float64(backupMetrics.BackupSize),
+				backupMetrics.InstanceName,
 			)
 		}
 
 		ch <- prometheus.MustNewConstMetric(
 			attemptsCounterDesc,
 			prometheus.CounterValue,
-			float64(metrics.Attempts),
-			instance,
+			float64(backupMetrics.Attempts),
+			backupMetrics.InstanceName,
 		)
 
 		ch <- prometheus.MustNewConstMetric(
 			successCounterDesc,
 			prometheus.CounterValue,
-			float64(metrics.Successes),
-			instance,
+			float64(backupMetrics.Successes),
+			backupMetrics.InstanceName,
 		)
 
 		ch <- prometheus.MustNewConstMetric(
 			failureCounterDesc,
 			prometheus.CounterValue,
-			float64(metrics.Failures),
-			instance,
+			float64(backupMetrics.Failures),
+			backupMetrics.InstanceName,
 		)
 
 		ch <- prometheus.MustNewConstMetric(
 			latestAttemptTimestampDesc,
 			prometheus.GaugeValue,
-			float64(metrics.AttemptTS),
-			instance,
+			float64(backupMetrics.AttemptTS),
+			backupMetrics.InstanceName,
 		)
 
-		if metrics.SuccessTS > 0 {
+		if backupMetrics.SuccessTS > 0 {
 			ch <- prometheus.MustNewConstMetric(
 				latestSuccessTimestampDesc,
 				prometheus.GaugeValue,
-				float64(metrics.SuccessTS),
-				instance,
+				float64(backupMetrics.SuccessTS),
+				backupMetrics.InstanceName,
 			)
 		}
 	}
