@@ -38,14 +38,14 @@ func (r *Resource) doV2Backup(ctx context.Context, etcdInstance giantnetes.ETCDI
 
 		r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Starting v2 backup on instance %s", instanceStatus.Name))
 
-			backupper := etcd.V2Backup{
-				Datadir: etcdInstance.ETCDv2.DataDir,
-				EncPass: r.encryptionPwd,
-				Logger:  r.logger,
-				Prefix:  key.FilenamePrefix(instanceStatus.Name),
-			}
+		backupper := etcd.V2Backup{
+			Datadir: etcdInstance.ETCDv2.DataDir,
+			EncPass: r.encryptionPwd,
+			Logger:  r.logger,
+			Prefix:  key.FilenamePrefix(instanceStatus.Name),
+		}
 
-		err := r.performBackup(ctx, backupper, instanceStatus.Name)
+		backupAttemptResult, err := r.performBackup(ctx, backupper, instanceStatus.Name)
 		if err == nil {
 			// Backup was successful.
 			instanceStatus.V2.LatestError = ""
@@ -55,6 +55,8 @@ func (r *Resource) doV2Backup(ctx context.Context, etcdInstance giantnetes.ETCDI
 			instanceStatus.V2.LatestError = err.Error()
 			instanceStatus.V2.Status = instanceBackupStateFailed
 		}
+
+		r.metricsHolder.Add(instanceStatus.Name, backupAttemptResult)
 
 		instanceStatus.V2.FinishedTimestamp = v1alpha1.DeepCopyTime{
 			Time: time.Now().UTC(),

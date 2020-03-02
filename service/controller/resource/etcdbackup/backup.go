@@ -9,16 +9,19 @@ import (
 	"github.com/giantswarm/microerror"
 
 	"github.com/giantswarm/etcd-backup-operator/pkg/etcd"
+	"github.com/giantswarm/etcd-backup-operator/pkg/etcd/metrics"
 )
 
-func (r *Resource) performBackup(ctx context.Context, backupper etcd.Backupper, instanceName string) error {
+func (r *Resource) performBackup(ctx context.Context, backupper etcd.Backupper, instanceName string) (*metrics.BackupAttemptResult, error) {
 	attempts := 0
+	var err error
+	var latestMetrics *metrics.BackupAttemptResult
 
 	o := func() error {
 		attempts = attempts + 1
 		r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Attempt number %d for %s", attempts, instanceName))
 
-		err := r.backupAttempt(ctx, backupper)
+		latestMetrics, err = r.backupAttempt(ctx, backupper)
 		if err != nil {
 			r.logger.LogCtx(ctx, "level", "warning", "message", fmt.Sprintf("Backup attempt #%d failed for %s. Latest error was: %s", attempts, instanceName, err))
 			return microerror.Mask(err)
@@ -30,39 +33,45 @@ func (r *Resource) performBackup(ctx context.Context, backupper etcd.Backupper, 
 	}
 	b := backoff.NewMaxRetries(uint64(maxBackupAttempts), 20*time.Second)
 
-	err := backoff.Retry(o, b)
+	err = backoff.Retry(o, b)
 	if err != nil {
 		r.logger.LogCtx(ctx, "level", "warning", "message", fmt.Sprintf("All backup attempts failed for %s. Latest error was: %s", instanceName, err))
-		return err
+		return latestMetrics, err
 	}
 
-	return nil
+	return latestMetrics, nil
 }
 
-func (r *Resource) backupAttempt(ctx context.Context, b etcd.Backupper) error {
+func (r *Resource) backupAttempt(ctx context.Context, b etcd.Backupper) (*metrics.BackupAttemptResult, error) {
 	var err error
 	version := b.Version()
 
 	r.logger.LogCtx(ctx, "level", "debug", "message", "Creating backup file")
+	start := time.Now()
 	_, err = b.Create()
 	if err != nil {
-		return microerror.Maskf(err, "Etcd %s creation failed: %s", version, err)
+		return metrics.NewFailedBackupAttemptResult(), microerror.Maskf(err, "Etcd %s creation failed: %s", version, err)
 	}
+	creationTime := time.Since(start).Milliseconds()
 
 	r.logger.LogCtx(ctx, "level", "debug", "message", "Encrypting backup file")
+	start = time.Now()
 	filepath, err := b.Encrypt()
 	if err != nil {
-		return microerror.Maskf(err, "Etcd %s encryption failed: %s", version, err)
+		return metrics.NewFailedBackupAttemptResult(), microerror.Maskf(err, "Etcd %s encryption failed: %s", version, err)
 	}
+	encryptionTime := time.Since(start).Milliseconds()
 
 	r.logger.LogCtx(ctx, "level", "debug", "message", "Uploading backup file")
-	_, err = r.uploader.Upload(filepath)
+	start = time.Now()
+	backupSize, err := r.uploader.Upload(filepath)
 	if err != nil {
-		return microerror.Maskf(err, "Etcd %s upload failed: %s", version, err)
+		return metrics.NewFailedBackupAttemptResult(), microerror.Maskf(err, "Etcd %s upload failed: %s", version, err)
 	}
+	uploadTime := time.Since(start).Milliseconds()
 
 	r.logger.LogCtx(ctx, "level", "debug", "message", "Cleaning up")
 	b.Cleanup()
 
-	return nil
+	return metrics.NewSuccessfulBackupAttemptResult(backupSize, creationTime, encryptionTime, uploadTime), nil
 }

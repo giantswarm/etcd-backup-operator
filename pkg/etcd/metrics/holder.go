@@ -2,10 +2,11 @@ package metrics
 
 import (
 	"sync"
+	"time"
 )
 
 type Holder struct {
-	data map[string]instanceBackupMetrics
+	data map[string]*instanceBackupMetrics
 	mux  sync.Mutex
 }
 
@@ -21,8 +22,38 @@ func (h Holder) GetData() []instanceBackupMetrics {
 	var ret []instanceBackupMetrics
 
 	for _, metrics := range h.data {
-		ret = append(ret, metrics)
+		ret = append(ret, *metrics)
 	}
 
 	return ret
+}
+
+func (h Holder) Add(instanceName string, metric *BackupAttemptResult) {
+	h.mux.Lock()
+	defer h.mux.Unlock()
+
+	if h.data == nil {
+		h.data = make(map[string]*InstanceBackupMetrics)
+	}
+
+	current := h.data[instanceName]
+	if current == nil {
+		current = &InstanceBackupMetrics{}
+	}
+
+	now := time.Now().Unix()
+	current.LatestAttemptTS = now
+	current.AttemptsCount = current.AttemptsCount + 1
+	if metric.Successful {
+		current.SuccessesCount = current.SuccessesCount + 1
+		current.CreationTime = metric.CreationTimeMeasurement
+		current.EncryptionTime = metric.EncryptionTimeMeasurement
+		current.UploadTime = metric.UploadTimeMeasurement
+		current.BackupFileSize = metric.BackupSizeMeasurement
+		current.LatestSuccessTS = now
+	} else {
+		current.FailuresCount = current.FailuresCount + 1
+	}
+
+	h.data[instanceName] = current
 }

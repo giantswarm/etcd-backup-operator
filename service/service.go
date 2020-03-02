@@ -160,6 +160,7 @@ func New(config Config) (*Service, error) {
 				Cert:      config.Viper.GetString(config.Flag.Service.ETCDv3.Cert),
 			},
 			EncryptionPwd: os.Getenv(key.EncryptionPassword),
+			MetricsHolder: metricsHolder,
 			Uploader:      uploader,
 		}
 

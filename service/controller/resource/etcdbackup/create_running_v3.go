@@ -50,7 +50,7 @@ func (r *Resource) doV3Backup(ctx context.Context, etcdInstance giantnetes.ETCDI
 			Prefix:    key.FilenamePrefix(instanceStatus.Name),
 		}
 
-		err := r.performBackup(ctx, backupper, instanceStatus.Name)
+		backupAttemptResult, err := r.performBackup(ctx, backupper, instanceStatus.Name)
 		if err == nil {
 			// Backup was successful.
 			instanceStatus.V3.LatestError = ""
@@ -60,6 +60,8 @@ func (r *Resource) doV3Backup(ctx context.Context, etcdInstance giantnetes.ETCDI
 			instanceStatus.V3.LatestError = err.Error()
 			instanceStatus.V3.Status = instanceBackupStateFailed
 		}
+
+		r.metricsHolder.Add(instanceStatus.Name, backupAttemptResult)
 
 		instanceStatus.V3.FinishedTimestamp = v1alpha1.DeepCopyTime{
 			Time: time.Now().UTC(),
