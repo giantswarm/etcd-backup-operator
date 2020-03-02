@@ -1,8 +1,9 @@
 package metrics
 
-type InstanceBackupMetrics struct {
-	InstanceName    string
+type instanceBackupMetrics struct {
 	AttemptsCount   int32
+	ETCDVersion     string
+	InstanceName    string
 	LatestAttemptTS int64
 	BackupFileSize  int64
 	CreationTime    int64

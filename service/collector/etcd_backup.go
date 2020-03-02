@@ -9,11 +9,12 @@ import (
 
 const (
 	labelTenantClusterId = "tenant_cluster_id"
+	etcdVersion          = "etcd_version"
 )
 
 var (
 	namespace                     = "etcd_backup"
-	labels                        = []string{labelTenantClusterId}
+	labels                        = []string{labelTenantClusterId, etcdVersion}
 	constLabels prometheus.Labels = nil
 
 	creationTimeDesc = prometheus.NewDesc(
@@ -107,6 +108,7 @@ func (r *ETCDBackup) Collect(ch chan<- prometheus.Metric) error {
 				prometheus.GaugeValue,
 				float64(backupMetrics.CreationTime),
 				backupMetrics.InstanceName,
+				backupMetrics.ETCDVersion,
 			)
 		}
 
@@ -115,6 +117,7 @@ func (r *ETCDBackup) Collect(ch chan<- prometheus.Metric) error {
 			prometheus.GaugeValue,
 			float64(backupMetrics.EncryptionTime),
 			backupMetrics.InstanceName,
+			backupMetrics.ETCDVersion,
 		)
 
 		if backupMetrics.UploadTime > 0 {
@@ -123,6 +126,7 @@ func (r *ETCDBackup) Collect(ch chan<- prometheus.Metric) error {
 				prometheus.GaugeValue,
 				float64(backupMetrics.UploadTime),
 				backupMetrics.InstanceName,
+				backupMetrics.ETCDVersion,
 			)
 		}
 
@@ -132,6 +136,7 @@ func (r *ETCDBackup) Collect(ch chan<- prometheus.Metric) error {
 				prometheus.GaugeValue,
 				float64(backupMetrics.BackupFileSize),
 				backupMetrics.InstanceName,
+				backupMetrics.ETCDVersion,
 			)
 		}
 
@@ -140,6 +145,7 @@ func (r *ETCDBackup) Collect(ch chan<- prometheus.Metric) error {
 			prometheus.CounterValue,
 			float64(backupMetrics.AttemptsCount),
 			backupMetrics.InstanceName,
+			backupMetrics.ETCDVersion,
 		)
 
 		ch <- prometheus.MustNewConstMetric(
@@ -147,6 +153,7 @@ func (r *ETCDBackup) Collect(ch chan<- prometheus.Metric) error {
 			prometheus.CounterValue,
 			float64(backupMetrics.SuccessesCount),
 			backupMetrics.InstanceName,
+			backupMetrics.ETCDVersion,
 		)
 
 		ch <- prometheus.MustNewConstMetric(
@@ -154,6 +161,7 @@ func (r *ETCDBackup) Collect(ch chan<- prometheus.Metric) error {
 			prometheus.CounterValue,
 			float64(backupMetrics.FailuresCount),
 			backupMetrics.InstanceName,
+			backupMetrics.ETCDVersion,
 		)
 
 		ch <- prometheus.MustNewConstMetric(
@@ -161,6 +169,7 @@ func (r *ETCDBackup) Collect(ch chan<- prometheus.Metric) error {
 			prometheus.GaugeValue,
 			float64(backupMetrics.LatestAttemptTS),
 			backupMetrics.InstanceName,
+			backupMetrics.ETCDVersion,
 		)
 
 		if backupMetrics.LatestSuccessTS > 0 {
@@ -169,6 +178,7 @@ func (r *ETCDBackup) Collect(ch chan<- prometheus.Metric) error {
 				prometheus.GaugeValue,
 				float64(backupMetrics.LatestSuccessTS),
 				backupMetrics.InstanceName,
+				backupMetrics.ETCDVersion,
 			)
 		}
 	}
