@@ -131,7 +131,7 @@ func New(config Config) (*Service, error) {
 
 	var etcdBackupController *controller.ETCDBackup
 	{
-		uploader, err := storage.NewS3Uploader(storage.S3Config{
+		uploader, err := storage.NewS3Upload(storage.S3Config{
 			AccessKeyID:     os.Getenv(key.EnvAWSAccessKeyID),
 			Bucket:          config.Viper.GetString(config.Flag.Service.S3.Bucket),
 			Region:          config.Viper.GetString(config.Flag.Service.S3.Region),

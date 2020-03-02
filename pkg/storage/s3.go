@@ -24,7 +24,7 @@ type S3Upload struct {
 	secretAccessKey string
 }
 
-func NewS3Uploader(config S3Config) (*S3Upload, error) {
+func NewS3Upload(config S3Config) (*S3Upload, error) {
 	if config.AccessKeyID == "" {
 		return nil, microerror.Maskf(invalidConfigError, "%T.AccessKeyID must be defined", config)
 	}
