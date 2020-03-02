@@ -33,12 +33,12 @@ func (h Holder) Add(instanceName string, metric *BackupAttemptResult) {
 	defer h.mux.Unlock()
 
 	if h.data == nil {
-		h.data = make(map[string]*InstanceBackupMetrics)
+		h.data = make(map[string]*instanceBackupMetrics)
 	}
 
 	current := h.data[instanceName]
 	if current == nil {
-		current = &InstanceBackupMetrics{}
+		current = &instanceBackupMetrics{}
 	}
 
 	now := time.Now().Unix()
