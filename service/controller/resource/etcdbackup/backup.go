@@ -56,7 +56,7 @@ func (r *Resource) backupAttempt(ctx context.Context, b etcd.Backupper) error {
 	}
 
 	r.logger.LogCtx(ctx, "level", "debug", "message", "Uploading backup file")
-	_, err = r.upload(ctx, filepath)
+	_, err = r.uploader.Upload(filepath)
 	if err != nil {
 		return microerror.Maskf(err, "Etcd %s upload failed: %s", version, err)
 	}

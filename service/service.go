@@ -20,8 +20,10 @@ import (
 	"github.com/giantswarm/etcd-backup-operator/flag"
 	"github.com/giantswarm/etcd-backup-operator/pkg/giantnetes"
 	"github.com/giantswarm/etcd-backup-operator/pkg/project"
+	"github.com/giantswarm/etcd-backup-operator/pkg/storage"
 	"github.com/giantswarm/etcd-backup-operator/service/collector"
 	"github.com/giantswarm/etcd-backup-operator/service/controller"
+	"github.com/giantswarm/etcd-backup-operator/service/controller/key"
 )
 
 // Config represents the configuration used to create a new service.
@@ -129,6 +131,16 @@ func New(config Config) (*Service, error) {
 
 	var etcdBackupController *controller.ETCDBackup
 	{
+		uploader, err := storage.NewS3Upload(storage.S3Config{
+			AccessKeyID:     os.Getenv(key.EnvAWSAccessKeyID),
+			Bucket:          config.Viper.GetString(config.Flag.Service.S3.Bucket),
+			Region:          config.Viper.GetString(config.Flag.Service.S3.Region),
+			SecretAccessKey: os.Getenv(key.EnvAWSSecretAccessKey),
+		})
+		if err != nil {
+			return nil, microerror.Mask(err)
+		}
+
 		c := controller.ETCDBackupConfig{
 			K8sClient: k8sClient,
 			Logger:    config.Logger,
@@ -141,7 +153,8 @@ func New(config Config) (*Service, error) {
 				Key:       config.Viper.GetString(config.Flag.Service.ETCDv3.Key),
 				Cert:      config.Viper.GetString(config.Flag.Service.ETCDv3.Cert),
 			},
-			EncryptionPwd: os.Getenv("ENCRYPTION_PASSWORD"),
+			EncryptionPwd: os.Getenv(key.EncryptionPassword),
+			Uploader:      uploader,
 		}
 
 		etcdBackupController, err = controller.NewETCDBackup(c)
