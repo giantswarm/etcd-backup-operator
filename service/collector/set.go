@@ -8,8 +8,9 @@ import (
 )
 
 type SetConfig struct {
-	K8sClient kubernetes.Interface
-	Logger    micrologger.Logger
+	K8sClient         kubernetes.Interface
+	Logger            micrologger.Logger
+	ETCDBackupMetrics *ETCDBackupMetrics
 }
 
 // Set is basically only a wrapper for the operator's collector implementations.
@@ -23,7 +24,9 @@ type Set struct {
 func NewSet(config SetConfig) (*Set, error) {
 	var err error
 
-	todo, err := NewTodo(TodoConfig{})
+	etcdBackup, err := NewETCDBackup(ETCDBackupConfig{
+		ETCDBackupMetrics: config.ETCDBackupMetrics,
+	})
 	if err != nil {
 		return nil, microerror.Mask(err)
 	}
@@ -32,7 +35,7 @@ func NewSet(config SetConfig) (*Set, error) {
 	{
 		c := collector.SetConfig{
 			Collectors: []collector.Interface{
-				todo,
+				etcdBackup,
 			},
 			Logger: config.Logger,
 		}
