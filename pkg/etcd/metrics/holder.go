@@ -13,7 +13,7 @@ func NewMetricsHolder() (*Holder, error) {
 	return &Holder{}, nil
 }
 
-// Returns a copy of the current metrics data in a synchronized way
+// Returns a copy of the current metrics data in a synchronized way.
 func (h Holder) GetData() []InstanceBackupMetrics {
 	h.mux.Lock()
 	defer h.mux.Unlock()
