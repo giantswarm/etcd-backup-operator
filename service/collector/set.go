@@ -4,13 +4,11 @@ import (
 	"github.com/giantswarm/exporterkit/collector"
 	"github.com/giantswarm/microerror"
 	"github.com/giantswarm/micrologger"
-	"k8s.io/client-go/kubernetes"
 
 	"github.com/giantswarm/etcd-backup-operator/pkg/etcd/metrics"
 )
 
 type SetConfig struct {
-	K8sClient     kubernetes.Interface
 	Logger        micrologger.Logger
 	MetricsHolder *metrics.Holder
 }
@@ -24,9 +22,6 @@ type Set struct {
 }
 
 func NewSet(config SetConfig) (*Set, error) {
-	if config.K8sClient == nil {
-		return nil, microerror.Maskf(invalidConfigError, "%T.K8sClient must be defined", config)
-	}
 	if config.Logger == nil {
 		return nil, microerror.Maskf(invalidConfigError, "%T.Logger must be defined", config)
 	}

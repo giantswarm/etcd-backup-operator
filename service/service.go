@@ -172,7 +172,6 @@ func New(config Config) (*Service, error) {
 	var operatorCollector *collector.Set
 	{
 		c := collector.SetConfig{
-			K8sClient:     k8sClient.K8sClient(),
 			Logger:        config.Logger,
 			MetricsHolder: metricsHolder,
 		}
