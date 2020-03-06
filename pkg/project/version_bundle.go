@@ -9,7 +9,7 @@ func NewVersionBundle() versionbundle.Bundle {
 		Changelogs: []versionbundle.Changelog{
 			{
 				Component:   "etcd-backup-operator",
-				Description: "TODO",
+				Description: "This operator is installed on the control plane and takes care of creating backups of the control plane and tenant cluster's ETCDs. It uploads the backups to Amazon S3",
 				Kind:        versionbundle.KindChanged,
 			},
 		},

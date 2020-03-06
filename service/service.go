@@ -22,7 +22,6 @@ import (
 	"github.com/giantswarm/etcd-backup-operator/pkg/giantnetes"
 	"github.com/giantswarm/etcd-backup-operator/pkg/project"
 	"github.com/giantswarm/etcd-backup-operator/pkg/storage"
-	"github.com/giantswarm/etcd-backup-operator/service/collector"
 	"github.com/giantswarm/etcd-backup-operator/service/controller"
 	"github.com/giantswarm/etcd-backup-operator/service/controller/key"
 )
@@ -40,7 +39,7 @@ type Service struct {
 
 	bootOnce             sync.Once
 	etcdBackupController *controller.ETCDBackup
-	operatorCollector    *collector.Set
+	metricsExporter      *metrics.Exporter
 }
 
 // New creates a new configured service object.
@@ -130,7 +129,7 @@ func New(config Config) (*Service, error) {
 		}
 	}
 
-	metricsHolder, err := metrics.NewMetricsHolder()
+	metricsHolder, err := metrics.NewExporter()
 	if err != nil {
 		return nil, microerror.Mask(err)
 	}
@@ -160,23 +159,11 @@ func New(config Config) (*Service, error) {
 				Cert:      config.Viper.GetString(config.Flag.Service.ETCDv3.Cert),
 			},
 			EncryptionPwd: os.Getenv(key.EncryptionPassword),
+			MetricsHolder: metricsHolder,
 			Uploader:      uploader,
 		}
 
 		etcdBackupController, err = controller.NewETCDBackup(c)
-		if err != nil {
-			return nil, microerror.Mask(err)
-		}
-	}
-
-	var operatorCollector *collector.Set
-	{
-		c := collector.SetConfig{
-			Logger:        config.Logger,
-			MetricsHolder: metricsHolder,
-		}
-
-		operatorCollector, err = collector.NewSet(c)
 		if err != nil {
 			return nil, microerror.Mask(err)
 		}
@@ -204,7 +191,7 @@ func New(config Config) (*Service, error) {
 
 		bootOnce:             sync.Once{},
 		etcdBackupController: etcdBackupController,
-		operatorCollector:    operatorCollector,
+		metricsExporter:      metricsHolder,
 	}
 
 	return s, nil
@@ -212,8 +199,7 @@ func New(config Config) (*Service, error) {
 
 func (s *Service) Boot(ctx context.Context) {
 	s.bootOnce.Do(func() {
-		go s.operatorCollector.Boot(ctx)
-
+		go s.metricsExporter.Boot(ctx)
 		go s.etcdBackupController.Boot(ctx)
 	})
 }
