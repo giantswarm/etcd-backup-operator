@@ -56,7 +56,7 @@ func (r *Resource) doV2Backup(ctx context.Context, etcdInstance giantnetes.ETCDI
 			instanceStatus.V2.Status = instanceBackupStateFailed
 		}
 
-		r.metricsHolder.Add(instanceStatus.Name, backupAttemptResult)
+		r.metricsHolder.Add(instanceStatus.Name, backupper.Version(), backupAttemptResult)
 
 		instanceStatus.V2.FinishedTimestamp = v1alpha1.DeepCopyTime{
 			Time: time.Now().UTC(),

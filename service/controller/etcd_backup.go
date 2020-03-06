@@ -20,7 +20,7 @@ type ETCDBackupConfig struct {
 	ETCDv2Settings giantnetes.ETCDv2Settings
 	ETCDv3Settings giantnetes.ETCDv3Settings
 	EncryptionPwd  string
-	MetricsHolder  *metrics.Holder
+	MetricsHolder  *metrics.Exporter
 	Uploader       storage.Uploader
 }
 
