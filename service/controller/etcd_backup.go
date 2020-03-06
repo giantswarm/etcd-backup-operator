@@ -8,6 +8,7 @@ import (
 	"github.com/giantswarm/operatorkit/controller"
 	"k8s.io/apimachinery/pkg/runtime"
 
+	"github.com/giantswarm/etcd-backup-operator/pkg/etcd/metrics"
 	"github.com/giantswarm/etcd-backup-operator/pkg/giantnetes"
 	"github.com/giantswarm/etcd-backup-operator/pkg/project"
 	"github.com/giantswarm/etcd-backup-operator/pkg/storage"
@@ -19,6 +20,7 @@ type ETCDBackupConfig struct {
 	ETCDv2Settings giantnetes.ETCDv2Settings
 	ETCDv3Settings giantnetes.ETCDv3Settings
 	EncryptionPwd  string
+	MetricsHolder  *metrics.Exporter
 	Uploader       storage.Uploader
 }
 
@@ -29,6 +31,9 @@ type ETCDBackup struct {
 func validateETCDBackupConfig(config ETCDBackupConfig) error {
 	if !config.ETCDv2Settings.AreComplete() && !config.ETCDv3Settings.AreComplete() {
 		return microerror.Maskf(invalidConfigError, "Either %T.ETCDv2Settings or %T.ETCDv3Settings must be defined", config, config)
+	}
+	if config.MetricsHolder == nil {
+		return microerror.Maskf(invalidConfigError, "%T.MetricsHolder must be defined", config)
 	}
 	if config.Uploader == nil {
 		return microerror.Maskf(invalidConfigError, "%T.Uploader must be defined", config)
@@ -89,6 +94,7 @@ func newETCDBackupResourceSets(config ETCDBackupConfig) ([]*controller.ResourceS
 			ETCDv2Settings: config.ETCDv2Settings,
 			ETCDv3Settings: config.ETCDv3Settings,
 			EncryptionPwd:  config.EncryptionPwd,
+			MetricsHolder:  config.MetricsHolder,
 			Uploader:       config.Uploader,
 		}
 

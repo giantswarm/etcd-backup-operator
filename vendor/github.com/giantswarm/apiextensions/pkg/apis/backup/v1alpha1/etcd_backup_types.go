@@ -52,7 +52,6 @@ spec:
               type: object
           required:
           - status
-          - instances
   additionalPrinterColumns:
   - name: guestBackup
     type: boolean
