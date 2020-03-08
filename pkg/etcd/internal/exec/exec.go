@@ -21,12 +21,6 @@ func Cmd(cmd string, args []string, envs []string, logger micrologger.Logger) ([
 	c := exec.Command(cmd, args...)
 	c.Env = append(os.Environ(), envs...)
 
-	err := c.Run()
-	if err != nil {
-		logger.Log("level", "error", "msg", "execCmd failed", "err", err)
-		return []byte{}, microerror.Mask(err)
-	}
-
 	// Execute and get output.
 	stdOutErr, err := c.CombinedOutput()
 	if err != nil {
