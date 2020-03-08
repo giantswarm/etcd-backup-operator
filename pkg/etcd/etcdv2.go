@@ -2,6 +2,7 @@ package etcd
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -47,9 +48,9 @@ func (b V2Backup) Create() (string, error) {
 		"--backup-dir", fpath,
 	}
 
-	_, err := exec.Cmd(key.EtcdctlCmd, etcdctlArgs, etcdctlEnvs, b.Logger)
+	log, err := exec.Cmd(key.Etcdctl2Cmd, etcdctlArgs, etcdctlEnvs, b.Logger)
 	if err != nil {
-		return "", microerror.Mask(err)
+		return "", errors.New(string(log))
 	}
 
 	// Create tar.gz.
