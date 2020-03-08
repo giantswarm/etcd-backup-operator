@@ -1,6 +1,6 @@
 FROM alpine:3.10
 
-RUN apk add --no-cache ca-certificates
+RUN apk add --no-cache ca-certificates curl
 
 ENV ETCD3_VER=v3.2.4
 RUN \
