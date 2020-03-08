@@ -47,6 +47,8 @@ func (b V3Backup) Create() (string, error) {
 		"snapshot",
 		"save",
 		fpath,
+		"--dial-timeout=10s",
+		"--command-timeout=30s",
 	}
 
 	if b.Endpoints != "" {

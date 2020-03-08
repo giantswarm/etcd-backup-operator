@@ -17,7 +17,7 @@ const (
 	backupStatePending                  = "Pending"
 	backupStateRunningV2BackupRunning   = "V2BackupRunning"
 	backupStateRunningV2BackupCompleted = "V2BackupCompleted"
-	backupStateRunningV3BackupRunning   = "RunningV3Backup"
+	backupStateRunningV3BackupRunning   = "V3BackupRunning"
 	backupStateRunningV3BackupCompleted = "V3BackupCompleted"
 	backupStateCompleted                = "Completed"
 	backupStateFailed                   = "Failed"

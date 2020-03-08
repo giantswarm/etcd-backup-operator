@@ -29,13 +29,17 @@ func (r *Resource) backupRunningV2BackupRunningTransition(ctx context.Context, o
 }
 
 func (r *Resource) doV2Backup(ctx context.Context, etcdInstance giantnetes.ETCDInstance, instanceStatus *v1alpha1.ETCDInstanceBackupStatusIndex) bool {
+	// If state is terminal, there's nothing else we can do on this instance, so just skip to next one.
+	if isTerminalInstaceState(instanceStatus.V2.Status) {
+		return false
+	}
+
+	if instanceStatus.V2.StartedTimestamp.Time.IsZero() {
+		instanceStatus.V2.StartedTimestamp.Time = time.Now().UTC()
+	}
+
 	etcdSettings := etcdInstance.ETCDv2
 	if etcdSettings.AreComplete() {
-		// If state is terminal, there's nothing else we can do on this instance, so just skip to next one.
-		if isTerminalInstaceState(instanceStatus.V2.Status) {
-			return false
-		}
-
 		r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Starting v2 backup on instance %s", instanceStatus.Name))
 
 		backupper := etcd.V2Backup{
@@ -57,13 +61,13 @@ func (r *Resource) doV2Backup(ctx context.Context, etcdInstance giantnetes.ETCDI
 		}
 
 		r.metricsHolder.Add(instanceStatus.Name, backupper.Version(), backupAttemptResult)
-
-		instanceStatus.V2.FinishedTimestamp = v1alpha1.DeepCopyTime{
-			Time: time.Now().UTC(),
-		}
 	} else {
-		r.logger.LogCtx(ctx, "level", "info", "message", "V2 backup skipped for %s because ETCD V2 setting are not set.", instanceStatus.Name)
+		r.logger.LogCtx(ctx, "level", "info", "message", fmt.Sprintf("V2 backup skipped for %s because ETCD V2 setting are not set.", instanceStatus.Name))
 		instanceStatus.V2.Status = instanceBackupStateSkipped
+	}
+
+	instanceStatus.V2.FinishedTimestamp = v1alpha1.DeepCopyTime{
+		Time: time.Now().UTC(),
 	}
 
 	return true

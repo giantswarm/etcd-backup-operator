@@ -101,7 +101,7 @@ type ETCDBackupSpec struct {
 
 type ETCDBackupStatus struct {
 	// map containing the state of the backup for all instances
-	Instances map[string]ETCDInstanceBackupStatusIndex `json:"instances" yaml:"instances"`
+	Instances map[string]ETCDInstanceBackupStatusIndex `json:"instances,omitempty" yaml:"instances"`
 	// Status of the whole backup job (can be 'Pending', 'Running'. 'Completed', 'Failed')
 	Status string `json:"status" yaml:"status"`
 	// Timestamp when the first attempt was made

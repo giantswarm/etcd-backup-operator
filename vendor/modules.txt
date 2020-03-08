@@ -56,7 +56,7 @@ github.com/evanphx/json-patch
 github.com/fsnotify/fsnotify
 # github.com/ghodss/yaml v1.0.1-0.20190212211648-25d852aebe32
 github.com/ghodss/yaml
-# github.com/giantswarm/apiextensions v0.0.0-20200227114837-d8169742c121
+# github.com/giantswarm/apiextensions v0.0.0-20200307171241-a3aeb377a20d
 github.com/giantswarm/apiextensions/pkg/apis/application/v1alpha1
 github.com/giantswarm/apiextensions/pkg/apis/backup/v1alpha1
 github.com/giantswarm/apiextensions/pkg/apis/core/v1alpha1

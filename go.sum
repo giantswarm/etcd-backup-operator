@@ -158,6 +158,12 @@ github.com/giantswarm/apiextensions v0.0.0-20200224110558-b7aa57c62ffb h1:m0aSMD
 github.com/giantswarm/apiextensions v0.0.0-20200224110558-b7aa57c62ffb/go.mod h1:zHLSgCszRMdZUzwmfOibzcyfRC89ygwAQlpXcukgZuc=
 github.com/giantswarm/apiextensions v0.0.0-20200227114837-d8169742c121 h1:nl+VXDwPzXrAchzHufxi4SZ+isRiiGhxUcP+AZ0BF9s=
 github.com/giantswarm/apiextensions v0.0.0-20200227114837-d8169742c121/go.mod h1:zHLSgCszRMdZUzwmfOibzcyfRC89ygwAQlpXcukgZuc=
+github.com/giantswarm/apiextensions v0.0.0-20200307170224-49dfce9bf19a h1:9I/KlTa/v3NI5iPeqpw/FRw10YDckwrfR69pW1H50qE=
+github.com/giantswarm/apiextensions v0.0.0-20200307170224-49dfce9bf19a/go.mod h1:zHLSgCszRMdZUzwmfOibzcyfRC89ygwAQlpXcukgZuc=
+github.com/giantswarm/apiextensions v0.0.0-20200307170335-512bb2ad9ba7 h1:WDB7qaBLMH2YchHENhY/Pirkmk+HVtt8Rs185P8oMwY=
+github.com/giantswarm/apiextensions v0.0.0-20200307170335-512bb2ad9ba7/go.mod h1:zHLSgCszRMdZUzwmfOibzcyfRC89ygwAQlpXcukgZuc=
+github.com/giantswarm/apiextensions v0.0.0-20200307171241-a3aeb377a20d h1:+6zG99eGkd1uRCD9ulUIqlblpqATr0LizFoGzHq5v7s=
+github.com/giantswarm/apiextensions v0.0.0-20200307171241-a3aeb377a20d/go.mod h1:zHLSgCszRMdZUzwmfOibzcyfRC89ygwAQlpXcukgZuc=
 github.com/giantswarm/backoff v0.0.0-20190913091243-4dd491125192 h1:jguq2nu1gbvP6OQIqmkUlbl4ekpwSRUPiXUWlF8InyQ=
 github.com/giantswarm/backoff v0.0.0-20190913091243-4dd491125192/go.mod h1:kjItv/iHgl/xsprYgbnCOme1pVTiiiaZeR2ybsN4ab0=
 github.com/giantswarm/etcd-backup v0.0.0-20200108121155-402c6bedf381 h1:GOZK21PoKjWe8VJEepfcW82PDYUr39qxWDjUIGYjICw=
