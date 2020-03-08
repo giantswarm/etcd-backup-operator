@@ -48,7 +48,7 @@ func (b V2Backup) Create() (string, error) {
 		"--backup-dir", fpath,
 	}
 
-	log, err := exec.Cmd(key.Etcdctl2Cmd, etcdctlArgs, etcdctlEnvs, b.Logger)
+	log, err := exec.Cmd(key.EtcdctlCmd, etcdctlArgs, etcdctlEnvs, b.Logger)
 	if err != nil {
 		return "", errors.New(string(log))
 	}
