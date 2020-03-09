@@ -11,6 +11,7 @@ metadata:
 spec:
   ports:
   - port: 8000
+  - port: 8112
   selector:
     app: {{ .Values.project.name }}
     version: {{ .Values.project.version }}
