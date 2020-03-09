@@ -10,8 +10,10 @@ metadata:
     prometheus.io/scrape: "true"
 spec:
   ports:
-  - port: 8000
-  - port: 8112
+  - name: api
+    port: 8000
+  - name: metrics
+    port: 8112
   selector:
     app: {{ .Values.project.name }}
     version: {{ .Values.project.version }}
