@@ -10,8 +10,6 @@ metadata:
     prometheus.io/scrape: "true"
 spec:
   ports:
-  - name: api
-    port: 8000
   - name: metrics
     port: 8112
   selector:
