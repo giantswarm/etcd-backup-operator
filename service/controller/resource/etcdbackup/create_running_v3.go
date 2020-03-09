@@ -3,7 +3,6 @@ package etcdbackup
 import (
 	"context"
 	"fmt"
-	"os"
 	"time"
 
 	"github.com/giantswarm/apiextensions/pkg/apis/backup/v1alpha1"
@@ -44,15 +43,7 @@ func (r *Resource) doV3Backup(ctx context.Context, etcdInstance giantnetes.ETCDI
 	if etcdSettings.AreComplete() {
 		r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Starting v3 backup on instance %s", instanceStatus.Name))
 
-		backupper := etcd.V3Backup{
-			CACert:    etcdSettings.CaCert,
-			Cert:      etcdSettings.Cert,
-			EncPass:   os.Getenv("ENCRYPTION_PASSWORD"),
-			Endpoints: etcdSettings.Endpoints,
-			Logger:    r.logger,
-			Key:       etcdSettings.Key,
-			Prefix:    key.FilenamePrefix(instanceStatus.Name),
-		}
+		backupper := etcd.NewV3Backup(etcdSettings.CaCert, etcdSettings.Cert, r.encryptionPwd, etcdSettings.Endpoints, r.logger, etcdSettings.Key, key.FilenamePrefix(instanceStatus.Name))
 
 		backupAttemptResult, err := r.performBackup(ctx, backupper, instanceStatus.Name)
 		if err == nil {

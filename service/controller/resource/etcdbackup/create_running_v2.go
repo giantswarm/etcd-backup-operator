@@ -42,12 +42,7 @@ func (r *Resource) doV2Backup(ctx context.Context, etcdInstance giantnetes.ETCDI
 	if etcdSettings.AreComplete() {
 		r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Starting v2 backup on instance %s", instanceStatus.Name))
 
-		backupper := etcd.V2Backup{
-			Datadir: etcdInstance.ETCDv2.DataDir,
-			EncPass: r.encryptionPwd,
-			Logger:  r.logger,
-			Prefix:  key.FilenamePrefix(instanceStatus.Name),
-		}
+		backupper := etcd.NewV2Backup(etcdInstance.ETCDv2.DataDir, r.encryptionPwd, r.logger, key.FilenamePrefix(instanceStatus.Name))
 
 		backupAttemptResult, err := r.performBackup(ctx, backupper, instanceStatus.Name)
 		if err == nil {

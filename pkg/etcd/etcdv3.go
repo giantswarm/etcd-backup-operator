@@ -23,11 +23,30 @@ type V3Backup struct {
 	Cert      string
 	EncPass   string
 	Endpoints string
-	Filename  string
 	Logger    micrologger.Logger
 	Key       string
 	Prefix    string
-	TmpDir    string
+
+	filename *string
+	tmpDir   *string
+}
+
+func NewV3Backup(caCert string, cert string, encPass string, endpoints string, logger micrologger.Logger, key string, prefix string) V3Backup {
+	filename := ""
+	tmpDir := ""
+
+	return V3Backup{
+		CACert:    caCert,
+		Cert:      cert,
+		EncPass:   encPass,
+		Endpoints: endpoints,
+		Logger:    logger,
+		Key:       key,
+		Prefix:    prefix,
+
+		filename: &filename,
+		tmpDir:   &tmpDir,
+	}
 }
 
 //clear temporary directory
@@ -37,11 +56,11 @@ func (b V3Backup) Cleanup() {
 
 // Create etcd in temporary directory.
 func (b V3Backup) Create() (string, error) {
-	// Filename
-	b.Filename = b.Prefix + "-backup-etcd-v3-" + time.Now().Format(key.TsFormat) + key.DbExt
+	// filename
+	*b.filename = b.Prefix + "-backup-etcd-v3-" + time.Now().Format(key.TsFormat) + key.DbExt
 
 	// Full path to file.
-	fpath := filepath.Join(b.getTmpDir(), b.Filename)
+	fpath := filepath.Join(b.getTmpDir(), *b.filename)
 
 	etcdctlEnvs := []string{"ETCDCTL_API=3"}
 	etcdctlArgs := []string{
@@ -77,9 +96,9 @@ func (b V3Backup) Create() (string, error) {
 		return "", microerror.Mask(err)
 	}
 
-	// Update Filename in etcd object.
-	b.Filename = b.Filename + key.TgzExt
-	fpath = filepath.Join(b.getTmpDir(), b.Filename)
+	// Update filename in etcd object.
+	*b.filename = *b.filename + key.TgzExt
+	fpath = filepath.Join(b.getTmpDir(), *b.filename)
 
 	b.Logger.Log("level", "info", "msg", "Etcd v3 backup created successfully")
 	return fpath, nil
@@ -88,7 +107,7 @@ func (b V3Backup) Create() (string, error) {
 // Encrypt backup.
 func (b V3Backup) Encrypt() (string, error) {
 	// Full path to file.
-	fpath := filepath.Join(b.getTmpDir(), b.Filename)
+	fpath := filepath.Join(b.getTmpDir(), *b.filename)
 
 	if b.EncPass == "" {
 		b.Logger.Log("level", "warning", "msg", "No passphrase provided. Skipping etcd v3 backup encryption")
@@ -101,9 +120,9 @@ func (b V3Backup) Encrypt() (string, error) {
 		return "", microerror.Mask(err)
 	}
 
-	// Update Filename in etcd object.
-	b.Filename = b.Filename + key.EncExt
-	fpath = filepath.Join(b.getTmpDir(), b.Filename)
+	// Update filename in etcd object.
+	*b.filename = *b.filename + key.EncExt
+	fpath = filepath.Join(b.getTmpDir(), *b.filename)
 
 	b.Logger.Log("level", "info", "msg", "Etcd v3 backup encrypted successfully")
 	return fpath, nil
@@ -114,14 +133,14 @@ func (b V3Backup) Version() string {
 }
 
 func (b V3Backup) getTmpDir() string {
-	if len(b.TmpDir) == 0 {
+	if len(*b.tmpDir) == 0 {
 		tmpDir, err := ioutil.TempDir("", "")
 		if err != nil {
 			panic(err)
 		}
 		b.Logger.LogCtx(context.Background(), fmt.Sprintf("Created temporary directory: %s", tmpDir))
-		b.TmpDir = tmpDir
+		*b.tmpDir = tmpDir
 	}
 
-	return b.TmpDir
+	return *b.tmpDir
 }
