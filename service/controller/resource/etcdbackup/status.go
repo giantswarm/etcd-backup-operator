@@ -52,30 +52,6 @@ func isTerminalInstaceState(state string) bool {
 	return state == instanceBackupStateCompleted || state == instanceBackupStateFailed || state == instanceBackupStateSkipped
 }
 
-func (r *Resource) setInstanceV2Status(ctx context.Context, customObject backupv1alpha1.ETCDBackup, instanceName string, newStatus string) error {
-	status, found := customObject.Status.Instances[instanceName]
-	if !found {
-		return microerror.Mask(microerror.Newf("Instances status was unexpectedly missing for %s", instanceName))
-	}
-
-	status.V2.Status = newStatus
-	customObject.Status.Instances[instanceName] = status
-
-	return r.persistCustomObject(customObject)
-}
-
-func (r *Resource) setInstanceV3Status(ctx context.Context, customObject backupv1alpha1.ETCDBackup, instanceName string, newStatus string) error {
-	status, found := customObject.Status.Instances[instanceName]
-	if !found {
-		return microerror.Mask(microerror.Newf("Instances status was unexpectedly missing for %s", instanceName))
-	}
-
-	status.V3.Status = newStatus
-	customObject.Status.Instances[instanceName] = status
-
-	return r.persistCustomObject(customObject)
-}
-
 func (r *Resource) persistCustomObject(customObject backupv1alpha1.ETCDBackup) error {
 	// Get error from API before updating it.
 	obj, err := r.k8sClient.G8sClient().BackupV1alpha1().ETCDBackups().Get(customObject.Name, v1.GetOptions{})
