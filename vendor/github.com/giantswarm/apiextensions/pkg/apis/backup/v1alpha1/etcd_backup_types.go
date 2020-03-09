@@ -42,6 +42,7 @@ spec:
               - V3BackupRunning
               - V3BackupCompleted
               - Failed
+              - Completed
             startedTimestamp:
               type: string
               format: date-time
