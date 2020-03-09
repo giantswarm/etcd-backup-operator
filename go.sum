@@ -166,6 +166,8 @@ github.com/giantswarm/apiextensions v0.0.0-20200307171241-a3aeb377a20d h1:+6zG99
 github.com/giantswarm/apiextensions v0.0.0-20200307171241-a3aeb377a20d/go.mod h1:zHLSgCszRMdZUzwmfOibzcyfRC89ygwAQlpXcukgZuc=
 github.com/giantswarm/apiextensions v0.0.0-20200309084226-7791e5c205fc h1:Jx34ppjmGjJbkMlsC/m2luhW0JxT02O7jW+X4OtBIaI=
 github.com/giantswarm/apiextensions v0.0.0-20200309084226-7791e5c205fc/go.mod h1:zHLSgCszRMdZUzwmfOibzcyfRC89ygwAQlpXcukgZuc=
+github.com/giantswarm/apiextensions v0.0.0-20200309084803-18425339a356 h1:AkLOYZtfvikWDdsdT1cDzO47c1ENWFP95mypTon7vKk=
+github.com/giantswarm/apiextensions v0.0.0-20200309084803-18425339a356/go.mod h1:zHLSgCszRMdZUzwmfOibzcyfRC89ygwAQlpXcukgZuc=
 github.com/giantswarm/backoff v0.0.0-20190913091243-4dd491125192 h1:jguq2nu1gbvP6OQIqmkUlbl4ekpwSRUPiXUWlF8InyQ=
 github.com/giantswarm/backoff v0.0.0-20190913091243-4dd491125192/go.mod h1:kjItv/iHgl/xsprYgbnCOme1pVTiiiaZeR2ybsN4ab0=
 github.com/giantswarm/etcd-backup v0.0.0-20200108121155-402c6bedf381 h1:GOZK21PoKjWe8VJEepfcW82PDYUr39qxWDjUIGYjICw=
