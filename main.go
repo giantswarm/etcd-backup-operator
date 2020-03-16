@@ -117,5 +117,10 @@ func mainE(ctx context.Context) error {
 	daemonCommand.PersistentFlags().String(f.Service.ETCDv3.Key, "", "Client private key for ETCD v3 connection")
 	daemonCommand.PersistentFlags().String(f.Service.ETCDv3.Endpoints, "", "Endpoints for ETCD v3 connection")
 
-	return newCommand.CobraCommand().Execute()
+	err = newCommand.CobraCommand().Execute()
+	if err != nil {
+		return microerror.Mask(err)
+	}
+
+	return nil
 }
