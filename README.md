@@ -54,7 +54,7 @@ go run -mod=vendor main.go daemon \
 - `--service.kubernetes.kubeconfig`: (Optional) KubeConfig used to connect to Kubernetes. When empty other settings are used.
 - `--service.kubernetes.tls.cafile`: (Optional) Certificate authority file path to use to authenticate with Kubernetes.
 - `--service.kubernetes.tls.crtfile`: (Optional) Certificate file path to use to authenticate with Kubernetes.
-- `--service.kubernetes.tls.keyfile`: (Optional)Key file path to use to authenticate with Kubernetes.
+- `--service.kubernetes.tls.keyfile`: (Optional) Key file path to use to authenticate with Kubernetes.
 
 #### S3 settings:
 
