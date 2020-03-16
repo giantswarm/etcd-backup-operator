@@ -24,7 +24,7 @@ func (r *Resource) backupPendingTransition(ctx context.Context, obj interface{},
 		Time: time.Now().UTC(),
 	}
 
-	err = r.persistCustomObject(customObject)
+	err = r.persistCustomObjectStatus(customObject)
 	if err != nil {
 		return "", microerror.Mask(err)
 	}

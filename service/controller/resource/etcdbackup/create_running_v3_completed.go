@@ -22,7 +22,7 @@ func (r *Resource) backupRunningV3BackupCompletedTransition(ctx context.Context,
 	customObject.Status.FinishedTimestamp = v1alpha1.DeepCopyTime{
 		Time: time.Now().UTC(),
 	}
-	err = r.persistCustomObject(customObject)
+	err = r.persistCustomObjectStatus(customObject)
 	if err != nil {
 		return "", microerror.Mask(err)
 	}

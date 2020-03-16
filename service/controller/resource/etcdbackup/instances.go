@@ -53,7 +53,7 @@ func (r *Resource) runBackupOnAllInstances(ctx context.Context, obj interface{},
 		if doneSomething {
 			customObject.Status.Instances[etcdInstance.Name] = instanceStatus
 
-			err = r.persistCustomObject(customObject)
+			err = r.persistCustomObjectStatus(customObject)
 			if err != nil {
 				return false, microerror.Mask(err)
 			}

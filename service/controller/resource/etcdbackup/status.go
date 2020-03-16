@@ -24,7 +24,7 @@ func (r *Resource) setGlobalStatus(customObject backupv1alpha1.ETCDBackup, updat
 
 	obj.Status.Status = updatedStatus
 
-	return r.persistCustomObject(*obj)
+	return r.persistCustomObjectStatus(*obj)
 }
 
 func (r *Resource) findOrInitializeInstanceStatus(ctx context.Context, etcdBackup backupv1alpha1.ETCDBackup, instance giantnetes.ETCDInstance) backupv1alpha1.ETCDInstanceBackupStatusIndex {
@@ -52,7 +52,7 @@ func isTerminalInstaceState(state string) bool {
 	return state == instanceBackupStateCompleted || state == instanceBackupStateFailed || state == instanceBackupStateSkipped
 }
 
-func (r *Resource) persistCustomObject(customObject backupv1alpha1.ETCDBackup) error {
+func (r *Resource) persistCustomObjectStatus(customObject backupv1alpha1.ETCDBackup) error {
 	// Get error from API before updating it.
 	obj, err := r.k8sClient.G8sClient().BackupV1alpha1().ETCDBackups().Get(customObject.Name, v1.GetOptions{})
 	if err != nil {
