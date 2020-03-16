@@ -1,7 +1,7 @@
 package key
 
 const (
-	EtcdctlCmd = "etcdctl"
+	EtcdctlCmd = "/usr/local/bin/etcdctl"
 	AwsCmd     = "Aws"
 	TgzExt     = ".tar.gz"
 	EncExt     = ".enc"

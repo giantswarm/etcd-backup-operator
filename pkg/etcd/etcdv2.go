@@ -2,6 +2,7 @@ package etcd
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -18,12 +19,28 @@ import (
 )
 
 type V2Backup struct {
-	Datadir  string
-	EncPass  string
-	Filename string
-	Logger   micrologger.Logger
-	Prefix   string
-	TmpDir   string
+	Datadir string
+	EncPass string
+	Logger  micrologger.Logger
+	Prefix  string
+
+	filename *string
+	tmpDir   *string
+}
+
+func NewV2Backup(dataDir string, encPass string, logger micrologger.Logger, prefix string) V2Backup {
+	filename := ""
+	tmpDir := ""
+
+	return V2Backup{
+		Datadir: dataDir,
+		EncPass: encPass,
+		Logger:  logger,
+		Prefix:  prefix,
+
+		filename: &filename,
+		tmpDir:   &tmpDir,
+	}
 }
 
 // Clear temporary directory.
@@ -33,11 +50,11 @@ func (b V2Backup) Cleanup() {
 
 // Create etcd in temporary directory, tar and compress.
 func (b V2Backup) Create() (string, error) {
-	// Filename.
-	b.Filename = b.Prefix + "-etcd-etcd-v2-" + time.Now().Format(key.TsFormat)
+	// filename.
+	*b.filename = b.Prefix + "-etcd-etcd-v2-" + time.Now().Format(key.TsFormat)
 
 	// Full path to file.
-	fpath := filepath.Join(b.getTmpDir(), b.Filename)
+	fpath := filepath.Join(b.getTmpDir(), *b.filename)
 
 	// Create a etcd.
 	etcdctlEnvs := []string{}
@@ -47,9 +64,9 @@ func (b V2Backup) Create() (string, error) {
 		"--backup-dir", fpath,
 	}
 
-	_, err := exec.Cmd(key.EtcdctlCmd, etcdctlArgs, etcdctlEnvs, b.Logger)
+	log, err := exec.Cmd(key.EtcdctlCmd, etcdctlArgs, etcdctlEnvs, b.Logger)
 	if err != nil {
-		return "", microerror.Mask(err)
+		return "", errors.New(string(log))
 	}
 
 	// Create tar.gz.
@@ -58,9 +75,9 @@ func (b V2Backup) Create() (string, error) {
 		return "", microerror.Mask(err)
 	}
 
-	// Update Filename in etcd object.
-	b.Filename = b.Filename + key.TgzExt
-	fpath = filepath.Join(b.getTmpDir(), b.Filename)
+	// Update filename in etcd object.
+	*b.filename = *b.filename + key.TgzExt
+	fpath = filepath.Join(b.getTmpDir(), *b.filename)
 
 	b.Logger.Log("level", "info", "msg", "Etcd v2 etcd created successfully")
 	return fpath, nil
@@ -69,7 +86,7 @@ func (b V2Backup) Create() (string, error) {
 // Encrypts the backup file.
 func (b V2Backup) Encrypt() (string, error) {
 	// Full path to file.
-	fpath := filepath.Join(b.getTmpDir(), b.Filename)
+	fpath := filepath.Join(b.getTmpDir(), *b.filename)
 
 	if b.EncPass == "" {
 		b.Logger.Log("level", "warning", "msg", "No passphrase provided. Skipping etcd v2 backup encryption")
@@ -82,9 +99,9 @@ func (b V2Backup) Encrypt() (string, error) {
 		return "", microerror.Mask(err)
 	}
 
-	// Update Filename in etcd object.
-	b.Filename = b.Filename + key.EncExt
-	fpath = filepath.Join(b.getTmpDir(), b.Filename)
+	// Update filename in etcd object.
+	*b.filename = *b.filename + key.EncExt
+	fpath = filepath.Join(b.getTmpDir(), *b.filename)
 
 	b.Logger.Log("level", "info", "msg", "Etcd v2 backup encrypted successfully")
 	return fpath, nil
@@ -95,14 +112,14 @@ func (b V2Backup) Version() string {
 }
 
 func (b V2Backup) getTmpDir() string {
-	if len(b.TmpDir) == 0 {
+	if len(*b.tmpDir) == 0 {
 		tmpDir, err := ioutil.TempDir("", "")
 		if err != nil {
 			panic(err)
 		}
 		b.Logger.LogCtx(context.Background(), fmt.Sprintf("Created temporary directory: %s", tmpDir))
-		b.TmpDir = tmpDir
+		*b.tmpDir = tmpDir
 	}
 
-	return b.TmpDir
+	return *b.tmpDir
 }

@@ -41,6 +41,10 @@ func (r *Resource) runBackupOnAllInstances(ctx context.Context, obj interface{},
 		instances = append(instances, guestInstances...)
 	}
 
+	if len(customObject.Status.Instances) == 0 {
+		customObject.Status.Instances = make(map[string]v1alpha1.ETCDInstanceBackupStatusIndex)
+	}
+
 	for _, etcdInstance := range instances {
 		instanceStatus := r.findOrInitializeInstanceStatus(ctx, customObject, etcdInstance)
 
@@ -49,11 +53,11 @@ func (r *Resource) runBackupOnAllInstances(ctx context.Context, obj interface{},
 		if doneSomething {
 			customObject.Status.Instances[etcdInstance.Name] = instanceStatus
 
-			err = r.persistCustomObject(customObject)
+			err = r.persistCustomObjectStatus(customObject)
 			if err != nil {
 				return false, microerror.Mask(err)
 			}
-			r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("set resource status to '%s'", etcdInstance.Name))
+			r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("set resource status for instance '%s'", etcdInstance.Name))
 			r.logger.LogCtx(ctx, "level", "debug", "message", "canceling reconciliation")
 			reconciliationcanceledcontext.SetCanceled(ctx)
 			return true, nil

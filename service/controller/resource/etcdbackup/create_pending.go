@@ -23,9 +23,8 @@ func (r *Resource) backupPendingTransition(ctx context.Context, obj interface{},
 	customObject.Status.StartedTimestamp = v1alpha1.DeepCopyTime{
 		Time: time.Now().UTC(),
 	}
-	customObject.Status.Instances = map[string]v1alpha1.ETCDInstanceBackupStatusIndex{}
 
-	err = r.persistCustomObject(customObject)
+	err = r.persistCustomObjectStatus(customObject)
 	if err != nil {
 		return "", microerror.Mask(err)
 	}

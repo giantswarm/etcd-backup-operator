@@ -3,10 +3,10 @@ package etcdbackup
 import (
 	"context"
 	"fmt"
-	"time"
 
 	backupv1alpha1 "github.com/giantswarm/apiextensions/pkg/apis/backup/v1alpha1"
 	"github.com/giantswarm/microerror"
+	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	"github.com/giantswarm/etcd-backup-operator/pkg/giantnetes"
 )
@@ -16,9 +16,15 @@ func (r *Resource) getGlobalStatus(customObject backupv1alpha1.ETCDBackup) (stri
 }
 
 func (r *Resource) setGlobalStatus(customObject backupv1alpha1.ETCDBackup, updatedStatus string) error {
-	customObject.Status.Status = updatedStatus
+	// Get error from API before updating it.
+	obj, err := r.k8sClient.G8sClient().BackupV1alpha1().ETCDBackups().Get(customObject.Name, v1.GetOptions{})
+	if err != nil {
+		return microerror.Mask(err)
+	}
 
-	return r.persistCustomObject(customObject)
+	obj.Status.Status = updatedStatus
+
+	return r.persistCustomObjectStatus(*obj)
 }
 
 func (r *Resource) findOrInitializeInstanceStatus(ctx context.Context, etcdBackup backupv1alpha1.ETCDBackup, instance giantnetes.ETCDInstance) backupv1alpha1.ETCDInstanceBackupStatusIndex {
@@ -29,21 +35,13 @@ func (r *Resource) findOrInitializeInstanceStatus(ctx context.Context, etcdBacku
 
 	r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Initializing new ETCDInstanceBackupStatus for %s", instance.Name))
 
-	now := time.Now().UTC()
-
 	newStatus := backupv1alpha1.ETCDInstanceBackupStatusIndex{
 		Name: instance.Name,
 		V2: backupv1alpha1.ETCDInstanceBackupStatus{
 			Status: instanceBackupStatePending,
-			StartedTimestamp: backupv1alpha1.DeepCopyTime{
-				Time: now,
-			},
 		},
 		V3: backupv1alpha1.ETCDInstanceBackupStatus{
 			Status: instanceBackupStatePending,
-			StartedTimestamp: backupv1alpha1.DeepCopyTime{
-				Time: now,
-			},
 		},
 	}
 
@@ -54,32 +52,16 @@ func isTerminalInstaceState(state string) bool {
 	return state == instanceBackupStateCompleted || state == instanceBackupStateFailed || state == instanceBackupStateSkipped
 }
 
-func (r *Resource) setInstanceV2Status(ctx context.Context, customObject backupv1alpha1.ETCDBackup, instanceName string, newStatus string) error {
-	status, found := customObject.Status.Instances[instanceName]
-	if !found {
-		return microerror.Mask(microerror.Newf("Instances status was unexpectedly missing for %s", instanceName))
+func (r *Resource) persistCustomObjectStatus(customObject backupv1alpha1.ETCDBackup) error {
+	// Get error from API before updating it.
+	obj, err := r.k8sClient.G8sClient().BackupV1alpha1().ETCDBackups().Get(customObject.Name, v1.GetOptions{})
+	if err != nil {
+		return microerror.Mask(err)
 	}
 
-	status.V2.Status = newStatus
-	customObject.Status.Instances[instanceName] = status
+	obj.Status = customObject.Status
 
-	return r.persistCustomObject(customObject)
-}
-
-func (r *Resource) setInstanceV3Status(ctx context.Context, customObject backupv1alpha1.ETCDBackup, instanceName string, newStatus string) error {
-	status, found := customObject.Status.Instances[instanceName]
-	if !found {
-		return microerror.Mask(microerror.Newf("Instances status was unexpectedly missing for %s", instanceName))
-	}
-
-	status.V3.Status = newStatus
-	customObject.Status.Instances[instanceName] = status
-
-	return r.persistCustomObject(customObject)
-}
-
-func (r *Resource) persistCustomObject(customObject backupv1alpha1.ETCDBackup) error {
-	_, err := r.k8sClient.G8sClient().BackupV1alpha1().ETCDBackups().UpdateStatus(&customObject)
+	_, err = r.k8sClient.G8sClient().BackupV1alpha1().ETCDBackups().UpdateStatus(obj)
 	if err != nil {
 		return microerror.Mask(err)
 	}

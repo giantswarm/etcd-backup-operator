@@ -116,7 +116,7 @@ func (u *Utils) checkClusterVersionSupport(cluster clusterWithProvider) (bool, e
 			if err != nil {
 				return false, microerror.Maskf(err, fmt.Sprintf("failed to get azure crd %s", cluster.clusterID))
 			}
-			return stringVersionCmp(crd.Spec.VersionBundle.Version, semver.New("0.0.0"), awsSupportFrom)
+			return stringVersionCmp(crd.Spec.VersionBundle.Version, semver.New("0.0.0"), azureSupportFrom)
 		}
 	case kvm:
 		{
