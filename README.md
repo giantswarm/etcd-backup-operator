@@ -80,5 +80,5 @@ You can specify all of them as well (and you'll enable both V2 and V3 backups).
 
 ## License
 
-azure-operator is under the Apache 2.0 license. See the [LICENSE](LICENSE) file for
+etcd-backup-operator is under the Apache 2.0 license. See the [LICENSE](LICENSE) file for
 details.
