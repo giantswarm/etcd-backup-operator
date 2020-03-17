@@ -9,9 +9,10 @@ import (
 
 const (
 	// CRD names for each provider.
-	aws   = "aws"
-	azure = "azure"
-	kvm   = "kvm"
+	aws        = "aws"
+	awsCluster = "awsClusterAPI"
+	azure      = "azure"
+	kvm        = "kvm"
 
 	// Namespace where secrets are located.
 	secretNamespace = "default"
