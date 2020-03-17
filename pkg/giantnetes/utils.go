@@ -110,7 +110,7 @@ func (u *Utils) checkClusterVersionSupport(cluster clusterWithProvider) (bool, e
 			}
 			return stringVersionCmp(crd.Spec.VersionBundle.Version, semver.New("0.0.0"), awsSupportFrom)
 		}
-	case awsCluster:
+	case awsCAPI:
 		{
 			// Cluster API AWS backups are always supported.
 			return true, nil
@@ -164,6 +164,15 @@ func (u *Utils) getEtcdEndpoint(cluster clusterWithProvider) (string, error) {
 				return "", microerror.Maskf(err, "error getting aws crd for guest cluster %s", cluster.clusterID)
 			}
 			etcdEndpoint = AwsEtcdEndpoint(crd.Spec.Cluster.Etcd.Domain)
+			break
+		}
+	case awsCAPI:
+		{
+			crd, err := crdClient.InfrastructureV1alpha2().AWSClusters(crdNamespace).Get(cluster.clusterID, getOpts)
+			if err != nil {
+				return "", microerror.Maskf(err, "error getting aws crd for guest cluster %s", cluster.clusterID)
+			}
+			etcdEndpoint = AwsCAPIEtcdEndpoint(cluster.clusterID, crd.Spec.Cluster.DNS.Domain)
 			break
 		}
 	case azure:
@@ -252,7 +261,7 @@ func (u *Utils) getAllGuestClusters(ctx context.Context, crdCLient versioned.Int
 			for _, awsClusterObj := range crdList.Items {
 				// Only backup cluster if it was not marked for delete.
 				if awsClusterObj.DeletionTimestamp == nil {
-					clusterList = append(clusterList, clusterWithProvider{awsClusterObj.Name, awsCluster})
+					clusterList = append(clusterList, clusterWithProvider{awsClusterObj.Name, awsCAPI})
 				}
 			}
 		} else {
