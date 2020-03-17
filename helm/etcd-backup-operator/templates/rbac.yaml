@@ -20,6 +20,13 @@ rules:
       - list
       - get
   - apiGroups:
+      - "infrastructure.giantswarm.io"
+    resources:
+      - awsclusters
+    verbs:
+      - list
+      - get
+  - apiGroups:
       - ""
     resources:
       - secrets
