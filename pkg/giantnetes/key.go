@@ -9,9 +9,10 @@ import (
 
 const (
 	// CRD names for each provider.
-	aws   = "aws"
-	azure = "azure"
-	kvm   = "kvm"
+	aws     = "aws"
+	awsCAPI = "awsCAPI"
+	azure   = "azure"
+	kvm     = "kvm"
 
 	// Namespace where secrets are located.
 	secretNamespace = "default"
@@ -27,6 +28,10 @@ var azureSupportFrom *semver.Version = semver.Must(semver.NewVersion("0.2.0"))
 
 func AwsEtcdEndpoint(etcdDomain string) string {
 	return fmt.Sprintf("https://%s:2379", etcdDomain)
+}
+
+func AwsCAPIEtcdEndpoint(clusterID string, baseDomain string) string {
+	return fmt.Sprintf("https://etcd.%s.k8s.%s:2379", clusterID, baseDomain)
 }
 
 func AzureEtcdEndpoint(etcdDomain string) string {

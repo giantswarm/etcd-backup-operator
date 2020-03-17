@@ -106,9 +106,14 @@ func (u *Utils) checkClusterVersionSupport(cluster clusterWithProvider) (bool, e
 		{
 			crd, err := crdClient.ProviderV1alpha1().AWSConfigs(crdNamespace).Get(cluster.clusterID, getOpts)
 			if err != nil {
-				return false, microerror.Maskf(err, fmt.Sprintf("failed to get aws crd %s", cluster.clusterID))
+				return false, microerror.Maskf(err, fmt.Sprintf("failed to get aws config crd %s", cluster.clusterID))
 			}
 			return stringVersionCmp(crd.Spec.VersionBundle.Version, semver.New("0.0.0"), awsSupportFrom)
+		}
+	case awsCAPI:
+		{
+			// Cluster API AWS backups are always supported.
+			return true, nil
 		}
 	case azure:
 		{
@@ -159,6 +164,15 @@ func (u *Utils) getEtcdEndpoint(cluster clusterWithProvider) (string, error) {
 				return "", microerror.Maskf(err, "error getting aws crd for guest cluster %s", cluster.clusterID)
 			}
 			etcdEndpoint = AwsEtcdEndpoint(crd.Spec.Cluster.Etcd.Domain)
+			break
+		}
+	case awsCAPI:
+		{
+			crd, err := crdClient.InfrastructureV1alpha2().AWSClusters(crdNamespace).Get(cluster.clusterID, getOpts)
+			if err != nil {
+				return "", microerror.Maskf(err, "error getting aws crd for guest cluster %s", cluster.clusterID)
+			}
+			etcdEndpoint = AwsCAPIEtcdEndpoint(cluster.clusterID, crd.Spec.Cluster.DNS.Domain)
 			break
 		}
 	case azure:
@@ -236,6 +250,22 @@ func (u *Utils) getAllGuestClusters(ctx context.Context, crdCLient versioned.Int
 			}
 		} else {
 			u.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Error listing AWSConfigs: %s", err))
+		}
+	}
+
+	// AWS cluster API
+	{
+		crdList, err := crdCLient.InfrastructureV1alpha2().AWSClusters(metav1.NamespaceAll).List(listOpt)
+		if err == nil {
+			anySuccess = true
+			for _, awsClusterObj := range crdList.Items {
+				// Only backup cluster if it was not marked for delete.
+				if awsClusterObj.DeletionTimestamp == nil {
+					clusterList = append(clusterList, clusterWithProvider{awsClusterObj.Name, awsCAPI})
+				}
+			}
+		} else {
+			u.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Error listing AWSClusters: %s", err))
 		}
 	}
 
