@@ -18,7 +18,7 @@ spec:
           serviceAccountName: {{ tpl .Values.resource.default.name  . }}
           containers:
           - name: etcd-backup
-            image: "{{ .Values.image.registry }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
+            image: "{{ .Values.Installation.V1.Registry.Domain }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
             command:
             - "/bin/create-cr.sh"
             - "{{ not .Values.Installation.V1.Infra.TestingEnvironment }}"
