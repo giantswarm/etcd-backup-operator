@@ -8,7 +8,7 @@ require (
 	github.com/coreos/go-semver v0.3.0
 	github.com/dsnet/compress v0.0.1 // indirect
 	github.com/ghodss/yaml v1.0.1-0.20190212211648-25d852aebe32 // indirect
-	github.com/giantswarm/apiextensions v0.0.0-20200309084803-18425339a356
+	github.com/giantswarm/apiextensions v0.2.1-0.20200323154427-9399ccd42e81
 	github.com/giantswarm/backoff v0.0.0-20190913091243-4dd491125192
 	github.com/giantswarm/etcd-backup v0.0.0-20200108121155-402c6bedf381 // indirect
 	github.com/giantswarm/exporterkit v0.0.0-20190619131829-9749deade60f // indirect
@@ -43,7 +43,7 @@ require (
 	golang.org/x/time v0.0.0-20191024005414-555d28b269f0 // indirect
 	google.golang.org/appengine v1.6.5 // indirect
 	k8s.io/apimachinery v0.17.0
-	k8s.io/client-go v0.0.0
+	k8s.io/client-go v0.16.6
 	k8s.io/kubernetes v1.17.2 // indirect
 	k8s.io/utils v0.0.0-20191114200735-6ca3b61696b6 // indirect
 	sigs.k8s.io/controller-runtime v0.4.0 // indirect
