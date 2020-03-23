@@ -11,7 +11,7 @@ require (
 	github.com/giantswarm/apiextensions v0.2.1-0.20200323170141-e2b7c1c359a2
 	github.com/giantswarm/backoff v0.0.0-20190913091243-4dd491125192
 	github.com/giantswarm/etcd-backup v0.0.0-20200108121155-402c6bedf381 // indirect
-	github.com/giantswarm/exporterkit v0.0.0-20190619131829-9749deade60f // indirect
+	github.com/giantswarm/exporterkit v0.0.0-20190619131829-9749deade60f
 	github.com/giantswarm/k8sclient v0.0.0-20191213144452-f75fead2ae06
 	github.com/giantswarm/microendpoint v0.0.0-20191121160659-e991deac2653
 	github.com/giantswarm/microerror v0.0.0-20191011121515-e0ebc4ecf5a5
@@ -42,11 +42,13 @@ require (
 	golang.org/x/oauth2 v0.0.0-20191202225959-858c2ad4c8b6 // indirect
 	golang.org/x/time v0.0.0-20191024005414-555d28b269f0 // indirect
 	google.golang.org/appengine v1.6.5 // indirect
+	k8s.io/apiextensions-apiserver v0.16.6
 	k8s.io/apimachinery v0.17.0
 	k8s.io/client-go v0.16.6
 	k8s.io/kubernetes v1.17.2 // indirect
 	k8s.io/utils v0.0.0-20191114200735-6ca3b61696b6 // indirect
 	sigs.k8s.io/controller-runtime v0.4.0 // indirect
+	sigs.k8s.io/yaml v1.1.0
 )
 
 replace (

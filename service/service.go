@@ -18,7 +18,6 @@ import (
 	"k8s.io/client-go/rest"
 
 	"github.com/giantswarm/etcd-backup-operator/flag"
-	"github.com/giantswarm/etcd-backup-operator/pkg/etcd/metrics"
 	"github.com/giantswarm/etcd-backup-operator/pkg/giantnetes"
 	"github.com/giantswarm/etcd-backup-operator/pkg/project"
 	"github.com/giantswarm/etcd-backup-operator/pkg/storage"
@@ -130,11 +129,6 @@ func New(config Config) (*Service, error) {
 		}
 	}
 
-	metricsHolder, err := metrics.NewExporter()
-	if err != nil {
-		return nil, microerror.Mask(err)
-	}
-
 	var etcdBackupController *controller.ETCDBackup
 	{
 		uploader, err := storage.NewS3Upload(storage.S3Config{
@@ -160,7 +154,6 @@ func New(config Config) (*Service, error) {
 				Cert:      config.Viper.GetString(config.Flag.Service.ETCDv3.Cert),
 			},
 			EncryptionPwd: os.Getenv(key.EncryptionPassword),
-			MetricsHolder: metricsHolder,
 			Uploader:      uploader,
 		}
 

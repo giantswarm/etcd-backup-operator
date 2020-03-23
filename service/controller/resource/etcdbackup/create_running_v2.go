@@ -58,8 +58,6 @@ func (r *Resource) doV2Backup(ctx context.Context, etcdInstance giantnetes.ETCDI
 			instanceStatus.V2.LatestError = err.Error()
 			instanceStatus.V2.Status = instanceBackupStateFailed
 		}
-
-		r.metricsHolder.Add(instanceStatus.Name, backupper.Version(), backupAttemptResult)
 	} else {
 		r.logger.LogCtx(ctx, "level", "info", "message", fmt.Sprintf("V2 backup skipped for %s because ETCD V2 setting are not set.", instanceStatus.Name))
 		instanceStatus.V2.Status = instanceBackupStateSkipped
