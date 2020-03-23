@@ -8,7 +8,7 @@ require (
 	github.com/coreos/go-semver v0.3.0
 	github.com/dsnet/compress v0.0.1 // indirect
 	github.com/ghodss/yaml v1.0.1-0.20190212211648-25d852aebe32 // indirect
-	github.com/giantswarm/apiextensions v0.2.1-0.20200323154427-9399ccd42e81
+	github.com/giantswarm/apiextensions v0.2.1-0.20200323170141-e2b7c1c359a2
 	github.com/giantswarm/backoff v0.0.0-20190913091243-4dd491125192
 	github.com/giantswarm/etcd-backup v0.0.0-20200108121155-402c6bedf381 // indirect
 	github.com/giantswarm/exporterkit v0.0.0-20190619131829-9749deade60f // indirect

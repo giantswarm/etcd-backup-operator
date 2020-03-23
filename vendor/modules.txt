@@ -54,7 +54,7 @@ github.com/dsnet/compress/internal/prefix
 github.com/evanphx/json-patch
 # github.com/fsnotify/fsnotify v1.4.7
 github.com/fsnotify/fsnotify
-# github.com/giantswarm/apiextensions v0.2.1-0.20200323154427-9399ccd42e81
+# github.com/giantswarm/apiextensions v0.2.1-0.20200323170141-e2b7c1c359a2
 github.com/giantswarm/apiextensions/pkg/apis/application/v1alpha1
 github.com/giantswarm/apiextensions/pkg/apis/backup/v1alpha1
 github.com/giantswarm/apiextensions/pkg/apis/core/v1alpha1
