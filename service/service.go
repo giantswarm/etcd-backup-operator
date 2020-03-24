@@ -18,10 +18,10 @@ import (
 	"k8s.io/client-go/rest"
 
 	"github.com/giantswarm/etcd-backup-operator/flag"
-	"github.com/giantswarm/etcd-backup-operator/pkg/etcd/metrics"
 	"github.com/giantswarm/etcd-backup-operator/pkg/giantnetes"
 	"github.com/giantswarm/etcd-backup-operator/pkg/project"
 	"github.com/giantswarm/etcd-backup-operator/pkg/storage"
+	"github.com/giantswarm/etcd-backup-operator/service/collector"
 	"github.com/giantswarm/etcd-backup-operator/service/controller"
 	"github.com/giantswarm/etcd-backup-operator/service/controller/key"
 )
@@ -39,7 +39,7 @@ type Service struct {
 
 	bootOnce             sync.Once
 	etcdBackupController *controller.ETCDBackup
-	metricsExporter      *metrics.Exporter
+	operatorCollector    *collector.Set
 }
 
 // New creates a new configured service object.
@@ -129,11 +129,6 @@ func New(config Config) (*Service, error) {
 		}
 	}
 
-	metricsHolder, err := metrics.NewExporter()
-	if err != nil {
-		return nil, microerror.Mask(err)
-	}
-
 	var etcdBackupController *controller.ETCDBackup
 	{
 		uploader, err := storage.NewS3Upload(storage.S3Config{
@@ -159,11 +154,23 @@ func New(config Config) (*Service, error) {
 				Cert:      config.Viper.GetString(config.Flag.Service.ETCDv3.Cert),
 			},
 			EncryptionPwd: os.Getenv(key.EncryptionPassword),
-			MetricsHolder: metricsHolder,
 			Uploader:      uploader,
 		}
 
 		etcdBackupController, err = controller.NewETCDBackup(c)
+		if err != nil {
+			return nil, microerror.Mask(err)
+		}
+	}
+
+	var operatorCollector *collector.Set
+	{
+		c := collector.SetConfig{
+			K8sClient: k8sClient,
+			Logger:    config.Logger,
+		}
+
+		operatorCollector, err = collector.NewSet(c)
 		if err != nil {
 			return nil, microerror.Mask(err)
 		}
@@ -191,7 +198,7 @@ func New(config Config) (*Service, error) {
 
 		bootOnce:             sync.Once{},
 		etcdBackupController: etcdBackupController,
-		metricsExporter:      metricsHolder,
+		operatorCollector:    operatorCollector,
 	}
 
 	return s, nil
@@ -199,7 +206,7 @@ func New(config Config) (*Service, error) {
 
 func (s *Service) Boot(ctx context.Context) {
 	s.bootOnce.Do(func() {
-		go s.metricsExporter.Boot(ctx)
+		go s.operatorCollector.Boot(ctx)
 		go s.etcdBackupController.Boot(ctx)
 	})
 }
