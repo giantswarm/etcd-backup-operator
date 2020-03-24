@@ -219,8 +219,8 @@ func (d *ETCDBackup) Collect(ch chan<- prometheus.Metric) error {
 
 	if newest != nil {
 		for _, instanceStatus := range newest.Status.Instances {
-			sendMetricsForVersion(instanceStatus.Name, instanceStatus.V2, "V2", newest.Name != lastSent)
-			sendMetricsForVersion(instanceStatus.Name, instanceStatus.V3, "V3", newest.Name != lastSent)
+			sendMetricsForVersion(instanceStatus.Name, instanceStatus.V2, "v2", newest.Name != lastSent)
+			sendMetricsForVersion(instanceStatus.Name, instanceStatus.V3, "v3", newest.Name != lastSent)
 		}
 
 		lastSent = newest.Name
