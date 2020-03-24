@@ -19,6 +19,8 @@ const (
 )
 
 var (
+	// This variable holds the name of the lastest CR that has been used to increase the global counters.
+	// It is used to increment the counter only once for each new CR.
 	lastSent = ""
 
 	namespace = "etcd_backup"
