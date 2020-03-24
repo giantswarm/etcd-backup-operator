@@ -19,6 +19,8 @@ const (
 )
 
 var (
+	lastSent = ""
+
 	namespace = "etcd_backup"
 	labels    = []string{labelTenantClusterId, labelETCDVersion}
 
@@ -129,67 +131,6 @@ func NewETCDBackup(config ETCDBackupConfig) (*ETCDBackup, error) {
 }
 
 func (d *ETCDBackup) Collect(ch chan<- prometheus.Metric) error {
-
-	//bk, err := d.g8sClient.BackupV1alpha1().ETCDBackups().Get("testing", v1.GetOptions{})
-	//if err != nil {
-	//	panic(err)
-	//}
-	//
-	//const longForm = time.RFC3339Nano
-	//v2start, _ := time.Parse(longForm, "2020-03-23T16:14:05.747764514Z")
-	//v2finish, _ := time.Parse(longForm, "2020-03-23T16:14:19.871264574Z")
-	//v3start, _ := time.Parse(longForm, "2020-03-23T16:14:20.011256915Z")
-	//v3finish, _ := time.Parse(longForm, "2020-03-23T16:14:36.574252096Z")
-	//globalstart, _ := time.Parse(longForm, "2020-03-23T16:14:05.537463552Z")
-	//globalfinish, _ := time.Parse(longForm, "2020-03-23T16:14:36.712608237Z")
-	//
-	//bk.Status = v1alpha1.ETCDBackupStatus{
-	//	Instances: map[string]v1alpha1.ETCDInstanceBackupStatusIndex{
-	//		"Control Plane": {
-	//			Name: "Control Plane",
-	//			V2: v1alpha1.ETCDInstanceBackupStatus{
-	//				Status: "Completed",
-	//				StartedTimestamp: v1alpha1.DeepCopyTime{
-	//					Time: v2start,
-	//				},
-	//				FinishedTimestamp: v1alpha1.DeepCopyTime{
-	//					Time: v2finish,
-	//				},
-	//				LatestError:    "",
-	//				CreationTime:   12502,
-	//				EncryptionTime: 0,
-	//				UploadTime:     1614,
-	//				BackupFileSize: 4708407,
-	//			},
-	//			V3: v1alpha1.ETCDInstanceBackupStatus{
-	//				Status: "Completed",
-	//				StartedTimestamp: v1alpha1.DeepCopyTime{
-	//					Time: v3start,
-	//				},
-	//				FinishedTimestamp: v1alpha1.DeepCopyTime{
-	//					Time: v3finish,
-	//				},
-	//				LatestError:    "",
-	//				CreationTime:   15041,
-	//				EncryptionTime: 0,
-	//				UploadTime:     1515,
-	//				BackupFileSize: 13895102,
-	//			},
-	//		},
-	//	},
-	//	Status: "Completed",
-	//	StartedTimestamp: v1alpha1.DeepCopyTime{
-	//		Time: globalstart,
-	//	},
-	//	FinishedTimestamp: v1alpha1.DeepCopyTime{
-	//		Time: globalfinish,
-	//	},
-	//}
-	//
-	//d.g8sClient.BackupV1alpha1().ETCDBackups().UpdateStatus(bk)
-
-	//attemptsCounter.WithLabelValues("test", "V2").Inc()
-
 	// Get a list of all ETCDBackup objects.
 	backups, err := d.g8sClient.BackupV1alpha1().ETCDBackups().List(v1.ListOptions{})
 	if err != nil {
@@ -209,108 +150,78 @@ func (d *ETCDBackup) Collect(ch chan<- prometheus.Metric) error {
 		}
 	}
 
-	if newest != nil {
-		for tenantClusterID, instanceStatus := range newest.Status.Instances {
-			ch <- prometheus.MustNewConstMetric(
-				latestAttemptTimestampDesc,
-				prometheus.GaugeValue,
-				float64(instanceStatus.V2.FinishedTimestamp.Unix()),
-				tenantClusterID,
-				"V2",
-			)
+	sendMetricsForVersion := func(tenantClusterID string, status v1alpha1.ETCDInstanceBackupStatus, version string, updateCounter bool) {
+		ch <- prometheus.MustNewConstMetric(
+			latestAttemptTimestampDesc,
+			prometheus.GaugeValue,
+			float64(status.FinishedTimestamp.Unix()),
+			tenantClusterID,
+			version,
+		)
 
-			ch <- prometheus.MustNewConstMetric(
-				latestAttemptTimestampDesc,
-				prometheus.GaugeValue,
-				float64(instanceStatus.V3.FinishedTimestamp.Unix()),
-				tenantClusterID,
-				"V3",
-			)
+		// The updateCounter bool indicates the fact that we need to increment the global counters for this metrics.
+		if updateCounter {
+			attemptsCounter.WithLabelValues(tenantClusterID, version).Inc()
+		}
 
-			if instanceStatus.V2.Status == backupStateCompleted {
-				ch <- prometheus.MustNewConstMetric(
-					creationTimeDesc,
-					prometheus.GaugeValue,
-					float64(instanceStatus.V2.CreationTime),
-					tenantClusterID,
-					"V2",
-				)
-
-				ch <- prometheus.MustNewConstMetric(
-					encryptionTimeDesc,
-					prometheus.GaugeValue,
-					float64(instanceStatus.V2.EncryptionTime),
-					tenantClusterID,
-					"V2",
-				)
-
-				ch <- prometheus.MustNewConstMetric(
-					uploadTimeDesc,
-					prometheus.GaugeValue,
-					float64(instanceStatus.V2.UploadTime),
-					tenantClusterID,
-					"V2",
-				)
-
-				ch <- prometheus.MustNewConstMetric(
-					backupSizeDesc,
-					prometheus.GaugeValue,
-					float64(instanceStatus.V2.BackupFileSize),
-					tenantClusterID,
-					"V2",
-				)
-
-				ch <- prometheus.MustNewConstMetric(
-					latestSuccessTimestampDesc,
-					prometheus.GaugeValue,
-					float64(instanceStatus.V2.FinishedTimestamp.Unix()),
-					tenantClusterID,
-					"V2",
-				)
+		if status.Status == backupStateCompleted {
+			if updateCounter {
+				successCounter.WithLabelValues(tenantClusterID, version).Inc()
 			}
 
-			if instanceStatus.V3.Status == backupStateCompleted {
-				ch <- prometheus.MustNewConstMetric(
-					creationTimeDesc,
-					prometheus.GaugeValue,
-					float64(instanceStatus.V3.CreationTime),
-					tenantClusterID,
-					"V3",
-				)
+			ch <- prometheus.MustNewConstMetric(
+				creationTimeDesc,
+				prometheus.GaugeValue,
+				float64(status.CreationTime),
+				tenantClusterID,
+				version,
+			)
 
-				ch <- prometheus.MustNewConstMetric(
-					encryptionTimeDesc,
-					prometheus.GaugeValue,
-					float64(instanceStatus.V3.EncryptionTime),
-					tenantClusterID,
-					"V3",
-				)
+			ch <- prometheus.MustNewConstMetric(
+				encryptionTimeDesc,
+				prometheus.GaugeValue,
+				float64(status.EncryptionTime),
+				tenantClusterID,
+				version,
+			)
 
-				ch <- prometheus.MustNewConstMetric(
-					uploadTimeDesc,
-					prometheus.GaugeValue,
-					float64(instanceStatus.V3.UploadTime),
-					tenantClusterID,
-					"V3",
-				)
+			ch <- prometheus.MustNewConstMetric(
+				uploadTimeDesc,
+				prometheus.GaugeValue,
+				float64(status.UploadTime),
+				tenantClusterID,
+				version,
+			)
 
-				ch <- prometheus.MustNewConstMetric(
-					backupSizeDesc,
-					prometheus.GaugeValue,
-					float64(instanceStatus.V3.BackupFileSize),
-					tenantClusterID,
-					"V3",
-				)
+			ch <- prometheus.MustNewConstMetric(
+				backupSizeDesc,
+				prometheus.GaugeValue,
+				float64(status.BackupFileSize),
+				tenantClusterID,
+				version,
+			)
 
-				ch <- prometheus.MustNewConstMetric(
-					latestSuccessTimestampDesc,
-					prometheus.GaugeValue,
-					float64(instanceStatus.V3.FinishedTimestamp.Unix()),
-					tenantClusterID,
-					"V3",
-				)
+			ch <- prometheus.MustNewConstMetric(
+				latestSuccessTimestampDesc,
+				prometheus.GaugeValue,
+				float64(status.FinishedTimestamp.Unix()),
+				tenantClusterID,
+				version,
+			)
+		} else {
+			if updateCounter {
+				failureCounter.WithLabelValues(tenantClusterID, version).Inc()
 			}
 		}
+	}
+
+	if newest != nil {
+		for _, instanceStatus := range newest.Status.Instances {
+			sendMetricsForVersion(instanceStatus.Name, instanceStatus.V2, "V2", newest.Name != lastSent)
+			sendMetricsForVersion(instanceStatus.Name, instanceStatus.V3, "V3", newest.Name != lastSent)
+		}
+
+		lastSent = newest.Name
 	}
 
 	return nil
