@@ -48,7 +48,7 @@ require (
 	k8s.io/kubernetes v1.17.2 // indirect
 	k8s.io/utils v0.0.0-20191114200735-6ca3b61696b6 // indirect
 	sigs.k8s.io/controller-runtime v0.4.0 // indirect
-	sigs.k8s.io/yaml v1.1.0
+	sigs.k8s.io/yaml v1.2.0
 )
 
 replace (
