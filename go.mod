@@ -44,7 +44,7 @@ require (
 	google.golang.org/appengine v1.6.5 // indirect
 	k8s.io/apiextensions-apiserver v0.16.6
 	k8s.io/apimachinery v0.17.0
-	k8s.io/client-go v0.16.6
+	k8s.io/client-go v0.18.0
 	k8s.io/kubernetes v1.17.2 // indirect
 	k8s.io/utils v0.0.0-20191114200735-6ca3b61696b6 // indirect
 	sigs.k8s.io/controller-runtime v0.4.0 // indirect
