@@ -3,7 +3,7 @@ module github.com/giantswarm/etcd-backup-operator
 go 1.13
 
 require (
-	github.com/aws/aws-sdk-go v1.16.26
+	github.com/aws/aws-sdk-go v1.30.5
 	github.com/cenkalti/backoff v2.2.1+incompatible // indirect
 	github.com/coreos/go-semver v0.3.0
 	github.com/dsnet/compress v0.0.1 // indirect
