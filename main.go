@@ -7,7 +7,6 @@ import (
 	"github.com/giantswarm/microkit/command"
 	microserver "github.com/giantswarm/microkit/server"
 	"github.com/giantswarm/micrologger"
-	"github.com/giantswarm/versionbundle"
 	"github.com/spf13/viper"
 
 	"github.com/giantswarm/etcd-backup-operator/flag"
@@ -23,7 +22,7 @@ var (
 func main() {
 	err := mainE(context.Background())
 	if err != nil {
-		panic(microerror.Stack(err))
+		panic(microerror.JSON(err))
 	}
 }
 
@@ -55,7 +54,7 @@ func mainE(ctx context.Context) error {
 
 			newService, err = service.New(c)
 			if err != nil {
-				panic(microerror.Stack(err))
+				panic(microerror.JSON(err))
 			}
 
 			go newService.Boot(ctx)
@@ -73,7 +72,7 @@ func mainE(ctx context.Context) error {
 
 			newServer, err = server.New(c)
 			if err != nil {
-				panic(microerror.Stack(err))
+				panic(microerror.JSON(err))
 			}
 		}
 
@@ -87,12 +86,11 @@ func mainE(ctx context.Context) error {
 			Logger:        logger,
 			ServerFactory: serverFactory,
 
-			Description:    project.Description(),
-			GitCommit:      project.GitSHA(),
-			Name:           project.Name(),
-			Source:         project.Source(),
-			Version:        project.Version(),
-			VersionBundles: []versionbundle.Bundle{project.NewVersionBundle()},
+			Description: project.Description(),
+			GitCommit:   project.GitSHA(),
+			Name:        project.Name(),
+			Source:      project.Source(),
+			Version:     project.Version(),
 		}
 
 		newCommand, err = command.New(c)
