@@ -1,93 +1,43 @@
 orbs:
-  architect: giantswarm/architect@0.6.0
+  architect: giantswarm/architect@0.8.14
 
 version: 2.1
-jobs:
-  build:
-    machine: true
-    steps:
-      - checkout
-
-      - run:
-          name: Install architect
-          command: |
-            wget -q $(curl -sS -H "Authorization: token $RELEASE_TOKEN" https://api.github.com/repos/giantswarm/architect/releases/latest | grep browser_download_url | head -n 1 | cut -d '"' -f 4)
-            chmod +x ./architect
-            ./architect version
-            wget -q $(curl -sS -H "Authorization: token $RELEASE_TOKEN" https://api.github.com/repos/giantswarm/architect/releases/latest | grep browser_download_url | head -n 1 | cut -d '"' -f 4)
-            chmod +x ./architect
-            ./architect version
-      - run: |
-          date +"%Y" > /tmp/year
-          date +"%m" > /tmp/month
-          date +"%d" > /tmp/day
-      - restore_cache:
-          keys:
-            - go-cache-v1-{{ checksum "/tmp/year" }}-{{ checksum "/tmp/month" }}-{{ checksum "/tmp/day" }}
-            - go-cache-v1-{{ checksum "/tmp/year" }}-{{ checksum "/tmp/month" }}
-            - go-cache-v1-{{ checksum "/tmp/year" }}
-
-      - run:
-          name: Build using architect
-          command: ./architect build
-
-      - store_test_results:
-          path: /tmp/results
-
-      - save_cache:
-          key: go-cache-v1-{{ checksum "/tmp/year" }}-{{ checksum "/tmp/month" }}-{{ checksum "/tmp/day" }}
-          paths:
-            - /tmp/go/cache
-
-      - persist_to_workspace:
-          root: .
-          paths:
-            - ./etcd-backup-operator
-
-  master:
-    docker:
-      - image: busybox
-    steps:
-      - run: "true"
-  pr:
-    docker:
-      - image: busybox
-    steps:
-      - run: "true"
-
 workflows:
   version: 2
   build:
     jobs:
-      # build binary
-      - build:
+      - architect/go-build:
+          name: go-build-etcd-backup-operator
+          binary: etcd-backup-operator
           filters:
+            # Trigger the job also on git tag.
             tags:
               only: /^v.*/
-      # build and push docker image to quay
+
       - architect/push-to-docker:
           name: push-etcd-backup-operator-to-quay
           image: "quay.io/giantswarm/etcd-backup-operator"
           username_envar: "QUAY_USERNAME"
           password_envar: "QUAY_PASSWORD"
           requires:
-            - build
+            - go-build-etcd-backup-operator
           filters:
             # Trigger the job also on git tag.
             tags:
               only: /^v.*/
+
       - architect/push-to-docker:
           name: push-etcd-backup-operator-to-aliyun
           image: "registry-intl.cn-shanghai.aliyuncs.com/giantswarm/etcd-backup-operator"
           username_envar: "ALIYUN_USERNAME"
           password_envar: "ALIYUN_PASSWORD"
           requires:
-            - build
+            - go-build-etcd-backup-operator
           filters:
             # Trigger the job also on git tag.
             tags:
               only: /^v.*/
-      # build and push helm chart to app catalog
+
       - architect/push-to-app-catalog:
           name: push-etcd-backup-operator-to-control-plane-app-catalog
           app_catalog: "control-plane-catalog"
@@ -96,16 +46,16 @@ workflows:
           # Make sure docker image is successfully built.
           requires:
             - push-etcd-backup-operator-to-quay
-            - push-etcd-backup-operator-to-aliyun
           filters:
             # Trigger the job also on git tag.
             tags:
               only: /^v.*/
-      # deploy to installations
+
       - architect/push-to-app-collection:
-          name: push-etcd-backup-operator-to-azure-app-collection
+          name: push-etcd-backup-operator-to-aws-app-collection
           app_name: "etcd-backup-operator"
           app_collection_repo: "azure-app-collection"
+          unique: "true"
           requires:
             - push-etcd-backup-operator-to-control-plane-app-catalog
           filters:
@@ -115,18 +65,34 @@ workflows:
             # Trigger the job also on git tag.
             tags:
               only: /^v.*/
-      - hold:
-          type: approval
-      - master:
+
+      - architect/push-to-app-collection:
+          name: push-etcd-backup-operator-to-azure-app-collection
+          app_name: "etcd-backup-operator"
+          app_collection_repo: "aws-app-collection"
+          unique: "true"
           requires:
-            - build
+            - push-etcd-backup-operator-to-control-plane-app-catalog
           filters:
+            # Do not trigger the job on commit.
             branches:
-              only: master
-      - pr:
+              ignore: /.*/
+            # Trigger the job also on git tag.
+            tags:
+              only: /^v.*/
+
+      - architect/push-to-app-collection:
+          name: push-etcd-backup-operator-to-kvm-app-collection
+          app_name: "etcd-backup-operator"
+          app_collection_repo: "kvm-app-collection"
+          unique: "true"
           requires:
-            - build
-            - hold
+            - push-etcd-backup-operator-to-control-plane-app-catalog
           filters:
+            # Do not trigger the job on commit.
             branches:
-              ignore: master
+              ignore: /.*/
+            # Trigger the job also on git tag.
+            tags:
+              only: /^v.*/
+
