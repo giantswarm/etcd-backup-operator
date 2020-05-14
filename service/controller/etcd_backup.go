@@ -51,7 +51,6 @@ func NewETCDBackup(config ETCDBackupConfig) (*ETCDBackup, error) {
 	var operatorkitController *controller.Controller
 	{
 		c := controller.Config{
-			CRD:          backupv1alpha1.NewETCDBackupCRD(),
 			K8sClient:    config.K8sClient,
 			Logger:       config.Logger,
 			ResourceSets: resourceSets,
