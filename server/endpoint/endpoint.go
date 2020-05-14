@@ -38,7 +38,7 @@ func New(config Config) (*Endpoint, error) {
 	{
 		c := version.Config{
 			Logger:  config.Logger,
-			Service: config.Service.Version,
+			Service: config.Service.GetVersion(),
 		}
 
 		versionEndpoint, err = version.New(c)
