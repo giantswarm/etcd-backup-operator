@@ -97,5 +97,3 @@ spec:
           limits:
             cpu: 100m
             memory: 500Mi
-      imagePullSecrets:
-      - name: {{ tpl .Values.resource.pullSecret.name . }}

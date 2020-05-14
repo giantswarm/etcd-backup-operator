@@ -1,6 +1,6 @@
 image:
   name: "giantswarm/etcd-backup-operator"
-  tag: "[[ .Version ]]"
+  tag: "0.0.0-4f793acc11c5273f7d8be4cff51661a9828c4561"
 Installation:
   V1:
     Registry:
@@ -12,7 +12,7 @@ pod:
     id: 1000
 project:
   name: "etcd-backup-operator"
-  version: "[[ .Version ]]"
+  version: "0.0.0-4f793acc11c5273f7d8be4cff51661a9828c4561"
 # Resource names are truncated to 47 characters.
 #
 # Kubernetes allows 63 characters limit for resource names. When pods for
@@ -31,6 +31,3 @@ resource:
     namespace: "giantswarm"
   psp:
     name: '{{ .Release.Name | replace "." "-" | trunc 47 }}-psp'
-  pullSecret:
-    name: '{{ .Release.Name | replace "." "-" | trunc 47 }}-pull-secret'
-    namespace: "giantswarm"
