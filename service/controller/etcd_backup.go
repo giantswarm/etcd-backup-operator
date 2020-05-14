@@ -83,14 +83,7 @@ func newETCDBackupResourceSets(config ETCDBackupConfig) ([]*controller.ResourceS
 
 	var resourceSet *controller.ResourceSet
 	{
-		c := etcdBackupResourceSetConfig{
-			K8sClient:      config.K8sClient,
-			Logger:         config.Logger,
-			ETCDv2Settings: config.ETCDv2Settings,
-			ETCDv3Settings: config.ETCDv3Settings,
-			EncryptionPwd:  config.EncryptionPwd,
-			Uploader:       config.Uploader,
-		}
+		c := etcdBackupResourceSetConfig(config)
 
 		resourceSet, err = newETCDBackupResourceSet(c)
 		if err != nil {

@@ -21,7 +21,7 @@ func Test_StateMachine(t *testing.T) {
 			name: "case 0: simple state transition",
 			machine: Machine{
 				"open":   func(ctx context.Context, obj interface{}, currentState State) (State, error) { return "closed", nil },
-				"closed": func(ctx context.Context, obj interface{}, currentState State) (State, error) { return "open", nil },
+				"closed": func(ctx context.Context, obj interface{}, currentState State) (State, error) { return "open", nil }, // nolint: goconst
 			},
 			currentState:     "open",
 			expectedNewState: "closed",
