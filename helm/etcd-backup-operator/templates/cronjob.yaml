@@ -4,8 +4,8 @@ metadata:
   name: {{ tpl .Values.resource.default.name  . }}-scheduler
   namespace: {{ tpl .Values.resource.default.namespace  . }}
   labels:
-    app: {{ .Values.project.name }}
-    version: {{ .Values.project.version }}
+    app: {{ .Chart.name }}
+    version: {{ .Chart.Version }}
 spec:
   # Run every six hours.
   schedule: "0 */6 * * *"

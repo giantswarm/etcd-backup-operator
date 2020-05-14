@@ -10,9 +10,6 @@ pod:
     id: 1000
   group:
     id: 1000
-project:
-  name: "etcd-backup-operator"
-  version: "[[ .Version ]]"
 # Resource names are truncated to 47 characters.
 #
 # Kubernetes allows 63 characters limit for resource names. When pods for
