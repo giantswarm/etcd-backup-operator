@@ -22,7 +22,7 @@ var (
 func main() {
 	err := mainE(context.Background())
 	if err != nil {
-		panic(microerror.Stack(err))
+		panic(microerror.JSON(err))
 	}
 }
 
@@ -54,7 +54,7 @@ func mainE(ctx context.Context) error {
 
 			newService, err = service.New(c)
 			if err != nil {
-				panic(microerror.Stack(err))
+				panic(microerror.JSON(err))
 			}
 
 			go newService.Boot(ctx)
@@ -72,7 +72,7 @@ func mainE(ctx context.Context) error {
 
 			newServer, err = server.New(c)
 			if err != nil {
-				panic(microerror.Stack(err))
+				panic(microerror.JSON(err))
 			}
 		}
 
