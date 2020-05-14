@@ -1,17 +1,12 @@
 package project
 
 var (
-	bundleVersion = "0.0.1"
-	description   = "The etcd-backup-operator does something."
-	gitSHA        = "n/a"
-	name          = "etcd-backup-operator"
-	source        = "https://github.com/giantswarm/etcd-backup-operator"
-	version       = "n/a"
+	description = "The etcd-backup-operator does something."
+	gitSHA      = "n/a"
+	name        = "etcd-backup-operator"
+	source      = "https://github.com/giantswarm/etcd-backup-operator"
+	version     = "0.1.0-dev"
 )
-
-func BundleVersion() string {
-	return bundleVersion
-}
 
 func Description() string {
 	return description
