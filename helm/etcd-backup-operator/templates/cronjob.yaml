@@ -23,5 +23,3 @@ spec:
             - "/bin/create-cr.sh"
             - "{{ not .Values.Installation.V1.Infra.TestingEnvironment }}"
           restartPolicy: Never
-          imagePullSecrets:
-          - name: {{ tpl .Values.resource.pullSecret.name . }}
