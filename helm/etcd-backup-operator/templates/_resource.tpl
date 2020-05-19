@@ -11,6 +11,11 @@ room for such suffix.
 {{- .Release.Name | replace "." "-" | trunc 47 | trimSuffix "-" -}}
 {{- end -}}
 
+
+{{- define "resource.default.namespace" -}}
+{{ .Release.Namespace }}
+{{- end -}}
+
 {{- define "resource.psp.name" -}}
 {{- include "resource.default.name" . -}}-psp
 {{- end -}}
