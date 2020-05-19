@@ -1,8 +1,8 @@
 apiVersion: batch/v2alpha1
 kind: CronJob
 metadata:
-  name: {{ tpl .Values.resource.default.name  . }}-scheduler
-  namespace: {{ tpl .Values.resource.default.namespace  . }}
+  name: {{ include "resource.default.name" . }}-scheduler
+  namespace: {{ include "resource.default.namespace" . }}
   labels:
     app: {{ .Values.project.name }}
     version: {{ .Values.project.version }}
@@ -15,7 +15,7 @@ spec:
     spec:
       template:
         spec:
-          serviceAccountName: {{ tpl .Values.resource.default.name  . }}
+          serviceAccountName: {{ include "resource.default.name" . }}
           containers:
           - name: etcd-backup
             image: "{{ .Values.Installation.V1.Registry.Domain }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
