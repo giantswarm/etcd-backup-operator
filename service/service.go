@@ -34,7 +34,8 @@ type Config struct {
 }
 
 type Service struct {
-	Version *version.Service
+	logger  micrologger.Logger
+	version *version.Service
 
 	bootOnce             sync.Once
 	etcdBackupController *controller.ETCDBackup
@@ -192,7 +193,8 @@ func New(config Config) (*Service, error) {
 	}
 
 	s := &Service{
-		Version: versionService,
+		logger:  config.Logger,
+		version: versionService,
 
 		bootOnce:             sync.Once{},
 		etcdBackupController: etcdBackupController,
@@ -204,7 +206,18 @@ func New(config Config) (*Service, error) {
 
 func (s *Service) Boot(ctx context.Context) {
 	s.bootOnce.Do(func() {
-		go s.operatorCollector.Boot(ctx)
+		go func() {
+			err := s.operatorCollector.Boot(ctx)
+			if err != nil {
+				s.logger.LogCtx(ctx, "level", "error", "message", "failed to boot collector", "stack", microerror.JSON(err))
+				os.Exit(1)
+			}
+
+		}()
 		go s.etcdBackupController.Boot(ctx)
 	})
+}
+
+func (s *Service) GetVersion() *version.Service {
+	return s.version
 }

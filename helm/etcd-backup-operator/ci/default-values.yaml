@@ -1,0 +1,11 @@
+---
+Installation:
+  V1:
+    Infra:
+      EtcdBackup:
+        EtcdDataDir: ""
+      TestingEnvironment: ""
+    Secret:
+      EtcdBackup:
+        AWSAccessKey: ""
+        AWSSecretKey: ""

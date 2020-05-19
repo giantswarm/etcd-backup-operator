@@ -16,7 +16,7 @@ const (
 
 	// Environment variables.
 	EnvAWSAccessKeyID     = "AWS_ACCESS_KEY_ID"
-	EnvAWSSecretAccessKey = "AWS_SECRET_ACCESS_KEY"
+	EnvAWSSecretAccessKey = "AWS_SECRET_ACCESS_KEY" // nolint: gosec
 	EncryptionPassword    = "ENCRYPTION_PASSWORD"
 )
 
