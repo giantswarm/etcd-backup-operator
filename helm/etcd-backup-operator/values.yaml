@@ -11,5 +11,5 @@ pod:
   group:
     id: 1000
 project:
-  name: "etcd-backup-operator"
-  version: "[[ .Version ]]"
+  branch: "[[ .Branch ]]"
+  commit: "[[ .SHA ]]"

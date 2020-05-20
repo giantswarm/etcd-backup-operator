@@ -14,11 +14,8 @@ spec:
     type: Recreate
   template:
     metadata:
-      labels:
-        app: {{ .Values.project.name }}
-        version: {{ .Values.project.version }}
       annotations:
-        releasetime: {{ $.Release.Time }}
+        releaseRevision: {{ .Release.Revision | quote }}
       labels:
         {{- include "labels.selector" . | nindent 8 }}
     spec:
@@ -39,7 +36,7 @@ spec:
       nodeSelector:
         node-role.kubernetes.io/master: ""
       volumes:
-      - name: {{ .Values.project.name }}-configmap
+      - name: {{ include "name" . }}-configmap
         configMap:
           name: {{ include "resource.default.name" . }}
           items:
@@ -53,19 +50,19 @@ spec:
           path: {{ .Values.Installation.V1.Infra.EtcdBackup.ClientCertsDir }}
       serviceAccountName: {{ include "resource.default.name" . }}
       containers:
-      - name: {{ .Values.project.name }}
+      - name: {{ include "name" . }}
         image: "{{ .Values.Installation.V1.Registry.Domain }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
         args:
         - daemon
-        - --config.dirs=/var/run/{{ .Values.project.name }}/configmap/
+        - --config.dirs=/var/run/{{ include "name" . }}/configmap/
         - --config.files=config
         volumeMounts:
         - mountPath: /var/lib/etcd
           name: etcd-datadir
         - mountPath: /certs
           name: etcd-certs
-        - name: {{ .Values.project.name }}-configmap
-          mountPath: /var/run/{{ .Values.project.name }}/configmap/
+        - name: {{ include "name" . }}-configmap
+          mountPath: /var/run/{{ include "name" . }}/configmap/
         env:
           - name: AWS_ACCESS_KEY_ID
             valueFrom:
