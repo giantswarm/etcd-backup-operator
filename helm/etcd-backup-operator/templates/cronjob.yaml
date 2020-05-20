@@ -4,8 +4,7 @@ metadata:
   name: {{ include "resource.default.name" . }}-scheduler
   namespace: {{ include "resource.default.namespace" . }}
   labels:
-    app: {{ .Values.project.name }}
-    version: {{ .Values.project.version }}
+    {{- include "labels.common" . | nindent 4 }}
 spec:
   # Run every six hours.
   schedule: "0 */6 * * *"
