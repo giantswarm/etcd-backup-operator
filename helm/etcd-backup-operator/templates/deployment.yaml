@@ -4,14 +4,12 @@ metadata:
   name: {{ include "resource.default.name" . }}
   namespace: {{ include "resource.default.namespace" . }}
   labels:
-    app: {{ .Values.project.name }}
-    version: {{ .Values.project.version }}
+    {{- include "labels.common" . | nindent 4 }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Values.project.name }}
-      version: {{ .Values.project.version }}
+      {{- include "labels.selector" . | nindent 6 }}
   strategy:
     type: Recreate
   template:
@@ -21,6 +19,8 @@ spec:
         version: {{ .Values.project.version }}
       annotations:
         releasetime: {{ $.Release.Time }}
+      labels:
+        {{- include "labels.selector" . | nindent 8 }}
     spec:
       restartPolicy: Always
       hostNetwork: true

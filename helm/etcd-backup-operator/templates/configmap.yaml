@@ -3,6 +3,8 @@ kind: ConfigMap
 metadata:
   name: {{ include "resource.default.name" . }}
   namespace: {{ include "resource.default.namespace" . }}
+  labels:
+    {{- include "labels.common" . | nindent 4 }}
 data:
   config.yml: |
     server:
