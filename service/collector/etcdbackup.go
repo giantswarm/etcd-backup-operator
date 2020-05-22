@@ -1,6 +1,8 @@
 package collector
 
 import (
+	"sort"
+
 	"github.com/giantswarm/apiextensions/pkg/apis/backup/v1alpha1"
 	"github.com/giantswarm/apiextensions/pkg/clientset/versioned"
 	"github.com/giantswarm/microerror"
@@ -15,14 +17,10 @@ const (
 	labelETCDVersion     = "etcd_version"
 
 	backupStateCompleted = "Completed"
-	backupStateFailed    = "Failed"
+	backupStateSkipped   = "Skipped"
 )
 
 var (
-	// This variable holds the name of the lastest CR that has been used to increase the global counters.
-	// It is used to increment the counter only once for each new CR.
-	lastSent = ""
-
 	namespace = "etcd_backup"
 	labels    = []string{labelTenantClusterId, labelETCDVersion}
 
@@ -67,33 +65,6 @@ var (
 		labels,
 		nil,
 	)
-
-	attemptsCounter = prometheus.NewCounterVec(
-		prometheus.CounterOpts{
-			Namespace: namespace,
-			Subsystem: "",
-			Name:      "attempts_count",
-			Help:      "Count of attempted backups",
-		},
-		labels)
-
-	successCounter = prometheus.NewCounterVec(
-		prometheus.CounterOpts{
-			Namespace: namespace,
-			Subsystem: "",
-			Name:      "success_count",
-			Help:      "Count of successful backups",
-		},
-		labels)
-
-	failureCounter = prometheus.NewCounterVec(
-		prometheus.CounterOpts{
-			Namespace: namespace,
-			Subsystem: "",
-			Name:      "failure_count",
-			Help:      "Count of failed backups",
-		},
-		labels)
 )
 
 type ETCDBackupConfig struct {
@@ -125,34 +96,49 @@ func NewETCDBackup(config ETCDBackupConfig) (*ETCDBackup, error) {
 		logger:    config.Logger,
 	}
 
-	prometheus.MustRegister(attemptsCounter)
-	prometheus.MustRegister(successCounter)
-	prometheus.MustRegister(failureCounter)
-
 	return d, nil
 }
 
 func (d *ETCDBackup) Collect(ch chan<- prometheus.Metric) error {
 	// Get a list of all ETCDBackup objects.
-	backups, err := d.g8sClient.BackupV1alpha1().ETCDBackups().List(v1.ListOptions{})
+	backupListResult, err := d.g8sClient.BackupV1alpha1().ETCDBackups().List(v1.ListOptions{})
 	if err != nil {
 		return microerror.Mask(err)
 	}
 
-	var newest *v1alpha1.ETCDBackup
+	// Sort backups by Status.FinishedTimestamp.
+	backups := backupListResult.Items
+	sort.Slice(backups, func(i, j int) bool {
+		t1 := backups[i].Status.FinishedTimestamp.Time
+		t2 := backups[j].Status.FinishedTimestamp.Time
+		return t1.Before(t2)
+	})
 
-	// Find the most recent ETCDBackup object in a final state.
-	for _, backup := range backups.Items {
-		// Ignore this backup CR if it is not in a final state.
-		if backup.Status.Status != backupStateCompleted && backup.Status.Status != backupStateFailed {
-			continue
-		}
-		if newest == nil || backup.Status.FinishedTimestamp.After(newest.Status.FinishedTimestamp.Time) {
-			newest = &backup
+	// Iterate over all ETCDBackup objects and select the most recent backup from each cluster.
+	latestV2SuccessMetrics := map[string]v1alpha1.ETCDInstanceBackupStatus{}
+	latestV3SuccessMetrics := map[string]v1alpha1.ETCDInstanceBackupStatus{}
+	latestV2AttemptMetrics := map[string]v1alpha1.ETCDInstanceBackupStatus{}
+	latestV3AttemptMetrics := map[string]v1alpha1.ETCDInstanceBackupStatus{}
+
+	for _, backup := range backups {
+		for _, instanceStatus := range backup.Status.Instances {
+			if instanceStatus.V2.Status == backupStateCompleted {
+				latestV2SuccessMetrics[instanceStatus.Name] = instanceStatus.V2
+			}
+			if instanceStatus.V3.Status == backupStateCompleted {
+				latestV3SuccessMetrics[instanceStatus.Name] = instanceStatus.V3
+			}
+
+			if instanceStatus.V2.Status != backupStateSkipped {
+				latestV2AttemptMetrics[instanceStatus.Name] = instanceStatus.V2
+			}
+			if instanceStatus.V3.Status != backupStateSkipped {
+				latestV3AttemptMetrics[instanceStatus.Name] = instanceStatus.V3
+			}
 		}
 	}
 
-	sendMetricsForVersion := func(tenantClusterID string, status v1alpha1.ETCDInstanceBackupStatus, version string, updateCounter bool) {
+	sendAttemptMetricsForVersion := func(tenantClusterID string, status v1alpha1.ETCDInstanceBackupStatus, version string) {
 		ch <- prometheus.MustNewConstMetric(
 			latestAttemptTimestampDesc,
 			prometheus.GaugeValue,
@@ -160,17 +146,10 @@ func (d *ETCDBackup) Collect(ch chan<- prometheus.Metric) error {
 			tenantClusterID,
 			version,
 		)
+	}
 
-		// The updateCounter bool indicates the fact that we need to increment the global counters for this metrics.
-		if updateCounter {
-			attemptsCounter.WithLabelValues(tenantClusterID, version).Inc()
-		}
-
+	sendSuccessMetricsForVersion := func(tenantClusterID string, status v1alpha1.ETCDInstanceBackupStatus, version string) {
 		if status.Status == backupStateCompleted {
-			if updateCounter {
-				successCounter.WithLabelValues(tenantClusterID, version).Inc()
-			}
-
 			ch <- prometheus.MustNewConstMetric(
 				creationTimeDesc,
 				prometheus.GaugeValue,
@@ -210,20 +189,23 @@ func (d *ETCDBackup) Collect(ch chan<- prometheus.Metric) error {
 				tenantClusterID,
 				version,
 			)
-		} else {
-			if updateCounter {
-				failureCounter.WithLabelValues(tenantClusterID, version).Inc()
-			}
 		}
 	}
 
-	if newest != nil {
-		for _, instanceStatus := range newest.Status.Instances {
-			sendMetricsForVersion(instanceStatus.Name, instanceStatus.V2, "v2", newest.Name != lastSent)
-			sendMetricsForVersion(instanceStatus.Name, instanceStatus.V3, "v3", newest.Name != lastSent)
-		}
+	for clusterName, status := range latestV2SuccessMetrics {
+		sendSuccessMetricsForVersion(clusterName, status, "V2")
+	}
 
-		lastSent = newest.Name
+	for clusterName, status := range latestV3SuccessMetrics {
+		sendSuccessMetricsForVersion(clusterName, status, "V3")
+	}
+
+	for clusterName, status := range latestV2AttemptMetrics {
+		sendAttemptMetricsForVersion(clusterName, status, "V2")
+	}
+
+	for clusterName, status := range latestV3AttemptMetrics {
+		sendAttemptMetricsForVersion(clusterName, status, "V3")
 	}
 
 	return nil
