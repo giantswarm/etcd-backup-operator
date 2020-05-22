@@ -10,6 +10,8 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
+
+	"github.com/giantswarm/etcd-backup-operator/service/controller/key"
 )
 
 const (
@@ -114,6 +116,14 @@ func (d *ETCDBackup) Collect(ch chan<- prometheus.Metric) error {
 		return t1.Before(t2)
 	})
 
+	// Get a list of current tenant clusters.
+	tenantClusterIds, err := d.getTenantClusterIDs()
+	if err != nil {
+		return microerror.Mask(err)
+	}
+
+	tenantClusterIds = append(tenantClusterIds, key.ControlPlane)
+
 	// Iterate over all ETCDBackup objects and select the most recent backup from each cluster.
 	latestV2SuccessMetrics := map[string]v1alpha1.ETCDInstanceBackupStatus{}
 	latestV3SuccessMetrics := map[string]v1alpha1.ETCDInstanceBackupStatus{}
@@ -122,6 +132,12 @@ func (d *ETCDBackup) Collect(ch chan<- prometheus.Metric) error {
 
 	for _, backup := range backups {
 		for _, instanceStatus := range backup.Status.Instances {
+			// The cluster this instance status is referring to does not exist anymore.
+			// We simply ignore this metric otherwise we get paged for deleted clusters.
+			if !inSlice(instanceStatus.Name, tenantClusterIds) {
+				continue
+			}
+
 			if instanceStatus.V2.Status == backupStateCompleted {
 				latestV2SuccessMetrics[instanceStatus.Name] = instanceStatus.V2
 			}
@@ -219,4 +235,28 @@ func (d *ETCDBackup) Describe(ch chan<- *prometheus.Desc) error {
 	ch <- latestAttemptTimestampDesc
 	ch <- latestSuccessTimestampDesc
 	return nil
+}
+
+func (d *ETCDBackup) getTenantClusterIDs() ([]string, error) {
+	var ret []string
+
+	azureConfigList, err := d.g8sClient.ProviderV1alpha1().AzureConfigs(v1.NamespaceAll).List(v1.ListOptions{})
+	if err != nil {
+		return ret, microerror.Mask(err)
+	}
+
+	for _, ac := range azureConfigList.Items {
+		ret = append(ret, ac.Name)
+	}
+
+	return ret, nil
+}
+
+func inSlice(a string, list []string) bool {
+	for _, b := range list {
+		if b == a {
+			return true
+		}
+	}
+	return false
 }
