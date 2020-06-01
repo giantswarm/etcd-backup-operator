@@ -238,15 +238,59 @@ func (d *ETCDBackup) Describe(ch chan<- *prometheus.Desc) error {
 }
 
 func (d *ETCDBackup) getTenantClusterIDs() ([]string, error) {
+	crdClient := d.g8sClient
 	var ret []string
 
-	azureConfigList, err := d.g8sClient.ProviderV1alpha1().AzureConfigs(v1.NamespaceAll).List(v1.ListOptions{})
-	if err != nil {
-		return ret, microerror.Mask(err)
+	// AWS
+	{
+		crdList, err := crdClient.ProviderV1alpha1().AWSConfigs(v1.NamespaceAll).List(v1.ListOptions{})
+		if err == nil {
+			for _, awsConfig := range crdList.Items {
+				// Only backup cluster if it was not marked for delete.
+				if awsConfig.DeletionTimestamp == nil {
+					ret = append(ret, awsConfig.Name)
+				}
+			}
+		}
 	}
 
-	for _, ac := range azureConfigList.Items {
-		ret = append(ret, ac.Name)
+	// AWS cluster API
+	{
+		crdList, err := crdClient.InfrastructureV1alpha2().AWSClusters(v1.NamespaceAll).List(v1.ListOptions{})
+		if err == nil {
+			for _, awsClusterObj := range crdList.Items {
+				// Only backup cluster if it was not marked for delete.
+				if awsClusterObj.DeletionTimestamp == nil {
+					ret = append(ret, awsClusterObj.Name)
+				}
+			}
+		}
+	}
+
+	// Azure
+	{
+		crdList, err := crdClient.ProviderV1alpha1().AzureConfigs(v1.NamespaceAll).List(v1.ListOptions{})
+		if err == nil {
+			for _, azureConfig := range crdList.Items {
+				// Only backup cluster if it was not marked for delete.
+				if azureConfig.DeletionTimestamp == nil {
+					ret = append(ret, azureConfig.Name)
+				}
+			}
+		}
+	}
+
+	// KVM
+	{
+		crdList, err := crdClient.ProviderV1alpha1().KVMConfigs(v1.NamespaceAll).List(v1.ListOptions{})
+		if err == nil {
+			for _, kvmConfig := range crdList.Items {
+				// Only backup cluster if it was not marked for delete.
+				if kvmConfig.DeletionTimestamp == nil {
+					ret = append(ret, kvmConfig.Name)
+				}
+			}
+		}
 	}
 
 	return ret, nil
