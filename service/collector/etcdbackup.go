@@ -247,7 +247,7 @@ func (d *ETCDBackup) getTenantClusterIDs() ([]string, error) {
 		if err == nil {
 			for _, awsConfig := range crdList.Items {
 				// Only backup cluster if it was not marked for delete.
-				if awsConfig.DeletionTimestamp == nil {
+				if awsConfig.ObjectMeta.DeletionTimestamp.IsZero() {
 					ret = append(ret, awsConfig.Name)
 				}
 			}
@@ -260,7 +260,7 @@ func (d *ETCDBackup) getTenantClusterIDs() ([]string, error) {
 		if err == nil {
 			for _, awsClusterObj := range crdList.Items {
 				// Only backup cluster if it was not marked for delete.
-				if awsClusterObj.DeletionTimestamp == nil {
+				if awsClusterObj.ObjectMeta.DeletionTimestamp.IsZero() {
 					ret = append(ret, awsClusterObj.Name)
 				}
 			}
@@ -273,7 +273,7 @@ func (d *ETCDBackup) getTenantClusterIDs() ([]string, error) {
 		if err == nil {
 			for _, azureConfig := range crdList.Items {
 				// Only backup cluster if it was not marked for delete.
-				if azureConfig.DeletionTimestamp == nil {
+				if azureConfig.ObjectMeta.DeletionTimestamp.IsZero() {
 					ret = append(ret, azureConfig.Name)
 				}
 			}
@@ -286,7 +286,7 @@ func (d *ETCDBackup) getTenantClusterIDs() ([]string, error) {
 		if err == nil {
 			for _, kvmConfig := range crdList.Items {
 				// Only backup cluster if it was not marked for delete.
-				if kvmConfig.DeletionTimestamp == nil {
+				if kvmConfig.ObjectMeta.DeletionTimestamp.IsZero() {
 					ret = append(ret, kvmConfig.Name)
 				}
 			}
