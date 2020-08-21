@@ -13,6 +13,9 @@ spec:
   jobTemplate:
     spec:
       template:
+        metadata:
+          labels:
+            {{- include "labels.common" . | nindent 12 }}
         spec:
           serviceAccountName: {{ include "resource.default.name" . }}
           containers:
