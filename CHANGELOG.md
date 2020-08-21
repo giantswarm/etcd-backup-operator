@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Label Jobs spawned from CronJob.
+- Add NetworkPolicy.
+
 ## [1.0.5] 2020-06-01
 
 ### Fixed
