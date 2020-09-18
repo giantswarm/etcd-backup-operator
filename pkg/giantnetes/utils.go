@@ -136,7 +136,7 @@ func (u *Utils) checkClusterVersionSupport(cluster clusterWithProvider) (bool, e
 func (u *Utils) getEtcdTLSCfg(clusterID string) (*TLSClientConfig, error) {
 	k8sClient := u.K8sClient.K8sClient()
 	getOpts := metav1.GetOptions{}
-	secret, err := k8sClient.CoreV1().Secrets(secretNamespace).Get(fmt.Sprintf("%s-etcd", clusterID), getOpts)
+	secret, err := k8sClient.CoreV1().Secrets(secretNamespace).Get(fmt.Sprintf("%s-calico-etcd-client", clusterID), getOpts)
 	if err != nil {
 		return nil, microerror.Maskf(executionFailedError, "error getting etcd client certificates for guest cluster %#q with error %#q", clusterID, err)
 	}

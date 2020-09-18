@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add monitoring labels
 
+### Changed
+
+- Use a different secret to get ETCD data from because the previous approach wasn't working for HA masters clusters.
+
 ## [1.1.0] 2020-08-21
 
 ### Added
