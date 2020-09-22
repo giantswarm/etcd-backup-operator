@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/giantswarm/apiextensions/pkg/apis/backup/v1alpha1"
+	"github.com/giantswarm/apiextensions/v2/pkg/apis/backup/v1alpha1"
 	"github.com/giantswarm/microerror"
-	"github.com/giantswarm/operatorkit/controller/context/reconciliationcanceledcontext"
+	"github.com/giantswarm/operatorkit/v2/pkg/controller/context/reconciliationcanceledcontext"
 
 	"github.com/giantswarm/etcd-backup-operator/pkg/giantnetes"
 	"github.com/giantswarm/etcd-backup-operator/service/controller/key"
@@ -53,7 +53,7 @@ func (r *Resource) runBackupOnAllInstances(ctx context.Context, obj interface{},
 		if doneSomething {
 			customObject.Status.Instances[etcdInstance.Name] = instanceStatus
 
-			err = r.persistCustomObjectStatus(customObject)
+			err = r.persistCustomObjectStatus(ctx, customObject)
 			if err != nil {
 				return false, microerror.Mask(err)
 			}

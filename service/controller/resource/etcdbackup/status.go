@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	backupv1alpha1 "github.com/giantswarm/apiextensions/pkg/apis/backup/v1alpha1"
+	backupv1alpha1 "github.com/giantswarm/apiextensions/v2/pkg/apis/backup/v1alpha1"
 	"github.com/giantswarm/microerror"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
@@ -15,16 +15,16 @@ func (r *Resource) getGlobalStatus(customObject backupv1alpha1.ETCDBackup) (stri
 	return customObject.Status.Status, nil
 }
 
-func (r *Resource) setGlobalStatus(customObject backupv1alpha1.ETCDBackup, updatedStatus string) error {
+func (r *Resource) setGlobalStatus(ctx context.Context, customObject backupv1alpha1.ETCDBackup, updatedStatus string) error {
 	// Get error from API before updating it.
-	obj, err := r.k8sClient.G8sClient().BackupV1alpha1().ETCDBackups().Get(customObject.Name, v1.GetOptions{})
+	obj, err := r.k8sClient.G8sClient().BackupV1alpha1().ETCDBackups().Get(ctx, customObject.Name, v1.GetOptions{})
 	if err != nil {
 		return microerror.Mask(err)
 	}
 
 	obj.Status.Status = updatedStatus
 
-	return r.persistCustomObjectStatus(*obj)
+	return r.persistCustomObjectStatus(ctx, *obj)
 }
 
 func (r *Resource) findOrInitializeInstanceStatus(ctx context.Context, etcdBackup backupv1alpha1.ETCDBackup, instance giantnetes.ETCDInstance) backupv1alpha1.ETCDInstanceBackupStatusIndex {
@@ -52,16 +52,16 @@ func isTerminalInstaceState(state string) bool {
 	return state == instanceBackupStateCompleted || state == instanceBackupStateFailed || state == instanceBackupStateSkipped
 }
 
-func (r *Resource) persistCustomObjectStatus(customObject backupv1alpha1.ETCDBackup) error {
+func (r *Resource) persistCustomObjectStatus(ctx context.Context, customObject backupv1alpha1.ETCDBackup) error {
 	// Get error from API before updating it.
-	obj, err := r.k8sClient.G8sClient().BackupV1alpha1().ETCDBackups().Get(customObject.Name, v1.GetOptions{})
+	obj, err := r.k8sClient.G8sClient().BackupV1alpha1().ETCDBackups().Get(ctx, customObject.Name, v1.GetOptions{})
 	if err != nil {
 		return microerror.Mask(err)
 	}
 
 	obj.Status = customObject.Status
 
-	_, err = r.k8sClient.G8sClient().BackupV1alpha1().ETCDBackups().UpdateStatus(obj)
+	_, err = r.k8sClient.G8sClient().BackupV1alpha1().ETCDBackups().UpdateStatus(ctx, obj, v1.UpdateOptions{})
 	if err != nil {
 		return microerror.Mask(err)
 	}

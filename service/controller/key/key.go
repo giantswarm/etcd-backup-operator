@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	backupv1alpha1 "github.com/giantswarm/apiextensions/pkg/apis/backup/v1alpha1"
+	backupv1alpha1 "github.com/giantswarm/apiextensions/v2/pkg/apis/backup/v1alpha1"
 	"github.com/giantswarm/microerror"
 )
 
