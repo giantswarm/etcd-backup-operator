@@ -8,7 +8,7 @@ import (
 	"github.com/giantswarm/microerror"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	"github.com/giantswarm/etcd-backup-operator/pkg/giantnetes"
+	"github.com/giantswarm/etcd-backup-operator/v2/pkg/giantnetes"
 )
 
 func (r *Resource) getGlobalStatus(customObject backupv1alpha1.ETCDBackup) (string, error) {

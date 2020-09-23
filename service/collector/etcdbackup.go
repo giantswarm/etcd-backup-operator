@@ -12,7 +12,7 @@ import (
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 
-	"github.com/giantswarm/etcd-backup-operator/service/controller/key"
+	"github.com/giantswarm/etcd-backup-operator/v2/service/controller/key"
 )
 
 const (
