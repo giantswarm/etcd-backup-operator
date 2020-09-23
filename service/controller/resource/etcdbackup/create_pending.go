@@ -7,8 +7,8 @@ import (
 	"github.com/giantswarm/microerror"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	"github.com/giantswarm/etcd-backup-operator/service/controller/key"
-	"github.com/giantswarm/etcd-backup-operator/service/controller/resource/etcdbackup/internal/state"
+	"github.com/giantswarm/etcd-backup-operator/v2/service/controller/key"
+	"github.com/giantswarm/etcd-backup-operator/v2/service/controller/resource/etcdbackup/internal/state"
 )
 
 // Sets the StartedTimestamp for the global reconciliation and initializes the Status->Instances field.

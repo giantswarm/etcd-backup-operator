@@ -5,8 +5,8 @@ import (
 
 	"github.com/giantswarm/microerror"
 
-	"github.com/giantswarm/etcd-backup-operator/service/controller/key"
-	"github.com/giantswarm/etcd-backup-operator/service/controller/resource/etcdbackup/internal/state"
+	"github.com/giantswarm/etcd-backup-operator/v2/service/controller/key"
+	"github.com/giantswarm/etcd-backup-operator/v2/service/controller/resource/etcdbackup/internal/state"
 )
 
 // Deletes the ETCDBackup if it's older than the threshold.
