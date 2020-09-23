@@ -1,10 +1,11 @@
 package collector
 
 import (
+	"context"
 	"sort"
 
-	"github.com/giantswarm/apiextensions/pkg/apis/backup/v1alpha1"
-	"github.com/giantswarm/apiextensions/pkg/clientset/versioned"
+	"github.com/giantswarm/apiextensions/v2/pkg/apis/backup/v1alpha1"
+	"github.com/giantswarm/apiextensions/v2/pkg/clientset/versioned"
 	"github.com/giantswarm/microerror"
 	"github.com/giantswarm/micrologger"
 	"github.com/prometheus/client_golang/prometheus"
@@ -102,8 +103,10 @@ func NewETCDBackup(config ETCDBackupConfig) (*ETCDBackup, error) {
 }
 
 func (d *ETCDBackup) Collect(ch chan<- prometheus.Metric) error {
+	ctx := context.Background()
+
 	// Get a list of all ETCDBackup objects.
-	backupListResult, err := d.g8sClient.BackupV1alpha1().ETCDBackups().List(v1.ListOptions{})
+	backupListResult, err := d.g8sClient.BackupV1alpha1().ETCDBackups().List(ctx, v1.ListOptions{})
 	if err != nil {
 		return microerror.Mask(err)
 	}
@@ -117,7 +120,7 @@ func (d *ETCDBackup) Collect(ch chan<- prometheus.Metric) error {
 	})
 
 	// Get a list of current tenant clusters.
-	tenantClusterIds, err := d.getTenantClusterIDs()
+	tenantClusterIds, err := d.getTenantClusterIDs(ctx)
 	if err != nil {
 		return microerror.Mask(err)
 	}
@@ -237,13 +240,13 @@ func (d *ETCDBackup) Describe(ch chan<- *prometheus.Desc) error {
 	return nil
 }
 
-func (d *ETCDBackup) getTenantClusterIDs() ([]string, error) {
+func (d *ETCDBackup) getTenantClusterIDs(ctx context.Context) ([]string, error) {
 	crdClient := d.g8sClient
 	var ret []string
 
 	// AWS
 	{
-		crdList, err := crdClient.ProviderV1alpha1().AWSConfigs(v1.NamespaceAll).List(v1.ListOptions{})
+		crdList, err := crdClient.ProviderV1alpha1().AWSConfigs(v1.NamespaceAll).List(ctx, v1.ListOptions{})
 		if err == nil {
 			for _, awsConfig := range crdList.Items {
 				// Only backup cluster if it was not marked for delete.
@@ -256,7 +259,7 @@ func (d *ETCDBackup) getTenantClusterIDs() ([]string, error) {
 
 	// AWS cluster API
 	{
-		crdList, err := crdClient.InfrastructureV1alpha2().AWSClusters(v1.NamespaceAll).List(v1.ListOptions{})
+		crdList, err := crdClient.InfrastructureV1alpha2().AWSClusters(v1.NamespaceAll).List(ctx, v1.ListOptions{})
 		if err == nil {
 			for _, awsClusterObj := range crdList.Items {
 				// Only backup cluster if it was not marked for delete.
@@ -269,7 +272,7 @@ func (d *ETCDBackup) getTenantClusterIDs() ([]string, error) {
 
 	// Azure
 	{
-		crdList, err := crdClient.ProviderV1alpha1().AzureConfigs(v1.NamespaceAll).List(v1.ListOptions{})
+		crdList, err := crdClient.ProviderV1alpha1().AzureConfigs(v1.NamespaceAll).List(ctx, v1.ListOptions{})
 		if err == nil {
 			for _, azureConfig := range crdList.Items {
 				// Only backup cluster if it was not marked for delete.
@@ -282,7 +285,7 @@ func (d *ETCDBackup) getTenantClusterIDs() ([]string, error) {
 
 	// KVM
 	{
-		crdList, err := crdClient.ProviderV1alpha1().KVMConfigs(v1.NamespaceAll).List(v1.ListOptions{})
+		crdList, err := crdClient.ProviderV1alpha1().KVMConfigs(v1.NamespaceAll).List(ctx, v1.ListOptions{})
 		if err == nil {
 			for _, kvmConfig := range crdList.Items {
 				// Only backup cluster if it was not marked for delete.

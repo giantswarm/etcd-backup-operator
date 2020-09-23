@@ -5,8 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/giantswarm/apiextensions/pkg/apis/backup/v1alpha1"
+	"github.com/giantswarm/apiextensions/v2/pkg/apis/backup/v1alpha1"
 	"github.com/giantswarm/microerror"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	"github.com/giantswarm/etcd-backup-operator/pkg/etcd"
 	"github.com/giantswarm/etcd-backup-operator/pkg/giantnetes"
@@ -64,9 +65,7 @@ func (r *Resource) doV3Backup(ctx context.Context, etcdInstance giantnetes.ETCDI
 		instanceStatus.V3.Status = instanceBackupStateSkipped
 	}
 
-	instanceStatus.V3.FinishedTimestamp = v1alpha1.DeepCopyTime{
-		Time: time.Now().UTC(),
-	}
+	instanceStatus.V3.FinishedTimestamp = metav1.Time{Time: time.Now().UTC()}
 
 	return true
 }

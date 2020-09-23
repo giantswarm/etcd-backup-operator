@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/giantswarm/microerror"
-	"github.com/giantswarm/operatorkit/controller/context/reconciliationcanceledcontext"
+	"github.com/giantswarm/operatorkit/v2/pkg/controller/context/reconciliationcanceledcontext"
 
 	"github.com/giantswarm/etcd-backup-operator/service/controller/key"
 	"github.com/giantswarm/etcd-backup-operator/service/controller/resource/etcdbackup/internal/state"
@@ -77,7 +77,7 @@ func (r *Resource) EnsureCreated(ctx context.Context, obj interface{}) error {
 	if newState != currentState {
 		r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("new state: %s", newState))
 		r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("setting resource status to '%s'", newState))
-		err = r.setGlobalStatus(customObject, string(newState))
+		err = r.setGlobalStatus(ctx, customObject, string(newState))
 		if err != nil {
 			return microerror.Mask(err)
 		}

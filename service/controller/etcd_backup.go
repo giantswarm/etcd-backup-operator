@@ -1,11 +1,12 @@
 package controller
 
 import (
-	backupv1alpha1 "github.com/giantswarm/apiextensions/pkg/apis/backup/v1alpha1"
-	"github.com/giantswarm/k8sclient"
+	backupv1alpha1 "github.com/giantswarm/apiextensions/v2/pkg/apis/backup/v1alpha1"
+	"github.com/giantswarm/k8sclient/v4/pkg/k8sclient"
 	"github.com/giantswarm/microerror"
 	"github.com/giantswarm/micrologger"
-	"github.com/giantswarm/operatorkit/controller"
+	"github.com/giantswarm/operatorkit/v2/pkg/controller"
+	"github.com/giantswarm/operatorkit/v2/pkg/resource"
 	"k8s.io/apimachinery/pkg/runtime"
 
 	"github.com/giantswarm/etcd-backup-operator/pkg/giantnetes"
@@ -51,9 +52,9 @@ func NewETCDBackup(config ETCDBackupConfig) (*ETCDBackup, error) {
 	var operatorkitController *controller.Controller
 	{
 		c := controller.Config{
-			K8sClient:    config.K8sClient,
-			Logger:       config.Logger,
-			ResourceSets: resourceSets,
+			K8sClient: config.K8sClient,
+			Logger:    config.Logger,
+			Resources: resourceSets,
 			NewRuntimeObjectFunc: func() runtime.Object {
 				return new(backupv1alpha1.ETCDBackup)
 			},
@@ -73,26 +74,30 @@ func NewETCDBackup(config ETCDBackupConfig) (*ETCDBackup, error) {
 	return c, nil
 }
 
-func newETCDBackupResourceSets(config ETCDBackupConfig) ([]*controller.ResourceSet, error) {
+func newETCDBackupResourceSets(config ETCDBackupConfig) ([]resource.Interface, error) {
 	var err error
 	err = validateETCDBackupConfig(config)
 	if err != nil {
 		return nil, microerror.Mask(err)
 	}
 
-	var resourceSet *controller.ResourceSet
+	var resources []resource.Interface
 	{
-		c := etcdBackupResourceSetConfig(config)
+		c := ETCDBackupConfig{
+			K8sClient:      config.K8sClient,
+			Logger:         config.Logger,
+			ETCDv2Settings: config.ETCDv2Settings,
+			ETCDv3Settings: config.ETCDv3Settings,
+			EncryptionPwd:  config.EncryptionPwd,
+			Uploader:       config.Uploader,
+		}
+		//etcdBackupResourceSetConfig(config)
 
-		resourceSet, err = newETCDBackupResourceSet(c)
+		resources, err = newETCDBackupResourceSet(c)
 		if err != nil {
 			return nil, microerror.Mask(err)
 		}
 	}
 
-	resourceSets := []*controller.ResourceSet{
-		resourceSet,
-	}
-
-	return resourceSets, nil
+	return resources, nil
 }

@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/giantswarm/apiextensions/pkg/apis/backup/v1alpha1"
 	"github.com/giantswarm/microerror"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	"github.com/giantswarm/etcd-backup-operator/service/controller/key"
 	"github.com/giantswarm/etcd-backup-operator/service/controller/resource/etcdbackup/internal/state"
@@ -19,10 +19,9 @@ func (r *Resource) backupRunningV3BackupCompletedTransition(ctx context.Context,
 	}
 
 	// Set the FinishedTimestamp to now.
-	customObject.Status.FinishedTimestamp = v1alpha1.DeepCopyTime{
-		Time: time.Now().UTC(),
-	}
-	err = r.persistCustomObjectStatus(customObject)
+	customObject.Status.FinishedTimestamp = metav1.Time{Time: time.Now().UTC()}
+
+	err = r.persistCustomObjectStatus(ctx, customObject)
 	if err != nil {
 		return "", microerror.Mask(err)
 	}
