@@ -13,7 +13,7 @@ require (
 	github.com/giantswarm/k8sclient/v4 v4.0.0
 	github.com/giantswarm/microendpoint v0.2.0
 	github.com/giantswarm/microerror v0.2.1
-	github.com/giantswarm/microkit v0.2.1
+	github.com/giantswarm/microkit v0.2.2
 	github.com/giantswarm/micrologger v0.3.1
 	github.com/giantswarm/operatorkit/v2 v2.0.0
 	github.com/golang/snappy v0.0.1 // indirect
@@ -22,7 +22,7 @@ require (
 	github.com/nwaples/rardecode v1.1.0 // indirect
 	github.com/pierrec/lz4 v2.5.2+incompatible // indirect
 	github.com/prometheus/client_golang v1.7.1
-	github.com/spf13/viper v1.7.0
+	github.com/spf13/viper v1.7.1
 	github.com/ulikunitz/xz v0.5.8 // indirect
 	github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8 // indirect
 	golang.org/x/crypto v0.0.0-20200220183623-bac4c82f6975
