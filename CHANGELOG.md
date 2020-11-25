@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.1] - 2020-11-25
+
 ### Fixed
 
 - Add support for 13.0.0 azure clusters.
@@ -70,7 +72,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First release.
 
-[Unreleased]: https://github.com/giantswarm/etcd-backup-operator/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/giantswarm/etcd-backup-operator/compare/v2.0.1...HEAD
+[2.0.1]: https://github.com/giantswarm/etcd-backup-operator/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/giantswarm/etcd-backup-operator/compare/v1.2.0...v2.0.0
 [1.2.0]: https://github.com/giantswarm/etcd-backup-operator/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/giantswarm/etcd-backup-operator/compare/v1.0.5...v1.1.0
