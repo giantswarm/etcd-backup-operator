@@ -17,7 +17,7 @@ require (
 	github.com/giantswarm/micrologger v0.3.1
 	github.com/giantswarm/operatorkit/v2 v2.0.0
 	github.com/golang/snappy v0.0.1 // indirect
-	github.com/google/go-cmp v0.5.1
+	github.com/google/go-cmp v0.5.4
 	github.com/mholt/archiver v3.1.1+incompatible
 	github.com/nwaples/rardecode v1.1.0 // indirect
 	github.com/pierrec/lz4 v2.5.2+incompatible // indirect
