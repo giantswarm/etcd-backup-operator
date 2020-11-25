@@ -8,6 +8,7 @@ import (
 	"github.com/coreos/go-semver/semver"
 	"github.com/giantswarm/apiextensions/v2/pkg/apis/backup/v1alpha1"
 	"github.com/giantswarm/apiextensions/v2/pkg/clientset/versioned"
+	"github.com/giantswarm/apiextensions/v2/pkg/label"
 	"github.com/giantswarm/k8sclient/v4/pkg/k8sclient"
 	"github.com/giantswarm/microerror"
 	"github.com/giantswarm/micrologger"
@@ -121,7 +122,19 @@ func (u *Utils) checkClusterVersionSupport(ctx context.Context, cluster clusterW
 			if err != nil {
 				return false, microerror.Maskf(executionFailedError, fmt.Sprintf("failed to get azure crd %#q with error %#q", cluster.clusterID, err))
 			}
-			return stringVersionCmp(crd.Spec.VersionBundle.Version, semver.New("0.0.0"), azureSupportFrom)
+			var version string
+			{
+				version = crd.Spec.VersionBundle.Version
+				if version == "" {
+					// CAPI clusters still have an AzureConfig, but they don't have the Spec.VersionBundle.Version field set.
+					// They save the version in a label.
+					version = crd.Labels[label.ReleaseVersion]
+				}
+			}
+			if version == "" {
+				return false, microerror.Maskf(executionFailedError, fmt.Sprintf("failed to get cluster version from AzureConfig %#q", cluster.clusterID))
+			}
+			return stringVersionCmp(version, semver.New("0.0.0"), azureSupportFrom)
 		}
 	case kvm:
 		{

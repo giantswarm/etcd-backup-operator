@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Add support for 13.0.0 azure clusters.
+
 ## [2.0.0] - 2020-09-23
 
-## Changed
+### Changed
 
 - Updated backward incompatible Kubernetes dependencies to v1.18.5.
 
