@@ -14,8 +14,8 @@ require (
 	github.com/giantswarm/microendpoint v0.2.0
 	github.com/giantswarm/microerror v0.2.1
 	github.com/giantswarm/microkit v0.2.2
-	github.com/giantswarm/micrologger v0.3.1
-	github.com/giantswarm/operatorkit/v2 v2.0.0
+	github.com/giantswarm/micrologger v0.3.3
+	github.com/giantswarm/operatorkit/v2 v2.0.2
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/google/go-cmp v0.5.4
 	github.com/mholt/archiver v3.1.1+incompatible
@@ -26,6 +26,6 @@ require (
 	github.com/ulikunitz/xz v0.5.8 // indirect
 	github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8 // indirect
 	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
-	k8s.io/apimachinery v0.18.5
-	k8s.io/client-go v0.18.5
+	k8s.io/apimachinery v0.18.9
+	k8s.io/client-go v0.18.9
 )
