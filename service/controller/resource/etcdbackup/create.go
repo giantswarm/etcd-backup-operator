@@ -58,6 +58,8 @@ func (r *Resource) EnsureCreated(ctx context.Context, obj interface{}) error {
 		return microerror.Mask(err)
 	}
 
+	return microerror.Maskf(invalidConfigError, "This is a test for sentry")
+
 	var newState state.State
 	var currentState state.State
 	{

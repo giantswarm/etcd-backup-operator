@@ -58,7 +58,8 @@ func NewETCDBackup(config ETCDBackupConfig) (*ETCDBackup, error) {
 			NewRuntimeObjectFunc: func() runtime.Object {
 				return new(backupv1alpha1.ETCDBackup)
 			},
-			Name: project.Name() + "-etcd-backup-controller",
+			Name:      project.Name() + "-etcd-backup-controller",
+			SentryDSN: "https://dfd0d6af79384d6bb93e8756dfc5aeb6@o373689.ingest.sentry.io/5190947",
 		}
 
 		operatorkitController, err = controller.New(c)
