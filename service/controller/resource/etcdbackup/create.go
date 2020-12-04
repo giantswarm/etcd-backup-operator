@@ -3,7 +3,6 @@ package etcdbackup
 import (
 	"context"
 	"fmt"
-	"math/rand"
 
 	"github.com/giantswarm/microerror"
 	"github.com/giantswarm/operatorkit/v2/pkg/controller/context/reconciliationcanceledcontext"
@@ -57,10 +56,6 @@ func (r *Resource) EnsureCreated(ctx context.Context, obj interface{}) error {
 	customObject, err := key.ToCustomObject(obj)
 	if err != nil {
 		return microerror.Mask(err)
-	}
-
-	if rand.Intn(1000) >= 0 {
-		return microerror.Maskf(invalidConfigError, "This is a test for sentry")
 	}
 
 	var newState state.State

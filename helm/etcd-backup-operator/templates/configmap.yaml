@@ -31,3 +31,5 @@ data:
         cert: "/certs/{{ .Values.Installation.V1.Infra.EtcdBackup.ClientCertFileName }}"
         key: "/certs/{{ .Values.Installation.V1.Infra.EtcdBackup.ClientKeyFileName }}"
         endpoints: "{{ .Values.Installation.V1.Infra.EtcdBackup.EtcdEndpoints }}"
+      sentry:
+        dsn: "https://4553619a49094382872ae888b7e8f7f3@o346224.ingest.sentry.io/5544797"

@@ -20,6 +20,7 @@ type ETCDBackupConfig struct {
 	ETCDv2Settings giantnetes.ETCDv2Settings
 	ETCDv3Settings giantnetes.ETCDv3Settings
 	EncryptionPwd  string
+	SentryDSN      string
 	Uploader       storage.Uploader
 }
 
@@ -59,7 +60,7 @@ func NewETCDBackup(config ETCDBackupConfig) (*ETCDBackup, error) {
 				return new(backupv1alpha1.ETCDBackup)
 			},
 			Name:      project.Name() + "-etcd-backup-controller",
-			SentryDSN: "https://dfd0d6af79384d6bb93e8756dfc5aeb6@o373689.ingest.sentry.io/5190947",
+			SentryDSN: config.SentryDSN,
 		}
 
 		operatorkitController, err = controller.New(c)

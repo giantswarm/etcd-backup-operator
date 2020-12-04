@@ -10,4 +10,5 @@ type Service struct {
 	S3         S3Uploader
 	ETCDv2     ETCDv2Settings
 	ETCDv3     ETCDv3Settings
+	Sentry     Sentry
 }
