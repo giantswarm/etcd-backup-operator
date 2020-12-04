@@ -114,6 +114,7 @@ func mainE(ctx context.Context) error {
 	daemonCommand.PersistentFlags().String(f.Service.ETCDv3.CaCert, "", "Client CA certificate for ETCD v3 connection")
 	daemonCommand.PersistentFlags().String(f.Service.ETCDv3.Key, "", "Client private key for ETCD v3 connection")
 	daemonCommand.PersistentFlags().String(f.Service.ETCDv3.Endpoints, "", "Endpoints for ETCD v3 connection")
+	daemonCommand.PersistentFlags().String(f.Service.Sentry.DSN, "", "DSN of the Sentry instance to forward errors to.")
 
 	err = newCommand.CobraCommand().Execute()
 	if err != nil {

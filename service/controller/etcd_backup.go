@@ -20,6 +20,7 @@ type ETCDBackupConfig struct {
 	ETCDv2Settings giantnetes.ETCDv2Settings
 	ETCDv3Settings giantnetes.ETCDv3Settings
 	EncryptionPwd  string
+	SentryDSN      string
 	Uploader       storage.Uploader
 }
 
@@ -58,7 +59,8 @@ func NewETCDBackup(config ETCDBackupConfig) (*ETCDBackup, error) {
 			NewRuntimeObjectFunc: func() runtime.Object {
 				return new(backupv1alpha1.ETCDBackup)
 			},
-			Name: project.Name() + "-etcd-backup-controller",
+			Name:      project.Name() + "-etcd-backup-controller",
+			SentryDSN: config.SentryDSN,
 		}
 
 		operatorkitController, err = controller.New(c)
