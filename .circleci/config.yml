@@ -1,5 +1,5 @@
 orbs:
-  architect: giantswarm/architect@0.10.0
+  architect: giantswarm/architect@2.1.0
 
 version: 2.1
 workflows:
@@ -59,7 +59,6 @@ workflows:
           name: push-etcd-backup-operator-to-aws-app-collection
           app_name: "etcd-backup-operator"
           app_collection_repo: "azure-app-collection"
-          unique: "true"
           requires:
             - push-etcd-backup-operator-to-control-plane-app-catalog
           filters:
@@ -75,7 +74,6 @@ workflows:
           name: push-etcd-backup-operator-to-azure-app-collection
           app_name: "etcd-backup-operator"
           app_collection_repo: "aws-app-collection"
-          unique: "true"
           requires:
             - push-etcd-backup-operator-to-control-plane-app-catalog
           filters:
@@ -91,7 +89,6 @@ workflows:
           name: push-etcd-backup-operator-to-kvm-app-collection
           app_name: "etcd-backup-operator"
           app_collection_repo: "kvm-app-collection"
-          unique: "true"
           requires:
             - push-etcd-backup-operator-to-control-plane-app-catalog
           filters:
