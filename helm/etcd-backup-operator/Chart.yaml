@@ -4,3 +4,5 @@ description: "Helm chart for etcd-backup-operator."
 home: "https://github.com/giantswarm/etcd-backup-operator"
 version: "[[ .Version ]]"
 appVersion: "[[ .AppVersion ]]"
+annotations:
+  application.giantswarm.io/team: "celestial"
