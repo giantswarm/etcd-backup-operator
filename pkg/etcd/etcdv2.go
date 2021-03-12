@@ -11,7 +11,7 @@ import (
 
 	"github.com/giantswarm/microerror"
 	"github.com/giantswarm/micrologger"
-	"github.com/mholt/archiver"
+	"github.com/mholt/archiver/v3"
 
 	"github.com/giantswarm/etcd-backup-operator/v2/pkg/etcd/internal/encrypt"
 	"github.com/giantswarm/etcd-backup-operator/v2/pkg/etcd/internal/exec"
