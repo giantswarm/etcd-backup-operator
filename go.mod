@@ -17,7 +17,7 @@ require (
 	github.com/google/go-cmp v0.5.5
 	github.com/kr/pretty v0.2.0 // indirect
 	github.com/mholt/archiver/v3 v3.5.0
-	github.com/prometheus/client_golang v1.9.0
+	github.com/prometheus/client_golang v1.10.0
 	github.com/spf13/viper v1.7.1
 	github.com/ulikunitz/xz v0.5.8 // indirect
 	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
