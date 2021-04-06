@@ -5,15 +5,15 @@ go 1.13
 require (
 	github.com/aws/aws-sdk-go v1.38.12
 	github.com/coreos/go-semver v0.3.0
-	github.com/giantswarm/apiextensions/v2 v2.6.2
+	github.com/giantswarm/apiextensions/v3 v3.22.0
 	github.com/giantswarm/backoff v0.2.0
 	github.com/giantswarm/exporterkit v0.2.1
-	github.com/giantswarm/k8sclient/v4 v4.1.0
+	github.com/giantswarm/k8sclient/v5 v5.11.0
 	github.com/giantswarm/microendpoint v0.2.0
 	github.com/giantswarm/microerror v0.3.0
 	github.com/giantswarm/microkit v0.2.2
 	github.com/giantswarm/micrologger v0.5.0
-	github.com/giantswarm/operatorkit/v2 v2.0.2
+	github.com/giantswarm/operatorkit/v4 v4.3.1
 	github.com/google/go-cmp v0.5.5
 	github.com/kr/pretty v0.2.0 // indirect
 	github.com/mholt/archiver/v3 v3.5.0
@@ -29,4 +29,5 @@ replace (
 	github.com/coreos/etcd v3.3.10+incompatible => github.com/coreos/etcd v3.3.25+incompatible
 	github.com/coreos/etcd v3.3.13+incompatible => github.com/coreos/etcd v3.3.25+incompatible
 	github.com/gogo/protobuf v1.3.1 => github.com/gogo/protobuf v1.3.2
+	sigs.k8s.io/cluster-api => github.com/giantswarm/cluster-api v0.3.13-gs
 )
