@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Bump up dependencies:
+  - OperatorKit `v4.3.1`.
+  - k8sclient `v5.11.0`
+  - apiextensions `v3.22.0`
+
 ## [2.2.0] - 2021-02-26
 
 ### Added
