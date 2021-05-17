@@ -3,7 +3,7 @@ module github.com/giantswarm/etcd-backup-operator/v2
 go 1.13
 
 require (
-	github.com/aws/aws-sdk-go v1.38.33
+	github.com/aws/aws-sdk-go v1.38.40
 	github.com/coreos/go-semver v0.3.0
 	github.com/giantswarm/apiextensions/v3 v3.22.0
 	github.com/giantswarm/backoff v0.2.0
@@ -22,7 +22,7 @@ require (
 	github.com/ulikunitz/xz v0.5.8 // indirect
 	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
 	k8s.io/apimachinery v0.18.18
-	k8s.io/client-go v0.18.9
+	k8s.io/client-go v0.18.18
 )
 
 replace (
