@@ -14,7 +14,7 @@ require (
 	github.com/giantswarm/microkit v0.2.2
 	github.com/giantswarm/micrologger v0.5.0
 	github.com/giantswarm/operatorkit/v4 v4.3.1
-	github.com/google/go-cmp v0.5.5
+	github.com/google/go-cmp v0.5.6
 	github.com/kr/pretty v0.2.0 // indirect
 	github.com/mholt/archiver/v3 v3.5.0
 	github.com/prometheus/client_golang v1.10.0
