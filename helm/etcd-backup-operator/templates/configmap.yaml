@@ -25,7 +25,7 @@ data:
         bucket: "{{ .Values.Installation.V1.Infra.EtcdBackup.S3Bucket }}"
         region: "{{ .Values.Installation.V1.Infra.EtcdBackup.S3Region }}"
       etcdv2:
-        datadir: {{ if eq .Values.Installation.V1.Provider.Kind "kvm" }}/var/lib/etcd{{ end }}
+        datadir: "{{ if eq .Values.Installation.V1.Provider.Kind "kvm" }}/var/lib/etcd{{ end }}"
       etcdv3:
         cacert: "/certs/{{ .Values.Installation.V1.Infra.EtcdBackup.ClientCaCertFileName }}"
         cert: "/certs/{{ .Values.Installation.V1.Infra.EtcdBackup.ClientCertFileName }}"
