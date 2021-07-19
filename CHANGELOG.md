@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Disabled etcd v2 backup for Azure and AWS.
+
 ## [2.2.1] - 2021-04-06
 
 - Bump up dependencies:
