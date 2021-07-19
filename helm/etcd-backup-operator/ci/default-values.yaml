@@ -5,6 +5,8 @@ Installation:
       EtcdBackup:
         EtcdDataDir: ""
       TestingEnvironment: ""
+    Provider:
+      Kind: AWS
     Secret:
       EtcdBackup:
         AWSAccessKey: ""
