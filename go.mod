@@ -5,7 +5,7 @@ go 1.13
 require (
 	github.com/aws/aws-sdk-go v1.40.12
 	github.com/coreos/go-semver v0.3.0
-	github.com/giantswarm/apiextensions/v3 v3.27.3
+	github.com/giantswarm/apiextensions/v3 v3.30.0
 	github.com/giantswarm/backoff v0.2.0
 	github.com/giantswarm/exporterkit v0.2.1
 	github.com/giantswarm/k8sclient/v5 v5.11.0
