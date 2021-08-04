@@ -22,14 +22,14 @@ data:
           crtFile: ''
           keyFile: ''
       s3:
-        bucket: "{{ .Values.Installation.V1.Infra.EtcdBackup.S3Bucket }}"
-        region: "{{ .Values.Installation.V1.Infra.EtcdBackup.S3Region }}"
+        bucket: "{{ .Values.aws.s3bucket }}"
+        region: "{{ .Values.aws.s3region }}"
       etcdv2:
-        datadir: "{{ if eq .Values.Installation.V1.Provider.Kind "kvm" }}/var/lib/etcd{{ end }}"
+        datadir: "{{ if eq .Values.provider.kind "kvm" }}/var/lib/etcd{{ end }}"
       etcdv3:
-        cacert: "/certs/{{ .Values.Installation.V1.Infra.EtcdBackup.ClientCaCertFileName }}"
-        cert: "/certs/{{ .Values.Installation.V1.Infra.EtcdBackup.ClientCertFileName }}"
-        key: "/certs/{{ .Values.Installation.V1.Infra.EtcdBackup.ClientKeyFileName }}"
-        endpoints: "{{ .Values.Installation.V1.Infra.EtcdBackup.EtcdEndpoints }}"
+        cacert: "/certs/{{ .Values.clientCaCertFileName }}"
+        cert: "/certs/{{ .Values.clientCertFileName }}"
+        key: "/certs/{{ .Values.clientKeyFileName }}"
+        endpoints: "{{ .Values.etcdEndpoints }}"
       sentry:
         dsn: "https://4553619a49094382872ae888b7e8f7f3@o346224.ingest.sentry.io/5544797"

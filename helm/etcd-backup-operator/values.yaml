@@ -1,10 +1,6 @@
 image:
   name: "giantswarm/etcd-backup-operator"
   tag: "[[ .Version ]]"
-Installation:
-  V1:
-    Registry:
-      Domain: quay.io
 pod:
   user:
     id: 1000
@@ -13,3 +9,25 @@ pod:
 project:
   branch: "[[ .Branch ]]"
   commit: "[[ .SHA ]]"
+
+registry:
+  domain: docker.io
+
+testingEnvironment: ""
+provider:
+  kind: ""
+
+aws:
+  s3bucket: ""
+  s3region: ""
+  credentials:
+    awsAccessKey: ""
+    awsSecretKey: ""
+
+clusterPrefix: ""
+etcdDataDir: ""
+clientCertsDir: "/etc/kubernetes/ssl/etcd/"
+clientCaCertFileName: ""
+clientCertFileName: ""
+clientKeyFileName: ""
+etcdEndpoints: "https://127.0.0.1:2379"
