@@ -44,14 +44,14 @@ spec:
             path: config.yml
       - name: etcd-datadir
         hostPath:
-          path: {{ .Values.Installation.V1.Infra.EtcdBackup.EtcdDataDir }}
+          path: {{ .Values.etcdDataDir }}
       - name: etcd-certs
         hostPath:
-          path: {{ .Values.Installation.V1.Infra.EtcdBackup.ClientCertsDir }}
+          path: {{ .Values.clientCertsDir }}
       serviceAccountName: {{ include "resource.default.name" . }}
       containers:
       - name: {{ include "name" . }}
-        image: "{{ .Values.Installation.V1.Registry.Domain }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
+        image: "{{ .Values.registry.domain }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
         args:
         - daemon
         - --config.dirs=/var/run/{{ include "name" . }}/configmap/
@@ -80,7 +80,7 @@ spec:
                 name: {{ include "resource.default.name" . }}
                 key: ETCDBACKUP_PASSPHRASE
           - name: FILENAME_PREFIX
-            value: "{{ .Values.Installation.V1.Infra.EtcdBackup.ClusterPrefix }}"
+            value: "{{ .Values.clusterPrefix }}"
         livenessProbe:
           httpGet:
             path: /healthz
