@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Cronjob template now uses apiVersion `batch/v1` which is default in k8s 1.21 
+
 ## [2.3.0] - 2021-07-19
 
 ### Changed
