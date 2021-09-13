@@ -24,7 +24,7 @@ func Cmd(cmd string, args []string, envs []string, logger micrologger.Logger) ([
 	// Execute and get output.
 	stdOutErr, err := c.CombinedOutput()
 	if err != nil {
-		logger.Log("level", "error", "msg", "execCmd failed", "reason", fmt.Sprintf("%s", stdOutErr), "err", err)
+		logger.Log("level", "error", "msg", "execCmd failed", "reason", string(stdOutErr), "err", err)
 		return stdOutErr, microerror.Mask(err)
 	}
 	return stdOutErr, nil
