@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Changed cronjob template apiVersion to `v2beta1`
+- Changed cronjob template apiVersion to `v2beta1`.
+- Use `/var/lib/etcd` as default `etcd` data folder when installing Helm Chart.
 
 ## [2.4.0] - 2021-08-05
 

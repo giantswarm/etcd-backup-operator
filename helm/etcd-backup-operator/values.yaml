@@ -25,7 +25,7 @@ aws:
     awsSecretKey: ""
 
 clusterPrefix: ""
-etcdDataDir: ""
+etcdDataDir: "/var/lib/etcd"
 clientCertsDir: "/etc/kubernetes/ssl/etcd/"
 clientCaCertFileName: ""
 clientCertFileName: ""
