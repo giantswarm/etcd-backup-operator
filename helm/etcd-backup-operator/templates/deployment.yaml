@@ -44,7 +44,7 @@ spec:
             path: config.yml
       - name: etcd-datadir
         hostPath:
-          path: {{ .Values.etcdDataDir }}
+          path: "{{ .Values.etcdDataDir }}"
       - name: etcd-certs
         hostPath:
           path: {{ .Values.clientCertsDir }}
