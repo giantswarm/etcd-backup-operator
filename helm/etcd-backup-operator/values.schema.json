@@ -1,0 +1,111 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "properties": {
+        "aws": {
+            "type": "object",
+            "properties": {
+                "credentials": {
+                    "type": "object",
+                    "properties": {
+                        "awsAccessKey": {
+                            "type": "string"
+                        },
+                        "awsSecretKey": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "s3bucket": {
+                    "type": "string"
+                },
+                "s3region": {
+                    "type": "string"
+                }
+            }
+        },
+        "clientCaCertFileName": {
+            "type": "string"
+        },
+        "clientCertFileName": {
+            "type": "string"
+        },
+        "clientCertsDir": {
+            "type": "string"
+        },
+        "clientKeyFileName": {
+            "type": "string"
+        },
+        "clusterPrefix": {
+            "type": "string"
+        },
+        "etcdDataDir": {
+            "type": ["null", "string"]
+        },
+        "etcdEndpoints": {
+            "type": "string"
+        },
+        "image": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "tag": {
+                    "type": "string"
+                }
+            }
+        },
+        "pod": {
+            "type": "object",
+            "properties": {
+                "group": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "user": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        }
+                    }
+                }
+            }
+        },
+        "project": {
+            "type": "object",
+            "properties": {
+                "branch": {
+                    "type": "string"
+                },
+                "commit": {
+                    "type": "string"
+                }
+            }
+        },
+        "provider": {
+            "type": "object",
+            "properties": {
+                "kind": {
+                    "type": "string"
+                }
+            }
+        },
+        "registry": {
+            "type": "object",
+            "properties": {
+                "domain": {
+                    "type": "string"
+                }
+            }
+        },
+        "testingEnvironment": {
+            "type": "string"
+        }
+    }
+}

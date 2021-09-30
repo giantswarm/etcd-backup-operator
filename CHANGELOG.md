@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Changed cronjob template apiVersion to `v2beta1`
 
+### Added
+
+- Added `values.schema.json` file to validate helm values.
+
 ## [2.4.0] - 2021-08-05
 
 ### Changed
