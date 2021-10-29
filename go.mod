@@ -8,12 +8,12 @@ require (
 	github.com/giantswarm/apiextensions/v3 v3.32.0
 	github.com/giantswarm/backoff v0.2.0
 	github.com/giantswarm/exporterkit v0.2.1
-	github.com/giantswarm/k8sclient/v5 v5.12.0
+	github.com/giantswarm/k8sclient/v6 v6.0.0
 	github.com/giantswarm/microendpoint v0.2.0
 	github.com/giantswarm/microerror v0.3.0
 	github.com/giantswarm/microkit v0.2.2
 	github.com/giantswarm/micrologger v0.5.0
-	github.com/giantswarm/operatorkit/v4 v4.3.1
+	github.com/giantswarm/operatorkit/v5 v5.0.0
 	github.com/google/go-cmp v0.5.6
 	github.com/kr/pretty v0.2.0 // indirect
 	github.com/mholt/archiver/v3 v3.5.0
