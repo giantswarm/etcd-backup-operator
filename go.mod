@@ -3,7 +3,7 @@ module github.com/giantswarm/etcd-backup-operator/v2
 go 1.13
 
 require (
-	github.com/aws/aws-sdk-go v1.40.27
+	github.com/aws/aws-sdk-go v1.41.17
 	github.com/coreos/go-semver v0.3.0
 	github.com/giantswarm/apiextensions/v3 v3.32.0
 	github.com/giantswarm/backoff v0.2.0
@@ -15,12 +15,10 @@ require (
 	github.com/giantswarm/micrologger v0.5.0
 	github.com/giantswarm/operatorkit/v4 v4.3.1
 	github.com/google/go-cmp v0.5.6
-	github.com/kr/pretty v0.2.0 // indirect
-	github.com/mholt/archiver/v3 v3.5.0
+	github.com/mholt/archiver/v3 v3.5.1
 	github.com/prometheus/client_golang v1.11.0
-	github.com/spf13/viper v1.8.1
-	github.com/ulikunitz/xz v0.5.8 // indirect
-	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
+	github.com/spf13/viper v1.9.0
+	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5
 	k8s.io/apimachinery v0.18.19
 	k8s.io/client-go v0.18.19
 )
