@@ -19,8 +19,8 @@ require (
 	github.com/prometheus/client_golang v1.11.0
 	github.com/spf13/viper v1.9.0
 	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5
-	k8s.io/apimachinery v0.18.19
-	k8s.io/client-go v0.18.19
+	k8s.io/apimachinery v0.20.12
+	k8s.io/client-go v0.20.12
 )
 
 replace (
