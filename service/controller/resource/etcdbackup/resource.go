@@ -15,24 +15,24 @@ const (
 )
 
 type Config struct {
-	K8sClient        k8sclient.Interface
-	Logger           micrologger.Logger
-	ETCDv2Settings   giantnetes.ETCDv2Settings
-	ETCDv3Settings   giantnetes.ETCDv3Settings
-	EncryptionPwd    string
-	InstallationName string
-	Uploader         storage.Uploader
+	K8sClient      k8sclient.Interface
+	Logger         micrologger.Logger
+	ETCDv2Settings giantnetes.ETCDv2Settings
+	ETCDv3Settings giantnetes.ETCDv3Settings
+	EncryptionPwd  string
+	Installation   string
+	Uploader       storage.Uploader
 }
 
 type Resource struct {
-	logger           micrologger.Logger
-	k8sClient        k8sclient.Interface
-	stateMachine     state.Machine
-	etcdV2Settings   giantnetes.ETCDv2Settings
-	etcdV3Settings   giantnetes.ETCDv3Settings
-	encryptionPwd    string
-	installationName string
-	uploader         storage.Uploader
+	logger         micrologger.Logger
+	k8sClient      k8sclient.Interface
+	stateMachine   state.Machine
+	etcdV2Settings giantnetes.ETCDv2Settings
+	etcdV3Settings giantnetes.ETCDv3Settings
+	encryptionPwd  string
+	installation   string
+	uploader       storage.Uploader
 }
 
 func New(config Config) (*Resource, error) {
@@ -45,21 +45,21 @@ func New(config Config) (*Resource, error) {
 	if !config.ETCDv2Settings.AreComplete() && !config.ETCDv3Settings.AreComplete() {
 		return nil, microerror.Maskf(invalidConfigError, "Either %T.ETCDv2Settings or %T.ETCDv3Settings must be defined", config, config)
 	}
-	if config.InstallationName == "" {
-		return nil, microerror.Maskf(invalidConfigError, "%T.InstallationName must not be empty", config)
+	if config.Installation == "" {
+		return nil, microerror.Maskf(invalidConfigError, "%T.Installation must not be empty", config)
 	}
 	if config.Uploader == nil {
 		return nil, microerror.Maskf(invalidConfigError, "%T.Uploader must not be empty", config)
 	}
 
 	r := &Resource{
-		logger:           config.Logger,
-		k8sClient:        config.K8sClient,
-		etcdV2Settings:   config.ETCDv2Settings,
-		etcdV3Settings:   config.ETCDv3Settings,
-		encryptionPwd:    config.EncryptionPwd,
-		installationName: config.InstallationName,
-		uploader:         config.Uploader,
+		logger:         config.Logger,
+		k8sClient:      config.K8sClient,
+		etcdV2Settings: config.ETCDv2Settings,
+		etcdV3Settings: config.ETCDv3Settings,
+		encryptionPwd:  config.EncryptionPwd,
+		installation:   config.Installation,
+		uploader:       config.Uploader,
 	}
 
 	r.configureStateMachine()

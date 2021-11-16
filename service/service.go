@@ -153,10 +153,10 @@ func New(config Config) (*Service, error) {
 				Key:       config.Viper.GetString(config.Flag.Service.ETCDv3.Key),
 				Cert:      config.Viper.GetString(config.Flag.Service.ETCDv3.Cert),
 			},
-			EncryptionPwd:    os.Getenv(key.EncryptionPassword),
-			InstallationName: config.Viper.GetString(config.Flag.Service.InstallationName),
-			SentryDSN:        config.Viper.GetString(config.Flag.Service.Sentry.DSN),
-			Uploader:         uploader,
+			EncryptionPwd: os.Getenv(key.EncryptionPassword),
+			Installation:  config.Viper.GetString(config.Flag.Service.Installation),
+			SentryDSN:     config.Viper.GetString(config.Flag.Service.Sentry.DSN),
+			Uploader:      uploader,
 		}
 
 		etcdBackupController, err = controller.NewETCDBackup(c)
