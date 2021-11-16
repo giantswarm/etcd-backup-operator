@@ -1,4 +1,4 @@
-apiVersion: batch/v1beta1
+apiVersion: batch/{{ if .Capabilities.APIVersions.Has "batch/v1" }}v1{{ else }}v1beta1{{ end }}
 kind: CronJob
 metadata:
   name: {{ include "resource.default.name" . }}-scheduler
