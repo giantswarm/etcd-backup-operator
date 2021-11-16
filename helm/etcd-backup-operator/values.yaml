@@ -13,7 +13,7 @@ project:
 registry:
   domain: docker.io
 
-testingEnvironment: ""
+testingEnvironment: false
 provider:
   kind: ""
 
