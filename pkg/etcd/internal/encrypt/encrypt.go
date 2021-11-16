@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/giantswarm/microerror"
-	"golang.org/x/crypto/openpgp"
+	"golang.org/x/crypto/openpgp" //nolint
 )
 
 // Encrypt data with passphrase.
