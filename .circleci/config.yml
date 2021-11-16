@@ -29,6 +29,19 @@ workflows:
 
       - architect/push-to-docker:
           context: "architect"
+          name: push-etcd-backup-operator-to-docker
+          image: "docker.io/giantswarm/etcd-backup-operator"
+          username_envar: "DOCKER_USERNAME"
+          password_envar: "DOCKER_PASSWORD"
+          requires:
+            - go-build-etcd-backup-operator
+          filters:
+            # Trigger the job also on git tag.
+            tags:
+              only: /^v.*/
+
+      - architect/push-to-docker:
+          context: "architect"
           name: push-etcd-backup-operator-to-aliyun
           image: "registry-intl.cn-shanghai.aliyuncs.com/giantswarm/etcd-backup-operator"
           username_envar: "ALIYUN_USERNAME"
