@@ -51,7 +51,7 @@ func (b V2Backup) Cleanup() {
 // Create etcd in temporary directory, tar and compress.
 func (b V2Backup) Create() (string, error) {
 	// filename.
-	*b.filename = b.Prefix + "-etcd-etcd-v2-" + time.Now().Format(key.TsFormat)
+	*b.filename = b.Prefix + "-v2-" + time.Now().Format(key.TsFormat)
 
 	// Full path to file.
 	fpath := filepath.Join(b.getTmpDir(), *b.filename)

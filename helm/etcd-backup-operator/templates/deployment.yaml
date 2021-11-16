@@ -79,8 +79,6 @@ spec:
               secretKeyRef:
                 name: {{ include "resource.default.name" . }}
                 key: ETCDBACKUP_PASSPHRASE
-          - name: FILENAME_PREFIX
-            value: "{{ .Values.clusterPrefix }}"
         livenessProbe:
           httpGet:
             path: /healthz

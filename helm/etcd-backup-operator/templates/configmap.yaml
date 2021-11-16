@@ -31,5 +31,6 @@ data:
         cert: "/certs/{{ .Values.clientCertFileName }}"
         key: "/certs/{{ .Values.clientKeyFileName }}"
         endpoints: "{{ .Values.etcdEndpoints }}"
+      installationName: "{{ .Values.installation }}"
       sentry:
         dsn: "https://4553619a49094382872ae888b7e8f7f3@o346224.ingest.sentry.io/5544797"

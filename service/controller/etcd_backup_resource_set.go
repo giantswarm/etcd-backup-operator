@@ -13,6 +13,9 @@ func validateETCDBackupResourceSetConfigConfig(config ETCDBackupConfig) error {
 	if !config.ETCDv2Settings.AreComplete() && !config.ETCDv3Settings.AreComplete() {
 		return microerror.Maskf(invalidConfigError, "Either %T.ETCDv2Settings or %T.ETCDv3Settings must be defined", config, config)
 	}
+	if config.InstallationName == "" {
+		return microerror.Maskf(invalidConfigError, "%T.InstallationName must be defined", config)
+	}
 	if config.Uploader == nil {
 		return microerror.Maskf(invalidConfigError, "%T.Uploader must be defined", config)
 	}
@@ -29,12 +32,13 @@ func newETCDBackupResourceSet(config ETCDBackupConfig) ([]resource.Interface, er
 	var etcdBackupResource resource.Interface
 	{
 		c := etcdbackup.Config{
-			K8sClient:      config.K8sClient,
-			Logger:         config.Logger,
-			ETCDv2Settings: config.ETCDv2Settings,
-			ETCDv3Settings: config.ETCDv3Settings,
-			EncryptionPwd:  config.EncryptionPwd,
-			Uploader:       config.Uploader,
+			K8sClient:        config.K8sClient,
+			Logger:           config.Logger,
+			ETCDv2Settings:   config.ETCDv2Settings,
+			ETCDv3Settings:   config.ETCDv3Settings,
+			EncryptionPwd:    config.EncryptionPwd,
+			InstallationName: config.InstallationName,
+			Uploader:         config.Uploader,
 		}
 
 		etcdBackupResource, err = etcdbackup.New(c)

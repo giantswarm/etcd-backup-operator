@@ -24,10 +24,11 @@ aws:
     awsAccessKey: ""
     awsSecretKey: ""
 
-clusterPrefix: ""
 etcdDataDir: ""
 clientCertsDir: "/etc/kubernetes/ssl/etcd/"
 clientCaCertFileName: ""
 clientCertFileName: ""
 clientKeyFileName: ""
 etcdEndpoints: "https://127.0.0.1:2379"
+
+installation: ""

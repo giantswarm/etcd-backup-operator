@@ -125,7 +125,7 @@ func (d *ETCDBackup) Collect(ch chan<- prometheus.Metric) error {
 		return microerror.Mask(err)
 	}
 
-	tenantClusterIds = append(tenantClusterIds, key.ControlPlane)
+	tenantClusterIds = append(tenantClusterIds, key.ManagementCluster)
 
 	// Iterate over all ETCDBackup objects and select the most recent backup from each cluster.
 	latestV2SuccessMetrics := map[string]v1alpha1.ETCDInstanceBackupStatus{}

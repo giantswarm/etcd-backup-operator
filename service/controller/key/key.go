@@ -2,17 +2,13 @@ package key
 
 import (
 	"fmt"
-	"os"
 
 	backupv1alpha1 "github.com/giantswarm/apiextensions/v3/pkg/apis/backup/v1alpha1"
 	"github.com/giantswarm/microerror"
 )
 
 const (
-	ControlPlane = "Control Plane"
-
-	EnvFilenamePrefix = "FILENAME_PREFIX"
-	DefaultPrefix     = "etcd-backup"
+	ManagementCluster = "ManagementCluster"
 
 	// Environment variables.
 	EnvAWSAccessKeyID     = "AWS_ACCESS_KEY_ID"
@@ -34,14 +30,6 @@ func ToCustomObject(v interface{}) (backupv1alpha1.ETCDBackup, error) {
 	return customObject, nil
 }
 
-func FilenamePrefix(instanceName string) string {
-	globalPrefix := os.Getenv(EnvFilenamePrefix)
-	if len(globalPrefix) == 0 {
-		globalPrefix = DefaultPrefix
-	}
-
-	if instanceName == ControlPlane {
-		return globalPrefix
-	}
-	return fmt.Sprintf("%s-%s", globalPrefix, instanceName)
+func FilenamePrefix(installationName string, clusterName string) string {
+	return fmt.Sprintf("%s-%s", installationName, clusterName)
 }

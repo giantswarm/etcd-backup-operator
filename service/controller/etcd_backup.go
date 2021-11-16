@@ -15,13 +15,14 @@ import (
 )
 
 type ETCDBackupConfig struct {
-	K8sClient      k8sclient.Interface
-	Logger         micrologger.Logger
-	ETCDv2Settings giantnetes.ETCDv2Settings
-	ETCDv3Settings giantnetes.ETCDv3Settings
-	EncryptionPwd  string
-	SentryDSN      string
-	Uploader       storage.Uploader
+	K8sClient        k8sclient.Interface
+	Logger           micrologger.Logger
+	ETCDv2Settings   giantnetes.ETCDv2Settings
+	ETCDv3Settings   giantnetes.ETCDv3Settings
+	EncryptionPwd    string
+	InstallationName string
+	SentryDSN        string
+	Uploader         storage.Uploader
 }
 
 type ETCDBackup struct {
@@ -86,12 +87,13 @@ func newETCDBackupResourceSets(config ETCDBackupConfig) ([]resource.Interface, e
 	var resources []resource.Interface
 	{
 		c := ETCDBackupConfig{
-			K8sClient:      config.K8sClient,
-			Logger:         config.Logger,
-			ETCDv2Settings: config.ETCDv2Settings,
-			ETCDv3Settings: config.ETCDv3Settings,
-			EncryptionPwd:  config.EncryptionPwd,
-			Uploader:       config.Uploader,
+			K8sClient:        config.K8sClient,
+			Logger:           config.Logger,
+			ETCDv2Settings:   config.ETCDv2Settings,
+			ETCDv3Settings:   config.ETCDv3Settings,
+			EncryptionPwd:    config.EncryptionPwd,
+			InstallationName: config.InstallationName,
+			Uploader:         config.Uploader,
 		}
 		//etcdBackupResourceSetConfig(config)
 
