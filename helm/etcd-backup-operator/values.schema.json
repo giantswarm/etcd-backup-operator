@@ -108,7 +108,7 @@
             }
         },
         "testingEnvironment": {
-            "type": "string"
+            "type": "boolean"
         }
     }
 }
