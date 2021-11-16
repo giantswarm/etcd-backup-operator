@@ -56,6 +56,9 @@
                 }
             }
         },
+        "installation": {
+            "type": "string"
+        },
         "pod": {
             "type": "object",
             "properties": {
@@ -105,7 +108,7 @@
             }
         },
         "testingEnvironment": {
-            "type": "string"
+            "type": "boolean"
         }
     }
 }

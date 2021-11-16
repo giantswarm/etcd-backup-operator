@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Changed cronjob template apiVersion to `v2beta1`
+- Smart apiVersion selection for cronjob.
+- Use a clearer naming schema for backup files.
 
 ### Added
 

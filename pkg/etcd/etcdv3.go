@@ -57,7 +57,7 @@ func (b V3Backup) Cleanup() {
 // Create etcd in temporary directory.
 func (b V3Backup) Create() (string, error) {
 	// filename
-	*b.filename = b.Prefix + "-backup-etcd-v3-" + time.Now().Format(key.TsFormat) + key.DbExt
+	*b.filename = b.Prefix + "-v3-" + time.Now().Format(key.TsFormat) + key.DbExt
 
 	// Full path to file.
 	fpath := filepath.Join(b.getTmpDir(), *b.filename)

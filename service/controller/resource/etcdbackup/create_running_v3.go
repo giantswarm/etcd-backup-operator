@@ -44,7 +44,7 @@ func (r *Resource) doV3Backup(ctx context.Context, etcdInstance giantnetes.ETCDI
 	if etcdSettings.AreComplete() {
 		r.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Starting v3 backup on instance %s", instanceStatus.Name))
 
-		backupper := etcd.NewV3Backup(etcdSettings.CaCert, etcdSettings.Cert, r.encryptionPwd, etcdSettings.Endpoints, r.logger, etcdSettings.Key, key.FilenamePrefix(instanceStatus.Name))
+		backupper := etcd.NewV3Backup(etcdSettings.CaCert, etcdSettings.Cert, r.encryptionPwd, etcdSettings.Endpoints, r.logger, etcdSettings.Key, key.FilenamePrefix(r.installation, instanceStatus.Name))
 
 		backupAttemptResult, err := r.performBackup(ctx, backupper, instanceStatus.Name)
 		if err == nil {

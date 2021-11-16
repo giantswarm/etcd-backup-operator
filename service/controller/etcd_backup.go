@@ -20,6 +20,7 @@ type ETCDBackupConfig struct {
 	ETCDv2Settings giantnetes.ETCDv2Settings
 	ETCDv3Settings giantnetes.ETCDv3Settings
 	EncryptionPwd  string
+	Installation   string
 	SentryDSN      string
 	Uploader       storage.Uploader
 }
@@ -31,6 +32,9 @@ type ETCDBackup struct {
 func validateETCDBackupConfig(config ETCDBackupConfig) error {
 	if !config.ETCDv2Settings.AreComplete() && !config.ETCDv3Settings.AreComplete() {
 		return microerror.Maskf(invalidConfigError, "Either %T.ETCDv2Settings or %T.ETCDv3Settings must be defined", config, config)
+	}
+	if config.Installation == "" {
+		return microerror.Maskf(invalidConfigError, "%T.Installation must be defined", config)
 	}
 	if config.Uploader == nil {
 		return microerror.Maskf(invalidConfigError, "%T.Uploader must be defined", config)
@@ -91,6 +95,7 @@ func newETCDBackupResourceSets(config ETCDBackupConfig) ([]resource.Interface, e
 			ETCDv2Settings: config.ETCDv2Settings,
 			ETCDv3Settings: config.ETCDv3Settings,
 			EncryptionPwd:  config.EncryptionPwd,
+			Installation:   config.Installation,
 			Uploader:       config.Uploader,
 		}
 		//etcdBackupResourceSetConfig(config)

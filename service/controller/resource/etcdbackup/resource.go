@@ -20,6 +20,7 @@ type Config struct {
 	ETCDv2Settings giantnetes.ETCDv2Settings
 	ETCDv3Settings giantnetes.ETCDv3Settings
 	EncryptionPwd  string
+	Installation   string
 	Uploader       storage.Uploader
 }
 
@@ -30,6 +31,7 @@ type Resource struct {
 	etcdV2Settings giantnetes.ETCDv2Settings
 	etcdV3Settings giantnetes.ETCDv3Settings
 	encryptionPwd  string
+	installation   string
 	uploader       storage.Uploader
 }
 
@@ -43,6 +45,9 @@ func New(config Config) (*Resource, error) {
 	if !config.ETCDv2Settings.AreComplete() && !config.ETCDv3Settings.AreComplete() {
 		return nil, microerror.Maskf(invalidConfigError, "Either %T.ETCDv2Settings or %T.ETCDv3Settings must be defined", config, config)
 	}
+	if config.Installation == "" {
+		return nil, microerror.Maskf(invalidConfigError, "%T.Installation must not be empty", config)
+	}
 	if config.Uploader == nil {
 		return nil, microerror.Maskf(invalidConfigError, "%T.Uploader must not be empty", config)
 	}
@@ -53,6 +58,7 @@ func New(config Config) (*Resource, error) {
 		etcdV2Settings: config.ETCDv2Settings,
 		etcdV3Settings: config.ETCDv3Settings,
 		encryptionPwd:  config.EncryptionPwd,
+		installation:   config.Installation,
 		uploader:       config.Uploader,
 	}
 

@@ -26,7 +26,7 @@ func (r *Resource) runBackupOnAllInstances(ctx context.Context, obj interface{},
 	// Control plane.
 	instances := []giantnetes.ETCDInstance{
 		{
-			Name:   key.ControlPlane,
+			Name:   key.ManagementCluster,
 			ETCDv2: r.etcdV2Settings,
 			ETCDv3: r.etcdV3Settings,
 		},

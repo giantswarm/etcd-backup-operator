@@ -154,6 +154,7 @@ func New(config Config) (*Service, error) {
 				Cert:      config.Viper.GetString(config.Flag.Service.ETCDv3.Cert),
 			},
 			EncryptionPwd: os.Getenv(key.EncryptionPassword),
+			Installation:  config.Viper.GetString(config.Flag.Service.Installation),
 			SentryDSN:     config.Viper.GetString(config.Flag.Service.Sentry.DSN),
 			Uploader:      uploader,
 		}
