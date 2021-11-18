@@ -20,9 +20,10 @@ type Utils struct {
 	K8sClient k8sclient.Interface
 }
 
-type clusterWithProvider struct {
-	clusterID string
-	provider  string
+type Cluster struct {
+	clusterID        string
+	clusterNamespace string
+	provider         string
 }
 
 func NewUtils(logger micrologger.Logger, client k8sclient.Interface) (*Utils, error) {
@@ -52,10 +53,10 @@ func (u *Utils) GetTenantClusters(ctx context.Context, backup v1alpha1.ETCDBacku
 	for _, cluster := range clusterList {
 		u.logger.LogCtx(ctx, "level", "debug", fmt.Sprintf("Preparing instance entry for tenant clusters %s", cluster.clusterID))
 
-		// Check if the cluster release version has support for ETCD backup.
+		// Check if the Cluster release version has support for ETCD backup.
 		versionSupported, err := u.checkClusterVersionSupport(ctx, cluster)
 		if err != nil {
-			u.logger.LogCtx(ctx, "level", "error", "msg", fmt.Sprintf("Failed to check release version for cluster %s", cluster.clusterID), "reason", err)
+			u.logger.LogCtx(ctx, "level", "error", "msg", fmt.Sprintf("Failed to check release version for Cluster %s", cluster.clusterID), "reason", err)
 			continue
 		}
 		if !versionSupported {
@@ -64,22 +65,22 @@ func (u *Utils) GetTenantClusters(ctx context.Context, backup v1alpha1.ETCDBacku
 		}
 
 		// Fetch ETCD certs.
-		certs, err := u.getEtcdTLSCfg(ctx, cluster.clusterID)
+		certs, err := u.getEtcdTLSCfg(ctx, cluster.clusterID, cluster.clusterNamespace)
 		if err != nil {
-			u.logger.LogCtx(ctx, "level", "error", "msg", fmt.Sprintf("Failed to fetch etcd certs for cluster %s", cluster.clusterID), "reason", err)
+			u.logger.LogCtx(ctx, "level", "error", "msg", fmt.Sprintf("Failed to fetch etcd certs for Cluster %s", cluster.clusterID), "reason", err)
 			continue
 		}
 		// Write ETCD certs to tmpdir.
 		err = u.createCertFiles(cluster.clusterID, certs)
 		if err != nil {
-			u.logger.LogCtx(ctx, "level", "error", "msg", fmt.Sprintf("Failed to write etcd certs to tmpdir for cluster %s", cluster.clusterID), "reason", err)
+			u.logger.LogCtx(ctx, "level", "error", "msg", fmt.Sprintf("Failed to write etcd certs to tmpdir for Cluster %s", cluster.clusterID), "reason", err)
 			continue
 		}
 
 		// Fetch ETCD endpoint.
 		etcdEndpoint, err := u.getEtcdEndpoint(ctx, cluster)
 		if err != nil {
-			u.logger.LogCtx(ctx, "level", "error", "msg", fmt.Sprintf("Failed to fetch etcd endpoint for cluster %s", cluster.clusterID), "reason", err)
+			u.logger.LogCtx(ctx, "level", "error", "msg", fmt.Sprintf("Failed to fetch etcd endpoint for Cluster %s", cluster.clusterID), "reason", err)
 			continue
 		}
 
@@ -97,20 +98,12 @@ func (u *Utils) GetTenantClusters(ctx context.Context, backup v1alpha1.ETCDBacku
 	return instances, nil
 }
 
-// Check if cluster release version has guest cluster backup support.
-func (u *Utils) checkClusterVersionSupport(ctx context.Context, cluster clusterWithProvider) (bool, error) {
+// Check if Cluster release version has guest Cluster backup support.
+func (u *Utils) checkClusterVersionSupport(ctx context.Context, cluster Cluster) (bool, error) {
 	getOpts := metav1.GetOptions{}
 	crdClient := u.K8sClient.G8sClient()
 
 	switch cluster.provider {
-	case aws:
-		{
-			crd, err := crdClient.ProviderV1alpha1().AWSConfigs(crdNamespace).Get(ctx, cluster.clusterID, getOpts)
-			if err != nil {
-				return false, microerror.Maskf(executionFailedError, fmt.Sprintf("failed to get aws config crd %#q with error %#q", cluster.clusterID, err))
-			}
-			return stringVersionCmp(crd.Spec.VersionBundle.Version, semver.New("0.0.0"), awsSupportFrom)
-		}
 	case awsCAPI:
 		{
 			// Cluster API AWS backups are always supported.
@@ -118,7 +111,7 @@ func (u *Utils) checkClusterVersionSupport(ctx context.Context, cluster clusterW
 		}
 	case azure:
 		{
-			crd, err := crdClient.ProviderV1alpha1().AzureConfigs(crdNamespace).Get(ctx, cluster.clusterID, getOpts)
+			crd, err := crdClient.ProviderV1alpha1().AzureConfigs(cluster.clusterNamespace).Get(ctx, cluster.clusterID, getOpts)
 			if err != nil {
 				return false, microerror.Maskf(executionFailedError, fmt.Sprintf("failed to get azure crd %#q with error %#q", cluster.clusterID, err))
 			}
@@ -132,7 +125,7 @@ func (u *Utils) checkClusterVersionSupport(ctx context.Context, cluster clusterW
 				}
 			}
 			if version == "" {
-				return false, microerror.Maskf(executionFailedError, fmt.Sprintf("failed to get cluster version from AzureConfig %#q", cluster.clusterID))
+				return false, microerror.Maskf(executionFailedError, fmt.Sprintf("failed to get Cluster version from AzureConfig %#q", cluster.clusterID))
 			}
 			return stringVersionCmp(version, semver.New("0.0.0"), azureSupportFrom)
 		}
@@ -146,12 +139,12 @@ func (u *Utils) checkClusterVersionSupport(ctx context.Context, cluster clusterW
 }
 
 // Fetch ETCD client certs.
-func (u *Utils) getEtcdTLSCfg(ctx context.Context, clusterID string) (*TLSClientConfig, error) {
+func (u *Utils) getEtcdTLSCfg(ctx context.Context, clusterID string, clusterNamespace string) (*TLSClientConfig, error) {
 	k8sClient := u.K8sClient.K8sClient()
 	getOpts := metav1.GetOptions{}
-	secret, err := k8sClient.CoreV1().Secrets(secretNamespace).Get(ctx, fmt.Sprintf("%s-calico-etcd-client", clusterID), getOpts)
+	secret, err := k8sClient.CoreV1().Secrets(clusterNamespace).Get(ctx, fmt.Sprintf("%s-calico-etcd-client", clusterID), getOpts)
 	if err != nil {
-		return nil, microerror.Maskf(executionFailedError, "error getting etcd client certificates for guest cluster %#q with error %#q", clusterID, err)
+		return nil, microerror.Maskf(executionFailedError, "error getting etcd client certificates for guest Cluster %#q with error %#q", clusterID, err)
 	}
 
 	certs := &TLSClientConfig{
@@ -163,45 +156,36 @@ func (u *Utils) getEtcdTLSCfg(ctx context.Context, clusterID string) (*TLSClient
 	return certs, nil
 }
 
-// Fetch guest cluster ETCD endpoint.
-func (u *Utils) getEtcdEndpoint(ctx context.Context, cluster clusterWithProvider) (string, error) {
+// Fetch guest Cluster ETCD endpoint.
+func (u *Utils) getEtcdEndpoint(ctx context.Context, cluster Cluster) (string, error) {
 	getOpts := metav1.GetOptions{}
 	var etcdEndpoint string
 	crdClient := u.K8sClient.G8sClient()
 
 	switch cluster.provider {
-	case aws:
-		{
-			crd, err := crdClient.ProviderV1alpha1().AWSConfigs(crdNamespace).Get(ctx, cluster.clusterID, getOpts)
-			if err != nil {
-				return "", microerror.Maskf(executionFailedError, "error getting aws crd for guest cluster %#q with error %#q", cluster.clusterID, err)
-			}
-			etcdEndpoint = AwsEtcdEndpoint(crd.Spec.Cluster.Etcd.Domain)
-			break
-		}
 	case awsCAPI:
 		{
-			crd, err := crdClient.InfrastructureV1alpha2().AWSClusters(crdNamespace).Get(ctx, cluster.clusterID, getOpts)
+			crd, err := crdClient.InfrastructureV1alpha2().AWSClusters(cluster.clusterNamespace).Get(ctx, cluster.clusterID, getOpts)
 			if err != nil {
-				return "", microerror.Maskf(executionFailedError, "error getting aws crd for guest cluster %#q with error %#q", cluster.clusterID, err)
+				return "", microerror.Maskf(executionFailedError, "error getting aws crd for guest Cluster %#q with error %#q", cluster.clusterID, err)
 			}
 			etcdEndpoint = AwsCAPIEtcdEndpoint(cluster.clusterID, crd.Spec.Cluster.DNS.Domain)
 			break
 		}
 	case azure:
 		{
-			crd, err := crdClient.ProviderV1alpha1().AzureConfigs(crdNamespace).Get(ctx, cluster.clusterID, getOpts)
+			crd, err := crdClient.ProviderV1alpha1().AzureConfigs(cluster.clusterNamespace).Get(ctx, cluster.clusterID, getOpts)
 			if err != nil {
-				return "", microerror.Maskf(executionFailedError, "error getting azure crd for guest cluster %#q with error %#q", cluster.clusterID, err)
+				return "", microerror.Maskf(executionFailedError, "error getting azure crd for guest Cluster %#q with error %#q", cluster.clusterID, err)
 			}
 			etcdEndpoint = AzureEtcdEndpoint(crd.Spec.Cluster.Etcd.Domain)
 			break
 		}
 	case kvm:
 		{
-			crd, err := crdClient.ProviderV1alpha1().KVMConfigs(crdNamespace).Get(ctx, cluster.clusterID, getOpts)
+			crd, err := crdClient.ProviderV1alpha1().KVMConfigs(cluster.clusterNamespace).Get(ctx, cluster.clusterID, getOpts)
 			if err != nil {
-				return "", microerror.Maskf(executionFailedError, "error getting kvm crd for guest cluster %#q with error %#q", cluster.clusterID, err)
+				return "", microerror.Maskf(executionFailedError, "error getting kvm crd for guest Cluster %#q with error %#q", cluster.clusterID, err)
 			}
 			etcdEndpoint = KVMEtcdEndpoint(crd.Spec.Cluster.Etcd.Domain)
 			break
@@ -243,38 +227,22 @@ func (u *Utils) createCertFiles(clusterID string, certConfig *TLSClientConfig) e
 	return nil
 }
 
-// Fetch all guest clusters IDs in host cluster.
-func (u *Utils) getAllGuestClusters(ctx context.Context, crdCLient versioned.Interface) ([]clusterWithProvider, error) {
-	var clusterList []clusterWithProvider
+// Fetch all guest clusters IDs in host Cluster.
+func (u *Utils) getAllGuestClusters(ctx context.Context, crdCLient versioned.Interface) ([]Cluster, error) {
+	var clusterList []Cluster
 	listOpt := metav1.ListOptions{}
 
 	anySuccess := false
 
-	// AWS
-	{
-		crdList, err := crdCLient.ProviderV1alpha1().AWSConfigs(metav1.NamespaceAll).List(ctx, listOpt)
-		if err == nil {
-			anySuccess = true
-			for _, awsConfig := range crdList.Items {
-				// Only backup cluster if it was not marked for delete.
-				if awsConfig.DeletionTimestamp == nil {
-					clusterList = append(clusterList, clusterWithProvider{awsConfig.Name, aws})
-				}
-			}
-		} else {
-			u.logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("Error listing AWSConfigs: %s", err))
-		}
-	}
-
-	// AWS cluster API
+	// AWS Cluster API
 	{
 		crdList, err := crdCLient.InfrastructureV1alpha2().AWSClusters(metav1.NamespaceAll).List(ctx, listOpt)
 		if err == nil {
 			anySuccess = true
 			for _, awsClusterObj := range crdList.Items {
-				// Only backup cluster if it was not marked for delete.
+				// Only backup Cluster if it was not marked for delete.
 				if awsClusterObj.DeletionTimestamp == nil {
-					clusterList = append(clusterList, clusterWithProvider{awsClusterObj.Name, awsCAPI})
+					clusterList = append(clusterList, Cluster{awsClusterObj.Name, awsClusterObj.Namespace, awsCAPI})
 				}
 			}
 		} else {
@@ -288,9 +256,9 @@ func (u *Utils) getAllGuestClusters(ctx context.Context, crdCLient versioned.Int
 		if err == nil {
 			anySuccess = true
 			for _, azureConfig := range crdList.Items {
-				// Only backup cluster if it was not marked for delete.
+				// Only backup Cluster if it was not marked for delete.
 				if azureConfig.DeletionTimestamp == nil {
-					clusterList = append(clusterList, clusterWithProvider{azureConfig.Name, azure})
+					clusterList = append(clusterList, Cluster{azureConfig.Name, azureConfig.Namespace, azure})
 				}
 			}
 		} else {
@@ -304,9 +272,9 @@ func (u *Utils) getAllGuestClusters(ctx context.Context, crdCLient versioned.Int
 		if err == nil {
 			anySuccess = true
 			for _, kvmConfig := range crdList.Items {
-				// Only backup cluster if it was not marked for delete.
+				// Only backup Cluster if it was not marked for delete.
 				if kvmConfig.DeletionTimestamp == nil {
-					clusterList = append(clusterList, clusterWithProvider{kvmConfig.Name, kvm})
+					clusterList = append(clusterList, Cluster{kvmConfig.Name, kvmConfig.Namespace, kvm})
 				}
 			}
 		} else {
