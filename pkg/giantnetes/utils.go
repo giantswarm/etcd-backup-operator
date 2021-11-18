@@ -56,31 +56,31 @@ func (u *Utils) GetTenantClusters(ctx context.Context, backup v1alpha1.ETCDBacku
 		// Check if the Cluster release version has support for ETCD backup.
 		versionSupported, err := u.checkClusterVersionSupport(ctx, cluster)
 		if err != nil {
-			u.logger.LogCtx(ctx, "level", "error", "msg", fmt.Sprintf("Failed to check release version for Cluster %s", cluster.clusterID), "reason", err)
+			u.logger.LogCtx(ctx, "level", "error", "msg", fmt.Sprintf("Failed to check release version for cluster %s", cluster.clusterID), "reason", err)
 			continue
 		}
 		if !versionSupported {
-			u.logger.LogCtx(ctx, "level", "warning", "msg", fmt.Sprintf("Cluster %s is too old for etcd backup. Skipping.", cluster.clusterID))
+			u.logger.LogCtx(ctx, "level", "warning", "msg", fmt.Sprintf("cluster %s is too old for etcd backup. Skipping.", cluster.clusterID))
 			continue
 		}
 
 		// Fetch ETCD certs.
 		certs, err := u.getEtcdTLSCfg(ctx, cluster.clusterID, cluster.clusterNamespace)
 		if err != nil {
-			u.logger.LogCtx(ctx, "level", "error", "msg", fmt.Sprintf("Failed to fetch etcd certs for Cluster %s", cluster.clusterID), "reason", err)
+			u.logger.LogCtx(ctx, "level", "error", "msg", fmt.Sprintf("Failed to fetch etcd certs for cluster %s", cluster.clusterID), "reason", err)
 			continue
 		}
 		// Write ETCD certs to tmpdir.
 		err = u.createCertFiles(cluster.clusterID, certs)
 		if err != nil {
-			u.logger.LogCtx(ctx, "level", "error", "msg", fmt.Sprintf("Failed to write etcd certs to tmpdir for Cluster %s", cluster.clusterID), "reason", err)
+			u.logger.LogCtx(ctx, "level", "error", "msg", fmt.Sprintf("Failed to write etcd certs to tmpdir for cluster %s", cluster.clusterID), "reason", err)
 			continue
 		}
 
 		// Fetch ETCD endpoint.
 		etcdEndpoint, err := u.getEtcdEndpoint(ctx, cluster)
 		if err != nil {
-			u.logger.LogCtx(ctx, "level", "error", "msg", fmt.Sprintf("Failed to fetch etcd endpoint for Cluster %s", cluster.clusterID), "reason", err)
+			u.logger.LogCtx(ctx, "level", "error", "msg", fmt.Sprintf("Failed to fetch etcd endpoint for cluster %s", cluster.clusterID), "reason", err)
 			continue
 		}
 
@@ -125,7 +125,7 @@ func (u *Utils) checkClusterVersionSupport(ctx context.Context, cluster Cluster)
 				}
 			}
 			if version == "" {
-				return false, microerror.Maskf(executionFailedError, fmt.Sprintf("failed to get Cluster version from AzureConfig %#q", cluster.clusterID))
+				return false, microerror.Maskf(executionFailedError, fmt.Sprintf("failed to get cluster version from AzureConfig %#q", cluster.clusterID))
 			}
 			return stringVersionCmp(version, semver.New("0.0.0"), azureSupportFrom)
 		}
@@ -144,7 +144,7 @@ func (u *Utils) getEtcdTLSCfg(ctx context.Context, clusterID string, clusterName
 	getOpts := metav1.GetOptions{}
 	secret, err := k8sClient.CoreV1().Secrets(clusterNamespace).Get(ctx, fmt.Sprintf("%s-calico-etcd-client", clusterID), getOpts)
 	if err != nil {
-		return nil, microerror.Maskf(executionFailedError, "error getting etcd client certificates for guest Cluster %#q with error %#q", clusterID, err)
+		return nil, microerror.Maskf(executionFailedError, "error getting etcd client certificates for guest cluster %#q with error %#q", clusterID, err)
 	}
 
 	certs := &TLSClientConfig{
@@ -167,7 +167,7 @@ func (u *Utils) getEtcdEndpoint(ctx context.Context, cluster Cluster) (string, e
 		{
 			crd, err := crdClient.InfrastructureV1alpha2().AWSClusters(cluster.clusterNamespace).Get(ctx, cluster.clusterID, getOpts)
 			if err != nil {
-				return "", microerror.Maskf(executionFailedError, "error getting aws crd for guest Cluster %#q with error %#q", cluster.clusterID, err)
+				return "", microerror.Maskf(executionFailedError, "error getting aws crd for guest cluster %#q with error %#q", cluster.clusterID, err)
 			}
 			etcdEndpoint = AwsCAPIEtcdEndpoint(cluster.clusterID, crd.Spec.Cluster.DNS.Domain)
 			break
@@ -176,7 +176,7 @@ func (u *Utils) getEtcdEndpoint(ctx context.Context, cluster Cluster) (string, e
 		{
 			crd, err := crdClient.ProviderV1alpha1().AzureConfigs(cluster.clusterNamespace).Get(ctx, cluster.clusterID, getOpts)
 			if err != nil {
-				return "", microerror.Maskf(executionFailedError, "error getting azure crd for guest Cluster %#q with error %#q", cluster.clusterID, err)
+				return "", microerror.Maskf(executionFailedError, "error getting azure crd for guest cluster %#q with error %#q", cluster.clusterID, err)
 			}
 			etcdEndpoint = AzureEtcdEndpoint(crd.Spec.Cluster.Etcd.Domain)
 			break
@@ -185,7 +185,7 @@ func (u *Utils) getEtcdEndpoint(ctx context.Context, cluster Cluster) (string, e
 		{
 			crd, err := crdClient.ProviderV1alpha1().KVMConfigs(cluster.clusterNamespace).Get(ctx, cluster.clusterID, getOpts)
 			if err != nil {
-				return "", microerror.Maskf(executionFailedError, "error getting kvm crd for guest Cluster %#q with error %#q", cluster.clusterID, err)
+				return "", microerror.Maskf(executionFailedError, "error getting kvm crd for guest cluster %#q with error %#q", cluster.clusterID, err)
 			}
 			etcdEndpoint = KVMEtcdEndpoint(crd.Spec.Cluster.Etcd.Domain)
 			break
