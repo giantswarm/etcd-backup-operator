@@ -53,14 +53,14 @@ func (u *Utils) GetTenantClusters(ctx context.Context, backup v1alpha1.ETCDBacku
 	for _, cluster := range clusterList {
 		u.logger.LogCtx(ctx, "level", "debug", fmt.Sprintf("Preparing instance entry for tenant clusters %s", cluster.clusterID))
 
-		// Check if the Cluster release version has support for ETCD backup.
+		// Check if the cluster release version has support for ETCD backup.
 		versionSupported, err := u.checkClusterVersionSupport(ctx, cluster)
 		if err != nil {
 			u.logger.LogCtx(ctx, "level", "error", "msg", fmt.Sprintf("Failed to check release version for cluster %s", cluster.clusterID), "reason", err)
 			continue
 		}
 		if !versionSupported {
-			u.logger.LogCtx(ctx, "level", "warning", "msg", fmt.Sprintf("cluster %s is too old for etcd backup. Skipping.", cluster.clusterID))
+			u.logger.LogCtx(ctx, "level", "warning", "msg", fmt.Sprintf("Cluster %s is too old for etcd backup. Skipping.", cluster.clusterID))
 			continue
 		}
 
@@ -98,7 +98,7 @@ func (u *Utils) GetTenantClusters(ctx context.Context, backup v1alpha1.ETCDBacku
 	return instances, nil
 }
 
-// Check if Cluster release version has guest Cluster backup support.
+// Check if cluster release version has guest cluster backup support.
 func (u *Utils) checkClusterVersionSupport(ctx context.Context, cluster Cluster) (bool, error) {
 	getOpts := metav1.GetOptions{}
 	crdClient := u.K8sClient.G8sClient()
@@ -156,7 +156,7 @@ func (u *Utils) getEtcdTLSCfg(ctx context.Context, clusterID string, clusterName
 	return certs, nil
 }
 
-// Fetch guest Cluster ETCD endpoint.
+// Fetch guest cluster ETCD endpoint.
 func (u *Utils) getEtcdEndpoint(ctx context.Context, cluster Cluster) (string, error) {
 	getOpts := metav1.GetOptions{}
 	var etcdEndpoint string
@@ -227,7 +227,7 @@ func (u *Utils) createCertFiles(clusterID string, certConfig *TLSClientConfig) e
 	return nil
 }
 
-// Fetch all guest clusters IDs in host Cluster.
+// Fetch all guest clusters IDs in host cluster.
 func (u *Utils) getAllGuestClusters(ctx context.Context, crdCLient versioned.Interface) ([]Cluster, error) {
 	var clusterList []Cluster
 	listOpt := metav1.ListOptions{}
@@ -240,7 +240,7 @@ func (u *Utils) getAllGuestClusters(ctx context.Context, crdCLient versioned.Int
 		if err == nil {
 			anySuccess = true
 			for _, awsClusterObj := range crdList.Items {
-				// Only backup Cluster if it was not marked for delete.
+				// Only backup cluster if it was not marked for delete.
 				if awsClusterObj.DeletionTimestamp == nil {
 					clusterList = append(clusterList, Cluster{awsClusterObj.Name, awsClusterObj.Namespace, awsCAPI})
 				}
@@ -256,7 +256,7 @@ func (u *Utils) getAllGuestClusters(ctx context.Context, crdCLient versioned.Int
 		if err == nil {
 			anySuccess = true
 			for _, azureConfig := range crdList.Items {
-				// Only backup Cluster if it was not marked for delete.
+				// Only backup cluster if it was not marked for delete.
 				if azureConfig.DeletionTimestamp == nil {
 					clusterList = append(clusterList, Cluster{azureConfig.Name, azureConfig.Namespace, azure})
 				}
@@ -272,7 +272,7 @@ func (u *Utils) getAllGuestClusters(ctx context.Context, crdCLient versioned.Int
 		if err == nil {
 			anySuccess = true
 			for _, kvmConfig := range crdList.Items {
-				// Only backup Cluster if it was not marked for delete.
+				// Only backup cluster if it was not marked for delete.
 				if kvmConfig.DeletionTimestamp == nil {
 					clusterList = append(clusterList, Cluster{kvmConfig.Name, kvmConfig.Namespace, kvm})
 				}
