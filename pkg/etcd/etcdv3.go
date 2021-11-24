@@ -143,7 +143,7 @@ func (b V3Backup) compactAndDefrag() error {
 	output, err := b.runEtcdctlCmd([]string{
 		"endpoint",
 		"status",
-		`--write-out="json"`,
+		`--write-out=json`,
 	})
 	if err != nil {
 		return microerror.Mask(err)
