@@ -219,25 +219,6 @@ func getRevision(output []byte) (int32, error) {
 		Status endpointStatusOutputStatus
 	}
 
-	// [
-	//  {
-	//    "Endpoint": "https://127.0.0.1:2379",
-	//    "Status": {
-	//      "header": {
-	//        "cluster_id": 14841639068965180000,
-	//        "member_id": 11895648879011906000,
-	//        "revision": 197531277,
-	//        "raft_term": 48069
-	//      },
-	//      "version": "3.4.13",
-	//      "dbSize": 79740928,
-	//      "leader": 1412153380952468500,
-	//      "raftIndex": 224800332,
-	//      "raftTerm": 48069
-	//    }
-	//  }
-	//]
-
 	var status []endpointStatusOutput
 	err := json.Unmarshal(output, &status)
 	if err != nil {
