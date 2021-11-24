@@ -172,7 +172,6 @@ func (b V3Backup) compactAndDefrag() error {
 		"defrag",
 		"--command-timeout=60s",
 		"--dial-timeout=60s",
-		"--keepalive-timeout=25s",
 	})
 	if err != nil {
 		return microerror.Mask(err)
