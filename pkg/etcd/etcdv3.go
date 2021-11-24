@@ -166,6 +166,20 @@ func (b V3Backup) compactAndDefrag() error {
 
 	b.Logger.Debugf(context.Background(), "Compacted etcd instance")
 
+	b.Logger.Debugf(context.Background(), "Defragging etcd instance")
+
+	_, err = b.runEtcdctlCmd([]string{
+		"defrag",
+		"--command-timeout=60s",
+		"--dial-timeout=60s",
+		"--keepalive-timeout=25s",
+	})
+	if err != nil {
+		return microerror.Mask(err)
+	}
+
+	b.Logger.Debugf(context.Background(), "Defragged etcd instance")
+
 	return nil
 }
 
