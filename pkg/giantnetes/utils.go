@@ -12,7 +12,14 @@ import (
 	"github.com/giantswarm/k8sclient/v5/pkg/k8sclient"
 	"github.com/giantswarm/microerror"
 	"github.com/giantswarm/micrologger"
+	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"sigs.k8s.io/controller-runtime/pkg/client"
+)
+
+const (
+	certificateLabel      = "giantswarm.io/certificate"
+	certificateLabelValue = "calico-etcd-client"
 )
 
 type Utils struct {
@@ -140,12 +147,21 @@ func (u *Utils) checkClusterVersionSupport(ctx context.Context, cluster Cluster)
 
 // Fetch ETCD client certs.
 func (u *Utils) getEtcdTLSCfg(ctx context.Context, clusterID string, clusterNamespace string) (*TLSClientConfig, error) {
-	k8sClient := u.K8sClient.K8sClient()
-	getOpts := metav1.GetOptions{}
-	secret, err := k8sClient.CoreV1().Secrets(clusterNamespace).Get(ctx, fmt.Sprintf("%s-calico-etcd-client", clusterID), getOpts)
+	k8sClient := u.K8sClient.CtrlClient()
+	secrets := v1.SecretList{}
+	err := k8sClient.List(ctx, &secrets, client.MatchingLabels{
+		label.Cluster:    clusterID,
+		certificateLabel: certificateLabelValue,
+	})
 	if err != nil {
 		return nil, microerror.Maskf(executionFailedError, "error getting etcd client certificates for guest cluster %#q with error %#q", clusterID, err)
 	}
+
+	if len(secrets.Items) != 1 {
+		return nil, microerror.Maskf(executionFailedError, "expected exactly 1 secret with %s=%q and %s=%q, got %d", label.Cluster, clusterID, certificateLabel, certificateLabelValue, len(secrets.Items))
+	}
+
+	secret := secrets.Items[0]
 
 	certs := &TLSClientConfig{
 		CAData:  secret.Data["ca"],
