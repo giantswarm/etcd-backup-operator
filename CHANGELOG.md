@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.7.2] - 2022-01-17
+
 ### Fixed
 
 - Fixed RBAC
@@ -137,7 +139,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First release.
 
-[Unreleased]: https://github.com/giantswarm/etcd-backup-operator/compare/v2.7.1...HEAD
+[Unreleased]: https://github.com/giantswarm/etcd-backup-operator/compare/v2.7.2...HEAD
+[2.7.2]: https://github.com/giantswarm/etcd-backup-operator/compare/v2.7.1...v2.7.2
 [2.7.1]: https://github.com/giantswarm/etcd-backup-operator/compare/v2.7.0...v2.7.1
 [2.7.0]: https://github.com/giantswarm/etcd-backup-operator/compare/v2.6.0...v2.7.0
 [2.6.0]: https://github.com/giantswarm/etcd-backup-operator/compare/v2.5.0...v2.6.0
