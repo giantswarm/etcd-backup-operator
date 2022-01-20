@@ -57,7 +57,7 @@ func (r *Resource) runBackupOnAllInstances(ctx context.Context, obj interface{},
 		}
 	} else {
 		// Control plane.
-		instances := []giantnetes.ETCDInstance{
+		instances = []giantnetes.ETCDInstance{
 			{
 				Name:   key.ManagementCluster,
 				ETCDv2: r.etcdV2Settings,

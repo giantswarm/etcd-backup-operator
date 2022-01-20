@@ -24,7 +24,7 @@ func NewSet(config SetConfig) (*Set, error) {
 
 	var etcdBackupCollector *ETCDBackup
 	{
-		c := ETCDBackupConfig{
+		c := ETCDBackupConfig{ //nolint
 			K8sClient: config.K8sClient,
 			Logger:    config.Logger,
 		}
