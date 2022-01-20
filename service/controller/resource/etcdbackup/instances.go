@@ -6,7 +6,7 @@ import (
 
 	"github.com/giantswarm/apiextensions/v3/pkg/apis/backup/v1alpha1"
 	"github.com/giantswarm/microerror"
-	"github.com/giantswarm/operatorkit/v4/pkg/controller/context/reconciliationcanceledcontext"
+	"github.com/giantswarm/operatorkit/v7/pkg/controller/context/reconciliationcanceledcontext"
 
 	"github.com/giantswarm/etcd-backup-operator/v2/pkg/giantnetes"
 	"github.com/giantswarm/etcd-backup-operator/v2/service/controller/key"
@@ -23,22 +23,56 @@ func (r *Resource) runBackupOnAllInstances(ctx context.Context, obj interface{},
 		return false, microerror.Mask(err)
 	}
 
-	// Control plane.
-	instances := []giantnetes.ETCDInstance{
-		{
-			Name:   key.ManagementCluster,
-			ETCDv2: r.etcdV2Settings,
-			ETCDv3: r.etcdV3Settings,
-		},
-	}
-
-	if customObject.Spec.GuestBackup {
-		// Tenant clusters.
+	var instances []giantnetes.ETCDInstance
+	if len(customObject.Spec.ClusterNames) > 0 {
+		// User specified a list of cluster IDs to be backed up.
+		// Load workload clusters.
 		guestInstances, err := utils.GetTenantClusters(ctx, customObject)
 		if err != nil {
 			return false, microerror.Mask(err)
 		}
-		instances = append(instances, guestInstances...)
+
+		for _, id := range customObject.Spec.ClusterNames {
+			if id == key.ManagementCluster {
+				instances = append(instances, giantnetes.ETCDInstance{
+					Name:   key.ManagementCluster,
+					ETCDv2: r.etcdV2Settings,
+					ETCDv3: r.etcdV3Settings,
+				},
+				)
+			} else {
+				found := false
+				for _, candidate := range guestInstances {
+					if candidate.Name == id {
+						instances = append(instances, candidate)
+						found = true
+						break
+					}
+				}
+
+				if !found {
+					r.logger.LogCtx(ctx, "level", "error", "message", fmt.Sprintf("requests cluster %q was not found", id))
+				}
+			}
+		}
+	} else {
+		// Control plane.
+		instances := []giantnetes.ETCDInstance{
+			{
+				Name:   key.ManagementCluster,
+				ETCDv2: r.etcdV2Settings,
+				ETCDv3: r.etcdV3Settings,
+			},
+		}
+
+		if customObject.Spec.GuestBackup {
+			// Tenant clusters.
+			guestInstances, err := utils.GetTenantClusters(ctx, customObject)
+			if err != nil {
+				return false, microerror.Mask(err)
+			}
+			instances = append(instances, guestInstances...)
+		}
 	}
 
 	if len(customObject.Status.Instances) == 0 {

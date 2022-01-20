@@ -6,7 +6,7 @@ import (
 
 	backupv1alpha1 "github.com/giantswarm/apiextensions/v3/pkg/apis/backup/v1alpha1"
 	"github.com/giantswarm/microerror"
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	"github.com/giantswarm/etcd-backup-operator/v2/pkg/giantnetes"
 )
@@ -17,14 +17,15 @@ func (r *Resource) getGlobalStatus(customObject backupv1alpha1.ETCDBackup) (stri
 
 func (r *Resource) setGlobalStatus(ctx context.Context, customObject backupv1alpha1.ETCDBackup, updatedStatus string) error {
 	// Get error from API before updating it.
-	obj, err := r.k8sClient.G8sClient().BackupV1alpha1().ETCDBackups().Get(ctx, customObject.Name, v1.GetOptions{})
+	obj := backupv1alpha1.ETCDBackup{}
+	err := r.k8sClient.CtrlClient().Get(ctx, client.ObjectKey{Name: customObject.Name, Namespace: customObject.Namespace}, &obj)
 	if err != nil {
 		return microerror.Mask(err)
 	}
 
 	obj.Status.Status = updatedStatus
 
-	return r.persistCustomObjectStatus(ctx, *obj)
+	return r.persistCustomObjectStatus(ctx, obj)
 }
 
 func (r *Resource) findOrInitializeInstanceStatus(ctx context.Context, etcdBackup backupv1alpha1.ETCDBackup, instance giantnetes.ETCDInstance) backupv1alpha1.ETCDInstanceBackupStatusIndex {
@@ -54,14 +55,15 @@ func isTerminalInstaceState(state string) bool {
 
 func (r *Resource) persistCustomObjectStatus(ctx context.Context, customObject backupv1alpha1.ETCDBackup) error {
 	// Get error from API before updating it.
-	obj, err := r.k8sClient.G8sClient().BackupV1alpha1().ETCDBackups().Get(ctx, customObject.Name, v1.GetOptions{})
+	obj := backupv1alpha1.ETCDBackup{}
+	err := r.k8sClient.CtrlClient().Get(ctx, client.ObjectKey{Name: customObject.Name, Namespace: customObject.Namespace}, &obj)
 	if err != nil {
 		return microerror.Mask(err)
 	}
 
 	obj.Status = customObject.Status
 
-	_, err = r.k8sClient.G8sClient().BackupV1alpha1().ETCDBackups().UpdateStatus(ctx, obj, v1.UpdateOptions{})
+	err = r.k8sClient.CtrlClient().Status().Update(ctx, &obj)
 	if err != nil {
 		return microerror.Mask(err)
 	}

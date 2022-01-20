@@ -2,7 +2,7 @@ package collector
 
 import (
 	"github.com/giantswarm/exporterkit/collector"
-	"github.com/giantswarm/k8sclient/v5/pkg/k8sclient"
+	"github.com/giantswarm/k8sclient/v7/pkg/k8sclient"
 	"github.com/giantswarm/microerror"
 	"github.com/giantswarm/micrologger"
 )
@@ -25,8 +25,7 @@ func NewSet(config SetConfig) (*Set, error) {
 	var etcdBackupCollector *ETCDBackup
 	{
 		c := ETCDBackupConfig{
-			G8sClient: config.K8sClient.G8sClient(),
-			K8sClient: config.K8sClient.K8sClient(),
+			K8sClient: config.K8sClient,
 			Logger:    config.Logger,
 		}
 
