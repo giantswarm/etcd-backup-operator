@@ -5,12 +5,12 @@ import (
 	"sort"
 
 	"github.com/giantswarm/apiextensions/v3/pkg/apis/backup/v1alpha1"
-	"github.com/giantswarm/apiextensions/v3/pkg/clientset/versioned"
+	"github.com/giantswarm/apiextensions/v3/pkg/apis/infrastructure/v1alpha3"
+	providerv1alpha1 "github.com/giantswarm/apiextensions/v3/pkg/apis/provider/v1alpha1"
+	"github.com/giantswarm/k8sclient/v7/pkg/k8sclient"
 	"github.com/giantswarm/microerror"
 	"github.com/giantswarm/micrologger"
 	"github.com/prometheus/client_golang/prometheus"
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/client-go/kubernetes"
 
 	"github.com/giantswarm/etcd-backup-operator/v2/service/controller/key"
 )
@@ -71,21 +71,16 @@ var (
 )
 
 type ETCDBackupConfig struct {
-	G8sClient versioned.Interface
-	K8sClient kubernetes.Interface
+	K8sClient k8sclient.Interface
 	Logger    micrologger.Logger
 }
 
 type ETCDBackup struct {
-	g8sClient versioned.Interface
-	k8sClient kubernetes.Interface
+	k8sClient k8sclient.Interface
 	logger    micrologger.Logger
 }
 
 func NewETCDBackup(config ETCDBackupConfig) (*ETCDBackup, error) {
-	if config.G8sClient == nil {
-		return nil, microerror.Maskf(invalidConfigError, "%T.G8sClient must not be empty", config)
-	}
 	if config.K8sClient == nil {
 		return nil, microerror.Maskf(invalidConfigError, "%T.K8sClient must not be empty", config)
 	}
@@ -94,7 +89,6 @@ func NewETCDBackup(config ETCDBackupConfig) (*ETCDBackup, error) {
 	}
 
 	d := &ETCDBackup{
-		g8sClient: config.G8sClient,
 		k8sClient: config.K8sClient,
 		logger:    config.Logger,
 	}
@@ -106,7 +100,8 @@ func (d *ETCDBackup) Collect(ch chan<- prometheus.Metric) error {
 	ctx := context.Background()
 
 	// Get a list of all ETCDBackup objects.
-	backupListResult, err := d.g8sClient.BackupV1alpha1().ETCDBackups().List(ctx, v1.ListOptions{})
+	backupListResult := v1alpha1.ETCDBackupList{}
+	err := d.k8sClient.CtrlClient().List(ctx, &backupListResult)
 	if err != nil {
 		return microerror.Mask(err)
 	}
@@ -142,17 +137,17 @@ func (d *ETCDBackup) Collect(ch chan<- prometheus.Metric) error {
 			}
 
 			if instanceStatus.V2.Status == backupStateCompleted {
-				latestV2SuccessMetrics[instanceStatus.Name] = instanceStatus.V2
+				latestV2SuccessMetrics[instanceStatus.Name] = *instanceStatus.V2
 			}
 			if instanceStatus.V3.Status == backupStateCompleted {
-				latestV3SuccessMetrics[instanceStatus.Name] = instanceStatus.V3
+				latestV3SuccessMetrics[instanceStatus.Name] = *instanceStatus.V3
 			}
 
 			if instanceStatus.V2.Status != backupStateSkipped {
-				latestV2AttemptMetrics[instanceStatus.Name] = instanceStatus.V2
+				latestV2AttemptMetrics[instanceStatus.Name] = *instanceStatus.V2
 			}
 			if instanceStatus.V3.Status != backupStateSkipped {
-				latestV3AttemptMetrics[instanceStatus.Name] = instanceStatus.V3
+				latestV3AttemptMetrics[instanceStatus.Name] = *instanceStatus.V3
 			}
 		}
 	}
@@ -241,12 +236,13 @@ func (d *ETCDBackup) Describe(ch chan<- *prometheus.Desc) error {
 }
 
 func (d *ETCDBackup) getTenantClusterIDs(ctx context.Context) ([]string, error) {
-	crdClient := d.g8sClient
+	crdClient := d.k8sClient.CtrlClient()
 	var ret []string
 
 	// AWS
 	{
-		crdList, err := crdClient.ProviderV1alpha1().AWSConfigs(v1.NamespaceAll).List(ctx, v1.ListOptions{})
+		crdList := providerv1alpha1.AWSConfigList{}
+		err := crdClient.List(ctx, &crdList)
 		if err == nil {
 			for _, awsConfig := range crdList.Items {
 				// Only backup cluster if it was not marked for delete.
@@ -259,7 +255,8 @@ func (d *ETCDBackup) getTenantClusterIDs(ctx context.Context) ([]string, error) 
 
 	// AWS cluster API
 	{
-		crdList, err := crdClient.InfrastructureV1alpha2().AWSClusters(v1.NamespaceAll).List(ctx, v1.ListOptions{})
+		crdList := v1alpha3.AWSClusterList{}
+		err := crdClient.List(ctx, &crdList)
 		if err == nil {
 			for _, awsClusterObj := range crdList.Items {
 				// Only backup cluster if it was not marked for delete.
@@ -272,7 +269,8 @@ func (d *ETCDBackup) getTenantClusterIDs(ctx context.Context) ([]string, error) 
 
 	// Azure
 	{
-		crdList, err := crdClient.ProviderV1alpha1().AzureConfigs(v1.NamespaceAll).List(ctx, v1.ListOptions{})
+		crdList := providerv1alpha1.AzureConfigList{}
+		err := crdClient.List(ctx, &crdList)
 		if err == nil {
 			for _, azureConfig := range crdList.Items {
 				// Only backup cluster if it was not marked for delete.
@@ -285,7 +283,8 @@ func (d *ETCDBackup) getTenantClusterIDs(ctx context.Context) ([]string, error) 
 
 	// KVM
 	{
-		crdList, err := crdClient.ProviderV1alpha1().KVMConfigs(v1.NamespaceAll).List(ctx, v1.ListOptions{})
+		crdList := providerv1alpha1.KVMConfigList{}
+		err := crdClient.List(ctx, &crdList)
 		if err == nil {
 			for _, kvmConfig := range crdList.Items {
 				// Only backup cluster if it was not marked for delete.

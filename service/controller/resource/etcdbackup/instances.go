@@ -6,7 +6,7 @@ import (
 
 	"github.com/giantswarm/apiextensions/v3/pkg/apis/backup/v1alpha1"
 	"github.com/giantswarm/microerror"
-	"github.com/giantswarm/operatorkit/v4/pkg/controller/context/reconciliationcanceledcontext"
+	"github.com/giantswarm/operatorkit/v7/pkg/controller/context/reconciliationcanceledcontext"
 
 	"github.com/giantswarm/etcd-backup-operator/v2/pkg/giantnetes"
 	"github.com/giantswarm/etcd-backup-operator/v2/service/controller/key"
@@ -46,7 +46,7 @@ func (r *Resource) runBackupOnAllInstances(ctx context.Context, obj interface{},
 	}
 
 	for _, etcdInstance := range instances {
-		instanceStatus := r.findOrInitializeInstanceStatus(ctx, customObject, etcdInstance)
+		instanceStatus := r.findOrInitializeInstanceStatus(ctx, customObject, etcdInstance.Name)
 
 		doneSomething := handler(ctx, etcdInstance, &instanceStatus)
 
