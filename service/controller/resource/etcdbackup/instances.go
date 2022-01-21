@@ -60,6 +60,8 @@ func (r *Resource) runBackupOnAllInstances(ctx context.Context, obj interface{},
 					r.logger.LogCtx(ctx, "level", "error", "message", fmt.Sprintf("cluster %q was not found", id))
 					instanceStatus := r.findOrInitializeInstanceStatus(ctx, customObject, id)
 					instanceStatus.Error = "No cluster found with such name"
+					instanceStatus.V2 = nil
+					instanceStatus.V3 = nil
 					customObject.Status.Instances[id] = instanceStatus
 					err = r.persistCustomObjectStatus(ctx, customObject)
 					if err != nil {
