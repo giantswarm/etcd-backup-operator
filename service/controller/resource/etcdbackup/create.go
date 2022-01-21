@@ -26,7 +26,6 @@ const (
 	instanceBackupStatePending   = "Pending"
 	instanceBackupStateCompleted = "Completed"
 	instanceBackupStateFailed    = "Failed"
-	instanceBackupStateRunning   = "Running"
 	instanceBackupStateSkipped   = "Skipped"
 
 	// Various settings.
