@@ -36,12 +36,6 @@ func (r *Resource) findOrInitializeInstanceStatus(ctx context.Context, etcdBacku
 
 	newStatus := backupv1alpha1.ETCDInstanceBackupStatusIndex{
 		Name: instanceName,
-		V2: &backupv1alpha1.ETCDInstanceBackupStatus{
-			Status: instanceBackupStatePending,
-		},
-		V3: &backupv1alpha1.ETCDInstanceBackupStatus{
-			Status: instanceBackupStatePending,
-		},
 	}
 
 	return newStatus
