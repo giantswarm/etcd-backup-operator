@@ -25,6 +25,8 @@ func (r *Resource) runBackupOnAllInstances(ctx context.Context, obj interface{},
 
 	var instances []giantnetes.ETCDInstance
 	if len(customObject.Spec.ClusterNames) > 0 {
+		r.logger.LogCtx(ctx, "level", "error", "message", "CR contains explicit list of cluster names")
+
 		// User specified a list of cluster IDs to be backed up.
 		// Load workload clusters.
 		guestInstances, err := utils.GetTenantClusters(ctx, customObject)
@@ -51,11 +53,12 @@ func (r *Resource) runBackupOnAllInstances(ctx context.Context, obj interface{},
 				}
 
 				if !found {
-					r.logger.LogCtx(ctx, "level", "error", "message", fmt.Sprintf("requests cluster %q was not found", id))
+					r.logger.LogCtx(ctx, "level", "error", "message", fmt.Sprintf("cluster %q was not found", id))
 				}
 			}
 		}
 	} else {
+		r.logger.LogCtx(ctx, "level", "error", "message", "CR does not contain explicit list of cluster names")
 		// Control plane.
 		instances = []giantnetes.ETCDInstance{
 			{
