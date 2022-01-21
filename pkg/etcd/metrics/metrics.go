@@ -6,15 +6,17 @@ type BackupAttemptResult struct {
 	CreationTimeMeasurement   int64
 	EncryptionTimeMeasurement int64
 	UploadTimeMeasurement     int64
+	Filename                  string
 }
 
-func NewSuccessfulBackupAttemptResult(backupSize int64, creationTime int64, encryptionTime int64, uploadTime int64) *BackupAttemptResult {
+func NewSuccessfulBackupAttemptResult(backupSize int64, creationTime int64, encryptionTime int64, uploadTime int64, filename string) *BackupAttemptResult {
 	return &BackupAttemptResult{
 		Successful:                true,
 		BackupSizeMeasurement:     backupSize,
 		CreationTimeMeasurement:   creationTime,
 		EncryptionTimeMeasurement: encryptionTime,
 		UploadTimeMeasurement:     uploadTime,
+		Filename:                  filename,
 	}
 }
 
@@ -25,5 +27,6 @@ func NewFailedBackupAttemptResult() *BackupAttemptResult {
 		CreationTimeMeasurement:   -1,
 		EncryptionTimeMeasurement: -1,
 		UploadTimeMeasurement:     -1,
+		Filename:                  "",
 	}
 }

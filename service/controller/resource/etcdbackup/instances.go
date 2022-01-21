@@ -23,6 +23,10 @@ func (r *Resource) runBackupOnAllInstances(ctx context.Context, obj interface{},
 		return false, microerror.Mask(err)
 	}
 
+	if len(customObject.Status.Instances) == 0 {
+		customObject.Status.Instances = make(map[string]v1alpha1.ETCDInstanceBackupStatusIndex)
+	}
+
 	var instances []giantnetes.ETCDInstance
 	if len(customObject.Spec.ClusterNames) > 0 {
 		r.logger.LogCtx(ctx, "level", "error", "message", "CR contains explicit list of cluster names")
@@ -54,6 +58,8 @@ func (r *Resource) runBackupOnAllInstances(ctx context.Context, obj interface{},
 
 				if !found {
 					r.logger.LogCtx(ctx, "level", "error", "message", fmt.Sprintf("cluster %q was not found", id))
+					instanceStatus := r.findOrInitializeInstanceStatus(ctx, customObject, id)
+					instanceStatus.Error = "No cluster found with such name"
 				}
 			}
 		}
@@ -78,12 +84,8 @@ func (r *Resource) runBackupOnAllInstances(ctx context.Context, obj interface{},
 		}
 	}
 
-	if len(customObject.Status.Instances) == 0 {
-		customObject.Status.Instances = make(map[string]v1alpha1.ETCDInstanceBackupStatusIndex)
-	}
-
 	for _, etcdInstance := range instances {
-		instanceStatus := r.findOrInitializeInstanceStatus(ctx, customObject, etcdInstance)
+		instanceStatus := r.findOrInitializeInstanceStatus(ctx, customObject, etcdInstance.Name)
 
 		doneSomething := handler(ctx, etcdInstance, &instanceStatus)
 

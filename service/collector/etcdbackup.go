@@ -137,17 +137,17 @@ func (d *ETCDBackup) Collect(ch chan<- prometheus.Metric) error {
 			}
 
 			if instanceStatus.V2.Status == backupStateCompleted {
-				latestV2SuccessMetrics[instanceStatus.Name] = instanceStatus.V2
+				latestV2SuccessMetrics[instanceStatus.Name] = *instanceStatus.V2
 			}
 			if instanceStatus.V3.Status == backupStateCompleted {
-				latestV3SuccessMetrics[instanceStatus.Name] = instanceStatus.V3
+				latestV3SuccessMetrics[instanceStatus.Name] = *instanceStatus.V3
 			}
 
 			if instanceStatus.V2.Status != backupStateSkipped {
-				latestV2AttemptMetrics[instanceStatus.Name] = instanceStatus.V2
+				latestV2AttemptMetrics[instanceStatus.Name] = *instanceStatus.V2
 			}
 			if instanceStatus.V3.Status != backupStateSkipped {
-				latestV3AttemptMetrics[instanceStatus.Name] = instanceStatus.V3
+				latestV3AttemptMetrics[instanceStatus.Name] = *instanceStatus.V3
 			}
 		}
 	}

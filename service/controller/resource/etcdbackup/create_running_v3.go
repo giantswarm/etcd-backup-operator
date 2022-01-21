@@ -55,6 +55,7 @@ func (r *Resource) doV3Backup(ctx context.Context, etcdInstance giantnetes.ETCDI
 			instanceStatus.V3.EncryptionTime = backupAttemptResult.EncryptionTimeMeasurement
 			instanceStatus.V3.UploadTime = backupAttemptResult.UploadTimeMeasurement
 			instanceStatus.V3.BackupFileSize = backupAttemptResult.BackupSizeMeasurement
+			instanceStatus.V3.Filename = backupAttemptResult.Filename
 		} else {
 			// Backup was unsuccessful.
 			instanceStatus.V3.LatestError = err.Error()
