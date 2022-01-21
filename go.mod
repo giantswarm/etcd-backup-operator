@@ -1,11 +1,11 @@
 module github.com/giantswarm/etcd-backup-operator/v2
 
-go 1.13
+go 1.16
 
 require (
 	github.com/aws/aws-sdk-go v1.42.37
 	github.com/coreos/go-semver v0.3.0
-	github.com/giantswarm/apiextensions/v3 v3.39.1-0.20220121083702-1b7df4554117
+	github.com/giantswarm/apiextensions/v3 v3.40.0
 	github.com/giantswarm/backoff v1.0.0
 	github.com/giantswarm/exporterkit v1.0.0
 	github.com/giantswarm/k8sclient/v7 v7.0.1
