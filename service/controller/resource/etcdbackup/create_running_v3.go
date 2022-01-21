@@ -36,7 +36,10 @@ func (r *Resource) doV3Backup(ctx context.Context, etcdInstance giantnetes.ETCDI
 	}
 
 	if instanceStatus.V3.StartedTimestamp.Time.IsZero() {
+		// Return early to persist the status.
 		instanceStatus.V3.StartedTimestamp.Time = time.Now().UTC()
+		instanceStatus.V3.Status = instanceBackupStateRunning
+		return true
 	}
 
 	etcdSettings := etcdInstance.ETCDv3
