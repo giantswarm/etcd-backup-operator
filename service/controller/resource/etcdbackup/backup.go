@@ -3,6 +3,7 @@ package etcdbackup
 import (
 	"context"
 	"fmt"
+	"path/filepath"
 	"time"
 
 	"github.com/giantswarm/backoff"
@@ -56,7 +57,7 @@ func (r *Resource) backupAttempt(ctx context.Context, b etcd.Backupper) (*metric
 
 	r.logger.LogCtx(ctx, "level", "debug", "message", "Encrypting backup file")
 	start = time.Now()
-	filepath, err := b.Encrypt()
+	path, err := b.Encrypt()
 	if err != nil {
 		return metrics.NewFailedBackupAttemptResult(), microerror.Maskf(executionFailedError, "etcd %#q encryption failed with error %#q", version, err)
 	}
@@ -64,7 +65,7 @@ func (r *Resource) backupAttempt(ctx context.Context, b etcd.Backupper) (*metric
 
 	r.logger.LogCtx(ctx, "level", "debug", "message", "Uploading backup file")
 	start = time.Now()
-	backupSize, err := r.uploader.Upload(filepath)
+	backupSize, err := r.uploader.Upload(path)
 	if err != nil {
 		return metrics.NewFailedBackupAttemptResult(), microerror.Maskf(executionFailedError, "etcd %#q upload failed with error %#q", version, err)
 	}
@@ -73,5 +74,5 @@ func (r *Resource) backupAttempt(ctx context.Context, b etcd.Backupper) (*metric
 	r.logger.LogCtx(ctx, "level", "debug", "message", "Cleaning up")
 	b.Cleanup()
 
-	return metrics.NewSuccessfulBackupAttemptResult(backupSize, creationTime, encryptionTime, uploadTime), nil
+	return metrics.NewSuccessfulBackupAttemptResult(backupSize, creationTime, encryptionTime, uploadTime, filepath.Base(path)), nil
 }

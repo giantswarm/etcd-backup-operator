@@ -36,7 +36,10 @@ func (r *Resource) doV2Backup(ctx context.Context, etcdInstance giantnetes.ETCDI
 	}
 
 	if instanceStatus.V2.StartedTimestamp.Time.IsZero() {
+		// Return early to persist the status.
 		instanceStatus.V2.StartedTimestamp.Time = time.Now().UTC()
+		instanceStatus.V2.Status = instanceBackupStateRunning
+		return true
 	}
 
 	etcdSettings := etcdInstance.ETCDv2
@@ -54,6 +57,7 @@ func (r *Resource) doV2Backup(ctx context.Context, etcdInstance giantnetes.ETCDI
 			instanceStatus.V2.EncryptionTime = backupAttemptResult.EncryptionTimeMeasurement
 			instanceStatus.V2.UploadTime = backupAttemptResult.UploadTimeMeasurement
 			instanceStatus.V2.BackupFileSize = backupAttemptResult.BackupSizeMeasurement
+			instanceStatus.V2.Filename = backupAttemptResult.Filename
 		} else {
 			// Backup was unsuccessful.
 			instanceStatus.V2.LatestError = err.Error()
