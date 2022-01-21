@@ -36,7 +36,6 @@ func (r *Resource) doV2Backup(ctx context.Context, etcdInstance giantnetes.ETCDI
 	}
 
 	if instanceStatus.V2.StartedTimestamp.Time.IsZero() {
-		instanceStatus.V2.StartedTimestamp.Time = time.Now().UTC()
 		// Return early to persist the status.
 		instanceStatus.V2.StartedTimestamp.Time = time.Now().UTC()
 		instanceStatus.V2.Status = instanceBackupStateRunning
