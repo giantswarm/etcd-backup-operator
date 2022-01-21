@@ -2,12 +2,12 @@ package controller
 
 import (
 	backupv1alpha1 "github.com/giantswarm/apiextensions/v3/pkg/apis/backup/v1alpha1"
-	"github.com/giantswarm/k8sclient/v5/pkg/k8sclient"
+	"github.com/giantswarm/k8sclient/v7/pkg/k8sclient"
 	"github.com/giantswarm/microerror"
 	"github.com/giantswarm/micrologger"
-	"github.com/giantswarm/operatorkit/v4/pkg/controller"
-	"github.com/giantswarm/operatorkit/v4/pkg/resource"
-	"k8s.io/apimachinery/pkg/runtime"
+	"github.com/giantswarm/operatorkit/v7/pkg/controller"
+	"github.com/giantswarm/operatorkit/v7/pkg/resource"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	"github.com/giantswarm/etcd-backup-operator/v2/pkg/giantnetes"
 	"github.com/giantswarm/etcd-backup-operator/v2/pkg/project"
@@ -60,7 +60,7 @@ func NewETCDBackup(config ETCDBackupConfig) (*ETCDBackup, error) {
 			K8sClient: config.K8sClient,
 			Logger:    config.Logger,
 			Resources: resourceSets,
-			NewRuntimeObjectFunc: func() runtime.Object {
+			NewRuntimeObjectFunc: func() client.Object {
 				return new(backupv1alpha1.ETCDBackup)
 			},
 			Name:      project.Name() + "-etcd-backup-controller",

@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/giantswarm/microerror"
-	"github.com/giantswarm/operatorkit/v4/pkg/controller/context/reconciliationcanceledcontext"
+	"github.com/giantswarm/operatorkit/v7/pkg/controller/context/reconciliationcanceledcontext"
 
 	"github.com/giantswarm/etcd-backup-operator/v2/service/controller/key"
 	"github.com/giantswarm/etcd-backup-operator/v2/service/controller/resource/etcdbackup/internal/state"
