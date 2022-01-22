@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.8.0] - 2022-01-21
 
+- Add possibility to backup specific clusters within an installation.
+
 ## [2.7.2] - 2022-01-17
 
 ### Fixed
