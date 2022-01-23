@@ -7,7 +7,7 @@ import (
 	"os"
 	"sync"
 
-	backupv1alpha1 "github.com/giantswarm/apiextensions/v3/pkg/apis/backup/v1alpha1"
+	backupv1alpha1 "github.com/giantswarm/apiextensions-backup/api/v1alpha1"
 	infrastructurev1alpha3 "github.com/giantswarm/apiextensions/v3/pkg/apis/infrastructure/v1alpha3"
 	providerv1alpha1 "github.com/giantswarm/apiextensions/v3/pkg/apis/provider/v1alpha1"
 	"github.com/giantswarm/k8sclient/v7/pkg/k8sclient"

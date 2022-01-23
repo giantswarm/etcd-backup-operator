@@ -245,6 +245,8 @@ github.com/getsentry/sentry-go v0.11.0 h1:qro8uttJGvNAMr5CLcFI9CHR0aDzXl0Vs3Pmw/
 github.com/getsentry/sentry-go v0.11.0/go.mod h1:KBQIxiZAetw62Cj8Ri964vAEWVdgfaUCn30Q3bCvANo=
 github.com/ghodss/yaml v0.0.0-20150909031657-73d445a93680/go.mod h1:4dBDuWmgqj2HViK6kFavaiC9ZROes6MMH2rRYeMEF04=
 github.com/ghodss/yaml v1.0.0/go.mod h1:4dBDuWmgqj2HViK6kFavaiC9ZROes6MMH2rRYeMEF04=
+github.com/giantswarm/apiextensions-backup v0.1.0 h1:p/9eXBNEe4WtctT4Oi3zQOZm7aNIgWRwFHBEcmsQqfQ=
+github.com/giantswarm/apiextensions-backup v0.1.0/go.mod h1:hXSGARTfNkkoDC7SUqED1yIQ4pSDZzCg1WAlNwkFBPQ=
 github.com/giantswarm/apiextensions/v3 v3.40.0 h1:P1QGmI6sd9Ql0g5cmPgSqcN5liMm7KkE5DzF+VH3Hps=
 github.com/giantswarm/apiextensions/v3 v3.40.0/go.mod h1:Pfw9GhojeehHf7gOPLwOVWQbUB1E/TS8ThqzfZOQsw4=
 github.com/giantswarm/backoff v1.0.0 h1:1oeTvyPsm1tJrHlSmfxbIWuoCNWPOkWJCb8kfLvE2T0=

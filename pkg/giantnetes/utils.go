@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 
 	"github.com/coreos/go-semver/semver"
-	"github.com/giantswarm/apiextensions/v3/pkg/apis/backup/v1alpha1"
+	"github.com/giantswarm/apiextensions-backup/api/v1alpha1"
 	"github.com/giantswarm/apiextensions/v3/pkg/apis/infrastructure/v1alpha3"
 	providerv1alpha1 "github.com/giantswarm/apiextensions/v3/pkg/apis/provider/v1alpha1"
 	"github.com/giantswarm/apiextensions/v3/pkg/label"
