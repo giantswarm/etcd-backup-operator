@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	backupv1alpha1 "github.com/giantswarm/apiextensions/v3/pkg/apis/backup/v1alpha1"
+	backupv1alpha1 "github.com/giantswarm/apiextensions-backup/api/v1alpha1"
 	"github.com/giantswarm/microerror"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )

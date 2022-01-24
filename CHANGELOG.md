@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Switch from apiextensions to apiextensions-backup for etcdbackup CRD.
+
 ## [2.8.0] - 2022-01-21
 
 - Add possibility to backup specific clusters within an installation.
