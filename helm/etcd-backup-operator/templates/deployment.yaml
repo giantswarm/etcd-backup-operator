@@ -19,6 +19,20 @@ spec:
       labels:
         {{- include "labels.selector" . | nindent 8 }}
     spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    # Cannot be scheduled on the same node as chart-operator
+                    # as they both use hostNetwork + port 8000.
+                    - key: app.kubernetes.io/instance
+                      operator: In
+                      values:
+                        - chart-operator
+                topologyKey: kubernetes.io/hostname
       restartPolicy: Always
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet

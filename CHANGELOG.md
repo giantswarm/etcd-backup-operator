@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Anti-affinity rule to ensure that pod is not scheduled alongside chart-operator due to port collision.
+
 ### Changed
 
 - Switch from apiextensions to apiextensions-backup for etcdbackup CRD.
