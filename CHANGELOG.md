@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Allow container port to be configured.
+- Switch default container port to 8050 to avoid port collisions.
+
+### Changed
+
 - Switch from apiextensions to apiextensions-backup for etcdbackup CRD.
 
 ## [2.8.0] - 2022-01-21

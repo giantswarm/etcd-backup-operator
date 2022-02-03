@@ -82,7 +82,7 @@ spec:
         livenessProbe:
           httpGet:
             path: /healthz
-            port: 8000
+            port: {{ .Values.service.port }}
           initialDelaySeconds: 30
           timeoutSeconds: 1
         resources:
