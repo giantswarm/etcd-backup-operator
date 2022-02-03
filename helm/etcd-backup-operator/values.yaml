@@ -6,6 +6,8 @@ pod:
     id: 1000
   group:
     id: 1000
+service:
+  port: 8050
 project:
   branch: "[[ .Branch ]]"
   commit: "[[ .SHA ]]"

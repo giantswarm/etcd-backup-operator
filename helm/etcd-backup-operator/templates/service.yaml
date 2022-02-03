@@ -11,6 +11,6 @@ metadata:
 spec:
   ports:
   - name: metrics
-    port: 8000
+    port: {{ .Values.service.port }}
   selector:
     {{- include "labels.selector" . | nindent 4 }}
