@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - The `revision` data coming from `etcdctl` needs an `int64` to fit.
+- Fix nil pointer in collector.
 
 ## [2.9.0] - 2022-02-03
 
