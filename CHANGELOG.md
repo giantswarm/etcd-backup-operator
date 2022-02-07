@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.10.0] - 2022-02-07
+
 ### Fixed
 
 - The `revision` data coming from `etcdctl` needs an `int64` to fit.
@@ -159,7 +161,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First release.
 
-[Unreleased]: https://github.com/giantswarm/giantswarm/compare/v2.9.0...HEAD
+[Unreleased]: https://github.com/giantswarm/giantswarm/compare/v2.10.0...HEAD
+[2.10.0]: https://github.com/giantswarm/giantswarm/compare/v2.9.0...v2.10.0
 [2.9.0]: https://github.com/giantswarm/giantswarm/compare/v2.8.0...v2.9.0
 [2.8.0]: https://github.com/giantswarm/etcd-backup-operator/compare/v2.7.2...v2.8.0
 [2.7.2]: https://github.com/giantswarm/etcd-backup-operator/compare/v2.7.1...v2.7.2
