@@ -50,7 +50,7 @@ func NewV3Backup(caCert string, cert string, encPass string, endpoints string, l
 	}
 }
 
-//clear temporary directory
+// Cleanup clears temporary directory
 func (b V3Backup) Cleanup() {
 	os.RemoveAll(b.getTmpDir())
 }
@@ -206,9 +206,9 @@ func (b V3Backup) runEtcdctlCmd(etcdctlArgs []string) ([]byte, error) {
 	return log, nil
 }
 
-func getRevision(output []byte) (int32, error) {
+func getRevision(output []byte) (int64, error) {
 	type endpointStatusOutputStatusHeader struct {
-		Revision int32
+		Revision int64
 	}
 
 	type endpointStatusOutputStatus struct {
