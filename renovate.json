@@ -1,7 +1,6 @@
 {
   "extends": [
-    "config:base",
-    ":reviewer(team:team-phoenix)"
+    "config:base"
   ],
   "packageRules": [
     {
@@ -35,7 +34,7 @@
       "allowedVersions": ">= 4.0.0"
     }
   ],
-  "postUpdateOptions": ["gomodTidy1.17", "gomodUpdateImportPaths"],
+  "postUpdateOptions": ["gomodTidy", "gomodUpdateImportPaths"],
   "dependencyDashboard": true,
   "ignorePaths": [
     ".github/workflows/zz_generated.*",
