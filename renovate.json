@@ -36,7 +36,7 @@
       "allowedVersions": ">= 4.0.0"
     }
   ],
-  "postUpdateOptions": ["gomodTidy", "gomodUpdateImportPaths"],
+  "postUpdateOptions": ["gomodTidy1.17", "gomodUpdateImportPaths"],
   "dependencyDashboard": true,
   "ignorePaths": [
     ".github/workflows/zz_generated.*",
