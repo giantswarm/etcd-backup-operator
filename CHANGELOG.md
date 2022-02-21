@@ -161,9 +161,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First release.
 
-[Unreleased]: https://github.com/giantswarm/giantswarm/compare/v2.9.1...HEAD
-[2.9.1]: https://github.com/giantswarm/giantswarm/compare/v2.9.0...v2.9.1
-[2.9.0]: https://github.com/giantswarm/giantswarm/compare/v2.8.0...v2.9.0
+[Unreleased]: https://github.com/giantswarm/etcd-backup-operator/compare/v2.9.1...HEAD
+[2.9.1]: https://github.com/giantswarm/etcd-backup-operator/compare/v2.9.0...v2.9.1
+[2.9.0]: https://github.com/giantswarm/etcd-backup-operator/compare/v2.8.0...v2.9.0
 [2.8.0]: https://github.com/giantswarm/etcd-backup-operator/compare/v2.7.2...v2.8.0
 [2.7.2]: https://github.com/giantswarm/etcd-backup-operator/compare/v2.7.1...v2.7.2
 [2.7.1]: https://github.com/giantswarm/etcd-backup-operator/compare/v2.7.0...v2.7.1
