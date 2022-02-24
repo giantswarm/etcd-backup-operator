@@ -1,5 +1,5 @@
 orbs:
-  architect: giantswarm/architect@dev:go-mod-tidy-1-17
+  architect: giantswarm/architect@4.13.0
 
 version: 2.1
 workflows:
