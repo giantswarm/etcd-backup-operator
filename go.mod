@@ -3,7 +3,7 @@ module github.com/giantswarm/etcd-backup-operator/v2
 go 1.17
 
 require (
-	github.com/aws/aws-sdk-go v1.42.52
+	github.com/aws/aws-sdk-go v1.43.5
 	github.com/coreos/go-semver v0.3.0
 	github.com/giantswarm/apiextensions-backup v0.1.0
 	github.com/giantswarm/apiextensions/v3 v3.40.0
@@ -19,7 +19,7 @@ require (
 	github.com/mholt/archiver/v3 v3.5.1
 	github.com/prometheus/client_golang v1.12.1
 	github.com/spf13/viper v1.10.1
-	golang.org/x/crypto v0.0.0-20220213190939-1e6e3497d506
+	golang.org/x/crypto v0.0.0-20220214200702-86341886e292
 	k8s.io/api v0.20.15
 	k8s.io/apimachinery v0.20.15
 	k8s.io/client-go v0.20.15
@@ -81,11 +81,11 @@ require (
 	github.com/subosito/gotenv v1.2.0 // indirect
 	github.com/ulikunitz/xz v0.5.9 // indirect
 	github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8 // indirect
-	golang.org/x/net v0.0.0-20211216030914-fe4d6282115f // indirect
+	golang.org/x/net v0.0.0-20220127200216-cd36cc0744dd // indirect
 	golang.org/x/oauth2 v0.0.0-20211104180415-d3ed0bb246c8 // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
 	golang.org/x/sys v0.0.0-20220114195835-da31bd327af9 // indirect
-	golang.org/x/term v0.0.0-20210220032956-6a3ed077a48d // indirect
+	golang.org/x/term v0.0.0-20210927222741-03fcf44c2211 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/time v0.0.0-20210723032227-1f47c861a9ac // indirect
 	gomodules.xyz/jsonpatch/v2 v2.1.0 // indirect
