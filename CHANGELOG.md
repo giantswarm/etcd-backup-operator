@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.10.1] - 2022-03-22
+
 ### Fixed
 
 - Ignore VPA configuration if VPA is not installed.
@@ -171,7 +173,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First release.
 
-[Unreleased]: https://github.com/giantswarm/etcd-backup-operator/compare/v2.10.0...HEAD
+[Unreleased]: https://github.com/giantswarm/etcd-backup-operator/compare/v2.10.1...HEAD
+[2.10.1]: https://github.com/giantswarm/etcd-backup-operator/compare/v2.10.0...v2.10.1
 [2.10.0]: https://github.com/giantswarm/etcd-backup-operator/compare/v2.9.1...v2.10.0
 [2.9.1]: https://github.com/giantswarm/etcd-backup-operator/compare/v2.9.0...v2.9.1
 [2.9.0]: https://github.com/giantswarm/etcd-backup-operator/compare/v2.8.0...v2.9.0
