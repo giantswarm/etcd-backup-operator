@@ -34,3 +34,6 @@ clientKeyFileName: ""
 etcdEndpoints: "https://127.0.0.1:2379"
 
 installation: ""
+
+verticalPodAutoscaler:
+  enabled: true
