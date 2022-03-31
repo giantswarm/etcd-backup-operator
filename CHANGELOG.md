@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Use `giantswarm/k8smetadata` for labels.
+- Update `giantswarm/apiextensions` to `v6.0.0`.
+- Update k8s dependencies to `v0.22.2`.
+
 ## [2.10.1] - 2022-03-22
 
 ### Fixed
