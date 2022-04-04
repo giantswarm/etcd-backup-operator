@@ -13,9 +13,9 @@ import (
 	"github.com/giantswarm/micrologger"
 	"github.com/mholt/archiver/v3"
 
-	"github.com/giantswarm/etcd-backup-operator/v2/pkg/etcd/internal/encrypt"
-	"github.com/giantswarm/etcd-backup-operator/v2/pkg/etcd/internal/exec"
-	"github.com/giantswarm/etcd-backup-operator/v2/pkg/etcd/key"
+	"github.com/giantswarm/etcd-backup-operator/v3/pkg/etcd/internal/encrypt"
+	"github.com/giantswarm/etcd-backup-operator/v3/pkg/etcd/internal/exec"
+	"github.com/giantswarm/etcd-backup-operator/v3/pkg/etcd/key"
 )
 
 type V2Backup struct {

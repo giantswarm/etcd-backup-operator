@@ -6,7 +6,7 @@ import (
 	"github.com/giantswarm/operatorkit/v7/pkg/resource/wrapper/metricsresource"
 	"github.com/giantswarm/operatorkit/v7/pkg/resource/wrapper/retryresource"
 
-	"github.com/giantswarm/etcd-backup-operator/v2/service/controller/resource/etcdbackup"
+	"github.com/giantswarm/etcd-backup-operator/v3/service/controller/resource/etcdbackup"
 )
 
 func validateETCDBackupResourceSetConfigConfig(config ETCDBackupConfig) error {

@@ -18,13 +18,13 @@ import (
 	"github.com/spf13/viper"
 	"k8s.io/client-go/rest"
 
-	"github.com/giantswarm/etcd-backup-operator/v2/flag"
-	"github.com/giantswarm/etcd-backup-operator/v2/pkg/giantnetes"
-	"github.com/giantswarm/etcd-backup-operator/v2/pkg/project"
-	"github.com/giantswarm/etcd-backup-operator/v2/pkg/storage"
-	"github.com/giantswarm/etcd-backup-operator/v2/service/collector"
-	"github.com/giantswarm/etcd-backup-operator/v2/service/controller"
-	"github.com/giantswarm/etcd-backup-operator/v2/service/controller/key"
+	"github.com/giantswarm/etcd-backup-operator/v3/flag"
+	"github.com/giantswarm/etcd-backup-operator/v3/pkg/giantnetes"
+	"github.com/giantswarm/etcd-backup-operator/v3/pkg/project"
+	"github.com/giantswarm/etcd-backup-operator/v3/pkg/storage"
+	"github.com/giantswarm/etcd-backup-operator/v3/service/collector"
+	"github.com/giantswarm/etcd-backup-operator/v3/service/controller"
+	"github.com/giantswarm/etcd-backup-operator/v3/service/controller/key"
 )
 
 // Config represents the configuration used to create a new service.

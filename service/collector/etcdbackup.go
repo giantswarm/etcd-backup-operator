@@ -12,7 +12,7 @@ import (
 	"github.com/giantswarm/micrologger"
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/giantswarm/etcd-backup-operator/v2/service/controller/key"
+	"github.com/giantswarm/etcd-backup-operator/v3/service/controller/key"
 )
 
 const (

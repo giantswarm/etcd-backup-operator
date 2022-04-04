@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Bump go module version in `go.mod`.
+
 ## [3.0.0] - 2022-03-31
 
 - Use `giantswarm/k8smetadata` for labels.
