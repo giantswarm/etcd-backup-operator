@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.1] - 2022-04-04
+
 ### Fixed
 
 - Bump go module version in `go.mod`.
@@ -183,7 +185,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First release.
 
-[Unreleased]: https://github.com/giantswarm/etcd-backup-operator/compare/v3.0.0...HEAD
+[Unreleased]: https://github.com/giantswarm/etcd-backup-operator/compare/v3.0.1...HEAD
+[3.0.1]: https://github.com/giantswarm/etcd-backup-operator/compare/v3.0.0...v3.0.1
 [3.0.0]: https://github.com/giantswarm/etcd-backup-operator/compare/v2.10.1...v3.0.0
 [2.10.1]: https://github.com/giantswarm/etcd-backup-operator/compare/v2.10.0...v2.10.1
 [2.10.0]: https://github.com/giantswarm/etcd-backup-operator/compare/v2.9.1...v2.10.0
