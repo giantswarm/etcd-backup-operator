@@ -9,9 +9,9 @@ import (
 	"github.com/giantswarm/operatorkit/v7/pkg/resource"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	"github.com/giantswarm/etcd-backup-operator/v2/pkg/giantnetes"
-	"github.com/giantswarm/etcd-backup-operator/v2/pkg/project"
-	"github.com/giantswarm/etcd-backup-operator/v2/pkg/storage"
+	"github.com/giantswarm/etcd-backup-operator/v3/pkg/giantnetes"
+	"github.com/giantswarm/etcd-backup-operator/v3/pkg/project"
+	"github.com/giantswarm/etcd-backup-operator/v3/pkg/storage"
 )
 
 type ETCDBackupConfig struct {

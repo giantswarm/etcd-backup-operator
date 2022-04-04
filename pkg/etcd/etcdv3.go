@@ -14,9 +14,9 @@ import (
 	"github.com/mholt/archiver/v3"
 	"k8s.io/apimachinery/pkg/util/json"
 
-	"github.com/giantswarm/etcd-backup-operator/v2/pkg/etcd/internal/encrypt"
-	"github.com/giantswarm/etcd-backup-operator/v2/pkg/etcd/internal/exec"
-	"github.com/giantswarm/etcd-backup-operator/v2/pkg/etcd/key"
+	"github.com/giantswarm/etcd-backup-operator/v3/pkg/etcd/internal/encrypt"
+	"github.com/giantswarm/etcd-backup-operator/v3/pkg/etcd/internal/exec"
+	"github.com/giantswarm/etcd-backup-operator/v3/pkg/etcd/key"
 )
 
 type V3Backup struct {
