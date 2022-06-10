@@ -36,11 +36,8 @@
         "clientKeyFileName": {
             "type": "string"
         },
-        "clusterPrefix": {
-            "type": "string"
-        },
         "etcdDataDir": {
-            "type": ["null", "string"]
+            "type": "string"
         },
         "etcdEndpoints": {
             "type": "string"
@@ -107,8 +104,38 @@
                 }
             }
         },
+        "schedules": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "clustersRegex": {
+                        "type": "string"
+                    },
+                    "cronjob": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "service": {
+            "type": "object",
+            "properties": {
+                "port": {
+                    "type": "integer"
+                }
+            }
+        },
         "testingEnvironment": {
             "type": "boolean"
+        },
+        "verticalPodAutoscaler": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                }
+            }
         }
     }
 }
