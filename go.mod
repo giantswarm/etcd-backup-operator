@@ -5,7 +5,8 @@ go 1.17
 require (
 	github.com/aws/aws-sdk-go v1.43.5
 	github.com/coreos/go-semver v0.3.0
-	github.com/giantswarm/apiextensions-backup v0.1.0
+	github.com/dlclark/regexp2 v1.4.0
+	github.com/giantswarm/apiextensions-backup v0.2.1
 	github.com/giantswarm/apiextensions/v6 v6.0.0
 	github.com/giantswarm/backoff v1.0.0
 	github.com/giantswarm/exporterkit v1.0.0
@@ -33,7 +34,6 @@ require (
 	github.com/cenkalti/backoff/v4 v4.1.2 // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/dlclark/regexp2 v1.4.0 // indirect
 	github.com/dsnet/compress v0.0.2-0.20210315054119-f66993602bf5 // indirect
 	github.com/evanphx/json-patch v4.11.0+incompatible // indirect
 	github.com/fsnotify/fsnotify v1.5.1 // indirect
