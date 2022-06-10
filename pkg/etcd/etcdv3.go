@@ -2,6 +2,7 @@ package etcd
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -12,7 +13,6 @@ import (
 	"github.com/giantswarm/microerror"
 	"github.com/giantswarm/micrologger"
 	"github.com/mholt/archiver/v3"
-	"k8s.io/apimachinery/pkg/util/json"
 
 	"github.com/giantswarm/etcd-backup-operator/v3/pkg/etcd/internal/encrypt"
 	"github.com/giantswarm/etcd-backup-operator/v3/pkg/etcd/internal/exec"
