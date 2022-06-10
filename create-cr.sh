@@ -2,6 +2,7 @@
 
 name="etcd-backup-$(date +'%Y%m%d%H%M%S')"
 guestBackup="$1"
+clustersRegex="$2"
 
 if [ "$guestBackup" != "true" ] && [ "$guestBackup" != "false" ]
 then
@@ -16,6 +17,7 @@ metadata:
   name: "${name}"
 spec:
   guestBackup: $guestBackup
+  clustersRegex: $clustersRegex
 END
 )
 

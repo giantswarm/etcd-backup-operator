@@ -26,6 +26,14 @@ aws:
     awsAccessKey: ""
     awsSecretKey: ""
 
+schedules:
+  - cronjob: "0 */6 * * *"
+    clustersRegex: ".*"
+  # - cronjob: 0 */6 * * *
+  #   clusters: '^(?!<cluster-id>)'
+  # - cronjob: 0 3 * * * *
+  #   clusters: '<cluster-id>'
+
 etcdDataDir: ""
 clientCertsDir: "/etc/kubernetes/ssl/etcd/"
 clientCaCertFileName: ""

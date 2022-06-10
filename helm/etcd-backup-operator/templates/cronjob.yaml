@@ -1,13 +1,14 @@
-apiVersion: batch/{{ if ge (.Capabilities.KubeVersion.Minor | int) 21 }}v1{{ else }}v1beta1{{ end }}
+{{- range $i, $v := .Values.schedules -}}
+apiVersion: batch/{{ if ge ($.Capabilities.KubeVersion.Minor | int) 21 }}v1{{ else }}v1beta1{{ end }}
 kind: CronJob
 metadata:
-  name: {{ include "resource.default.name" . }}-scheduler
-  namespace: {{ include "resource.default.namespace" . }}
+  name: {{ include "resource.default.name" $ }}-scheduler-{{ $i }}
+  namespace: {{ include "resource.default.namespace" $ }}
   labels:
-    {{- include "labels.common" . | nindent 4 }}
+    {{- include "labels.common" $ | nindent 4 }}
 spec:
   # Run every six hours.
-  schedule: "0 */6 * * *"
+  schedule: {{ $v.cronjob }}
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 5
   jobTemplate:
@@ -15,13 +16,16 @@ spec:
       template:
         metadata:
           labels:
-            {{- include "labels.common" . | nindent 12 }}
+            {{- include "labels.common" $ | nindent 12 }}
         spec:
-          serviceAccountName: {{ include "resource.default.name" . }}
+          serviceAccountName: {{ include "resource.default.name" $ }}
           containers:
           - name: etcd-backup
-            image: "{{ .Values.registry.domain }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
+            image: "{{ $.Values.registry.domain }}/{{ $.Values.image.name }}:{{ $.Values.image.tag }}"
             command:
             - "/bin/create-cr.sh"
-            - "{{ not .Values.testingEnvironment }}"
+            - "{{ not $.Values.testingEnvironment }}"
+            - {{ $v.clusters | quote }}
           restartPolicy: Never
+---
+{{- end -}}
