@@ -8,7 +8,7 @@ metadata:
     {{- include "labels.common" $ | nindent 4 }}
 spec:
   # Run every six hours.
-  schedule: {{ $v.cronjob }}
+  schedule: {{ $v.cronjob | quote }}
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 5
   jobTemplate:
