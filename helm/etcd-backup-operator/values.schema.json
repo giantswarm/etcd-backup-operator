@@ -109,7 +109,7 @@
             "items": {
                 "type": "object",
                 "properties": {
-                    "clustersRegex": {
+                    "clusters": {
                         "type": "string"
                     },
                     "cronjob": {
