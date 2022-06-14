@@ -78,6 +78,18 @@ You can specify all of them as well (and you'll enable both V2 and V3 backups).
 - `AWS_ACCESS_KEY_ID`: (Required) The AWS access key ID, used to upload the backup files to AWS S3. 
 - `AWS_SECRET_ACCESS_KEY`: (Required) The AWS secret access key, used to upload the backup files to AWS S3.
 
+#### Different schedules
+
+You can schedule different cron datetimes to different clusters like it is explain here:
+
+```yaml
+schedules:
+  - cronjob: 0 */6 * * *
+    clusters: '^(?!<cluster-id>)' #all clusters but the id defined
+  - cronjob: 0 3 * * * *
+    clusters: '<cluster-id>' # only one cluster
+```
+
 ## License
 
 etcd-backup-operator is under the Apache 2.0 license. See the [LICENSE](LICENSE) file for
