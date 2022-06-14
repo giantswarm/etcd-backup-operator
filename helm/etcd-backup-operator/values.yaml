@@ -28,7 +28,7 @@ aws:
 
 schedules:
   - cronjob: "0 */6 * * *"
-    clustersRegex: ".*"
+    clusters: ".*"
   # - cronjob: 0 */6 * * *
   #   clusters: '^(?!<cluster-id>)' #all clusters but the id defined
   # - cronjob: 0 3 * * * *
