@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.1.0] - 2022-06-15
+
 ### Added
 
 - Extend the operator to allow multiple schedules and select which clusters will be backed up.
@@ -189,7 +191,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First release.
 
-[Unreleased]: https://github.com/giantswarm/etcd-backup-operator/compare/v3.0.1...HEAD
+[Unreleased]: https://github.com/giantswarm/etcd-backup-operator/compare/v3.1.0...HEAD
+[3.1.0]: https://github.com/giantswarm/etcd-backup-operator/compare/v3.0.1...v3.1.0
 [3.0.1]: https://github.com/giantswarm/etcd-backup-operator/compare/v3.0.0...v3.0.1
 [3.0.0]: https://github.com/giantswarm/etcd-backup-operator/compare/v2.10.1...v3.0.0
 [2.10.1]: https://github.com/giantswarm/etcd-backup-operator/compare/v2.10.0...v2.10.1
