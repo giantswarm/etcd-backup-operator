@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/dlclark/regexp2"
 	"github.com/giantswarm/apiextensions-backup/api/v1alpha1"
 	"github.com/giantswarm/microerror"
 	"github.com/giantswarm/operatorkit/v7/pkg/controller/context/reconciliationcanceledcontext"
@@ -87,7 +88,12 @@ func (r *Resource) runBackupOnAllInstances(ctx context.Context, obj interface{},
 			if err != nil {
 				return false, microerror.Mask(err)
 			}
-			instances = append(instances, guestInstances...)
+			re := regexp2.MustCompile(customObject.Spec.ClustersRegex, 0)
+			for _, guestInstance := range guestInstances {
+				if isMatch, _ := re.MatchString(guestInstance.Name); isMatch {
+					instances = append(instances, guestInstance)
+				}
+			}
 		}
 	}
 
