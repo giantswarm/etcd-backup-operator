@@ -74,8 +74,6 @@ func (r *Resource) runBackupOnAllInstances(ctx context.Context, obj interface{},
 	} else {
 		r.logger.LogCtx(ctx, "level", "debug", "message", "CR does not contain explicit list of cluster names")
 		// Control plane.
-		var instances []giantnetes.ETCDInstance
-
 		if !r.skipManagementClusterBackup {
 			cp := giantnetes.ETCDInstance{
 				Name:   key.ManagementCluster,

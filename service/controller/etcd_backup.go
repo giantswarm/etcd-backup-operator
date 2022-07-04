@@ -93,12 +93,12 @@ func newETCDBackupResourceSets(config ETCDBackupConfig) ([]resource.Interface, e
 		c := ETCDBackupConfig{
 			K8sClient:                   config.K8sClient,
 			Logger:                      config.Logger,
-			SkipManagementClusterBackup: config.SkipManagementClusterBackup,
 			ETCDv2Settings:              config.ETCDv2Settings,
 			ETCDv3Settings:              config.ETCDv3Settings,
 			EncryptionPwd:               config.EncryptionPwd,
 			Installation:                config.Installation,
 			Uploader:                    config.Uploader,
+			SkipManagementClusterBackup: config.SkipManagementClusterBackup,
 		}
 		// etcdBackupResourceSetConfig(config)
 
