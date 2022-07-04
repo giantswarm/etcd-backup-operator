@@ -1,13 +1,21 @@
 package key
 
 import (
+	"context"
 	"crypto/tls"
 	"crypto/x509"
+	"errors"
 	"fmt"
 	"io/ioutil"
 
 	backupv1alpha1 "github.com/giantswarm/apiextensions-backup/api/v1alpha1"
 	"github.com/giantswarm/microerror"
+	corev1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/runtime"
+	restclient "k8s.io/client-go/rest"
+	"k8s.io/client-go/tools/clientcmd"
+	kcfg "sigs.k8s.io/cluster-api/util/kubeconfig"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 const (
@@ -77,4 +85,43 @@ func TLSConfigFromCertFiles(ca string, cert string, key string) (*tls.Config, er
 	}
 
 	return tlsCofig, nil
+}
+
+// RESTConfig returns a configuration instance to be used with a Kubernetes client.
+func RESTConfig(ctx context.Context, c client.Reader, cluster client.ObjectKey) (*restclient.Config, error) {
+	kubeConfig, err := kcfg.FromSecret(ctx, c, cluster)
+	if err != nil {
+		return nil, errors.New(fmt.Sprintf("failed to retrieve kubeconfig secret for Cluster %s/%s : %s", cluster.Namespace, cluster.Name, err))
+	}
+
+	restConfig, err := clientcmd.RESTConfigFromKubeConfig(kubeConfig)
+	if err != nil {
+		return nil, errors.New(fmt.Sprintf("failed to create REST configuration for Cluster %s/%s : %s", cluster.Namespace, cluster.Name, err))
+	}
+
+	return restConfig, nil
+}
+
+func GetCtrlClient(config *restclient.Config) (client.Client, error) {
+	s := runtime.NewScheme()
+
+	schemes := []func(*runtime.Scheme) error{
+		corev1.AddToScheme,
+	}
+
+	// Extend the global client-go scheme which is used by all the tools under
+	// the hood. The scheme is required for the controller-runtime controller to
+	// be able to watch for runtime objects of a certain type.
+	schemeBuilder := runtime.SchemeBuilder(schemes)
+
+	err := schemeBuilder.AddToScheme(s)
+	if err != nil {
+		return nil, microerror.Mask(err)
+	}
+
+	c, err := client.New(config, client.Options{Scheme: s})
+	if err != nil {
+		return nil, microerror.Mask(err)
+	}
+	return c, nil
 }

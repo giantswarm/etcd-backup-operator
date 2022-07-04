@@ -34,7 +34,7 @@ func (r *Resource) runBackupOnAllInstances(ctx context.Context, obj interface{},
 
 		// User specified a list of cluster IDs to be backed up.
 		// Load workload clusters.
-		guestInstances, err := utils.GetTenantClusters(ctx, customObject)
+		guestInstances, err := utils.GetTenantClusters(ctx)
 		if err != nil {
 			return false, microerror.Mask(err)
 		}
@@ -84,7 +84,7 @@ func (r *Resource) runBackupOnAllInstances(ctx context.Context, obj interface{},
 
 		if customObject.Spec.GuestBackup {
 			// Tenant clusters.
-			guestInstances, err := utils.GetTenantClusters(ctx, customObject)
+			guestInstances, err := utils.GetTenantClusters(ctx)
 			if err != nil {
 				return false, microerror.Mask(err)
 			}

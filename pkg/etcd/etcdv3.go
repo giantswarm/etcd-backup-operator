@@ -18,6 +18,7 @@ import (
 
 	"github.com/giantswarm/etcd-backup-operator/v3/pkg/etcd/internal/encrypt"
 	"github.com/giantswarm/etcd-backup-operator/v3/pkg/etcd/key"
+	"github.com/giantswarm/etcd-backup-operator/v3/pkg/etcd/proxy"
 )
 
 type V3Backup struct {
@@ -31,11 +32,11 @@ type V3Backup struct {
 	tmpDir     *string
 }
 
-func NewV3Backup(tlsConfig *tls.Config, encPass string, endpoints string, logger micrologger.Logger, prefix string) (V3Backup, error) {
+func NewV3Backup(tlsConfig *tls.Config, p *proxy.Proxy, encPass string, endpoints string, logger micrologger.Logger, prefix string) (V3Backup, error) {
 	filename := ""
 	tmpDir := ""
 
-	etcdClient, err := createEtcdV3Client(endpoints, tlsConfig)
+	etcdClient, err := createEtcdV3Client(endpoints, tlsConfig, p)
 	if err != nil {
 		return V3Backup{}, microerror.Mask(err)
 	}
@@ -52,14 +53,26 @@ func NewV3Backup(tlsConfig *tls.Config, encPass string, endpoints string, logger
 	}, nil
 }
 
-func createEtcdV3Client(endpoint string, tlsConfig *tls.Config) (*clientv3.Client, error) {
+func createEtcdV3Client(endpoint string, tlsConfig *tls.Config, p *proxy.Proxy) (*clientv3.Client, error) {
+	dialOpt := []grpc.DialOption{
+		grpc.WithBlock(), // block until the underlying connection is up
+	}
+
+	// add proxy dialer if proxy is not nil
+	if p != nil {
+		dialer, err := proxy.NewDialer(*p)
+		if err != nil {
+			return nil, microerror.Mask(err)
+		}
+
+		dialOpt = append(dialOpt, grpc.WithContextDialer(dialer.DialContextWithAddr))
+	}
+
 	c, err := clientv3.New(clientv3.Config{
 		Endpoints:   []string{endpoint},
 		DialTimeout: time.Second * 60,
-		DialOptions: []grpc.DialOption{
-			grpc.WithBlock(), // block until the underlying connection is up
-		},
-		TLS: tlsConfig,
+		DialOptions: dialOpt,
+		TLS:         tlsConfig,
 	})
 
 	if err != nil {

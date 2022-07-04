@@ -17,6 +17,7 @@ import (
 	"github.com/giantswarm/micrologger"
 	"github.com/spf13/viper"
 	"k8s.io/client-go/rest"
+	capi "sigs.k8s.io/cluster-api/api/v1beta1"
 
 	"github.com/giantswarm/etcd-backup-operator/v3/flag"
 	"github.com/giantswarm/etcd-backup-operator/v3/pkg/giantnetes"
@@ -123,6 +124,7 @@ func New(config Config) (*Service, error) {
 				backupv1alpha1.AddToScheme,
 				infrastructurev1alpha3.AddToScheme,
 				providerv1alpha1.AddToScheme,
+				capi.AddToScheme,
 			},
 			RestConfig: restConfig,
 		}

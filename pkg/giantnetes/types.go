@@ -2,6 +2,8 @@ package giantnetes
 
 import (
 	"crypto/tls"
+
+	"github.com/giantswarm/etcd-backup-operator/v3/pkg/etcd/proxy"
 )
 
 type ETCDv2Settings struct {
@@ -10,6 +12,7 @@ type ETCDv2Settings struct {
 
 type ETCDv3Settings struct {
 	Endpoints string
+	Proxy     *proxy.Proxy
 	TLSConfig *tls.Config
 }
 

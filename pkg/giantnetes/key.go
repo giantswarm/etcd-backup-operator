@@ -2,7 +2,6 @@ package giantnetes
 
 import (
 	"fmt"
-	"path"
 
 	"github.com/coreos/go-semver/semver"
 )
@@ -12,6 +11,13 @@ const (
 	awsCAPI = "awsCAPI"
 	azure   = "azure"
 	kvm     = "kvm"
+	CAPI    = "capi"
+)
+
+const (
+	componentETCD = "etcd"
+
+	LabelCAPIControlPlaneNode = "node-role.kubernetes.io/control-plane=''"
 )
 
 var azureSupportFrom *semver.Version = semver.Must(semver.NewVersion("0.2.0"))
@@ -24,18 +30,10 @@ func AzureEtcdEndpoint(etcdDomain string) string {
 	return fmt.Sprintf("https://%s:2379", etcdDomain)
 }
 
-func CAFile(clusterID string, tmpDir string) string {
-	return path.Join(tmpDir, fmt.Sprintf("%s-%s.pem", clusterID, "ca"))
-}
-
-func CertFile(clusterID string, tmpDir string) string {
-	return path.Join(tmpDir, fmt.Sprintf("%s-%s.pem", clusterID, "crt"))
-}
-
-func KeyFile(clusterID string, tmpDir string) string {
-	return path.Join(tmpDir, fmt.Sprintf("%s-%s.pem", clusterID, "key"))
-}
-
 func KVMEtcdEndpoint(etcdDomain string) string {
 	return fmt.Sprintf("https://%s:443", etcdDomain)
+}
+
+func CAPIEtcdEndpoint(component string, nodeName string) string {
+	return fmt.Sprintf("%s-%s", component, nodeName)
 }
