@@ -145,6 +145,15 @@ func New(config Config) (*Service, error) {
 			return nil, microerror.Mask(err)
 		}
 
+		tlsConfig, err := key.TLSConfigFromCertFiles(
+			config.Viper.GetString(config.Flag.Service.ETCDv3.CaCert),
+			config.Viper.GetString(config.Flag.Service.ETCDv3.Cert),
+			config.Viper.GetString(config.Flag.Service.ETCDv3.Key),
+		)
+		if err != nil {
+			return nil, microerror.Mask(err)
+		}
+
 		c := controller.ETCDBackupConfig{
 			K8sClient: k8sClient,
 			Logger:    config.Logger,
@@ -153,9 +162,7 @@ func New(config Config) (*Service, error) {
 			},
 			ETCDv3Settings: giantnetes.ETCDv3Settings{
 				Endpoints: config.Viper.GetString(config.Flag.Service.ETCDv3.Endpoints),
-				CaCert:    config.Viper.GetString(config.Flag.Service.ETCDv3.CaCert),
-				Key:       config.Viper.GetString(config.Flag.Service.ETCDv3.Key),
-				Cert:      config.Viper.GetString(config.Flag.Service.ETCDv3.Cert),
+				TLSConfig: tlsConfig,
 			},
 			EncryptionPwd: os.Getenv(key.EncryptionPassword),
 			Installation:  config.Viper.GetString(config.Flag.Service.Installation),

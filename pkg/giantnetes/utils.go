@@ -3,7 +3,6 @@ package giantnetes
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
 
 	"github.com/coreos/go-semver/semver"
 	"github.com/giantswarm/apiextensions-backup/api/v1alpha1"
@@ -15,6 +14,8 @@ import (
 	"github.com/giantswarm/micrologger"
 	v1 "k8s.io/api/core/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
+
+	"github.com/giantswarm/etcd-backup-operator/v3/service/controller/key"
 )
 
 const (
@@ -72,15 +73,14 @@ func (u *Utils) GetTenantClusters(ctx context.Context, backup v1alpha1.ETCDBacku
 		}
 
 		// Fetch ETCD certs.
-		certs, err := u.getEtcdTLSCfg(ctx, cluster.clusterID, cluster.clusterNamespace)
+		certs, err := u.getLegacyEtcdTLSCfg(ctx, cluster.clusterID, cluster.clusterNamespace)
 		if err != nil {
 			u.logger.LogCtx(ctx, "level", "error", "msg", fmt.Sprintf("Failed to fetch etcd certs for cluster %s", cluster.clusterID), "reason", err)
 			continue
 		}
-		// Write ETCD certs to tmpdir.
-		err = u.createCertFiles(cluster.clusterID, certs)
+		tlsConfig, err := key.PrepareTLSConfig(certs.CAData, certs.CrtData, certs.KeyData)
 		if err != nil {
-			u.logger.LogCtx(ctx, "level", "error", "msg", fmt.Sprintf("Failed to write etcd certs to tmpdir for cluster %s", cluster.clusterID), "reason", err)
+			u.logger.LogCtx(ctx, "level", "error", "msg", fmt.Sprintf("Failed to prepare tls config  from  etcd certs for cluster %s", cluster.clusterID), "reason", err)
 			continue
 		}
 
@@ -96,9 +96,7 @@ func (u *Utils) GetTenantClusters(ctx context.Context, backup v1alpha1.ETCDBacku
 			ETCDv2: ETCDv2Settings{},
 			ETCDv3: ETCDv3Settings{
 				Endpoints: etcdEndpoint,
-				CaCert:    certs.CAFile,
-				Cert:      certs.CrtFile,
-				Key:       certs.KeyFile,
+				TLSConfig: tlsConfig,
 			},
 		})
 	}
@@ -146,7 +144,7 @@ func (u *Utils) checkClusterVersionSupport(ctx context.Context, cluster Cluster)
 }
 
 // Fetch ETCD client certs.
-func (u *Utils) getEtcdTLSCfg(ctx context.Context, clusterID string, clusterNamespace string) (*TLSClientConfig, error) {
+func (u *Utils) getLegacyEtcdTLSCfg(ctx context.Context, clusterID string, clusterNamespace string) (*TLSClientConfig, error) {
 	k8sClient := u.K8sClient.CtrlClient()
 	secrets := v1.SecretList{}
 	err := k8sClient.List(ctx, &secrets, client.MatchingLabels{
@@ -212,37 +210,6 @@ func (u *Utils) getEtcdEndpoint(ctx context.Context, cluster Cluster) (string, e
 
 	// We already check for unknown provider at the start.
 	return etcdEndpoint, nil
-}
-
-// Create cert files in tmp dir from certConfig and saves filenames back.
-func (u *Utils) createCertFiles(clusterID string, certConfig *TLSClientConfig) error {
-	tmpDir, err := ioutil.TempDir("", clusterID)
-	if err != nil {
-		return microerror.Mask(err)
-	}
-
-	// cert
-	err = ioutil.WriteFile(CertFile(clusterID, tmpDir), certConfig.CrtData, fileMode)
-	if err != nil {
-		return microerror.Maskf(executionFailedError, "failed to write crt file %#q with error %#q", CertFile(clusterID, tmpDir), err)
-	}
-	certConfig.CrtFile = CertFile(clusterID, tmpDir)
-
-	// key
-	err = ioutil.WriteFile(KeyFile(clusterID, tmpDir), certConfig.KeyData, fileMode)
-	if err != nil {
-		return microerror.Maskf(executionFailedError, "failed to write key file %#q with error %#q", KeyFile(clusterID, tmpDir), err)
-	}
-	certConfig.KeyFile = KeyFile(clusterID, tmpDir)
-
-	// ca
-	err = ioutil.WriteFile(CAFile(clusterID, tmpDir), certConfig.CAData, fileMode)
-	if err != nil {
-		return microerror.Maskf(executionFailedError, "failed to write ca file %#q with error %#q", CAFile(clusterID, tmpDir), err)
-	}
-	certConfig.CAFile = CAFile(clusterID, tmpDir)
-
-	return nil
 }
 
 // Fetch all guest clusters IDs in host cluster.
