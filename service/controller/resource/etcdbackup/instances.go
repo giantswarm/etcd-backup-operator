@@ -74,12 +74,15 @@ func (r *Resource) runBackupOnAllInstances(ctx context.Context, obj interface{},
 	} else {
 		r.logger.LogCtx(ctx, "level", "debug", "message", "CR does not contain explicit list of cluster names")
 		// Control plane.
-		instances = []giantnetes.ETCDInstance{
-			{
+		var instances []giantnetes.ETCDInstance
+
+		if !r.skipManagementClusterBackup {
+			cp := giantnetes.ETCDInstance{
 				Name:   key.ManagementCluster,
 				ETCDv2: r.etcdV2Settings,
 				ETCDv3: r.etcdV3Settings,
-			},
+			}
+			instances = append(instances, cp)
 		}
 
 		if customObject.Spec.GuestBackup {

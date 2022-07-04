@@ -15,14 +15,15 @@ import (
 )
 
 type ETCDBackupConfig struct {
-	K8sClient      k8sclient.Interface
-	Logger         micrologger.Logger
-	ETCDv2Settings giantnetes.ETCDv2Settings
-	ETCDv3Settings giantnetes.ETCDv3Settings
-	EncryptionPwd  string
-	Installation   string
-	SentryDSN      string
-	Uploader       storage.Uploader
+	K8sClient                   k8sclient.Interface
+	Logger                      micrologger.Logger
+	ETCDv2Settings              giantnetes.ETCDv2Settings
+	ETCDv3Settings              giantnetes.ETCDv3Settings
+	EncryptionPwd               string
+	Installation                string
+	SentryDSN                   string
+	Uploader                    storage.Uploader
+	SkipManagementClusterBackup bool
 }
 
 type ETCDBackup struct {
@@ -90,15 +91,16 @@ func newETCDBackupResourceSets(config ETCDBackupConfig) ([]resource.Interface, e
 	var resources []resource.Interface
 	{
 		c := ETCDBackupConfig{
-			K8sClient:      config.K8sClient,
-			Logger:         config.Logger,
-			ETCDv2Settings: config.ETCDv2Settings,
-			ETCDv3Settings: config.ETCDv3Settings,
-			EncryptionPwd:  config.EncryptionPwd,
-			Installation:   config.Installation,
-			Uploader:       config.Uploader,
+			K8sClient:                   config.K8sClient,
+			Logger:                      config.Logger,
+			SkipManagementClusterBackup: config.SkipManagementClusterBackup,
+			ETCDv2Settings:              config.ETCDv2Settings,
+			ETCDv3Settings:              config.ETCDv3Settings,
+			EncryptionPwd:               config.EncryptionPwd,
+			Installation:                config.Installation,
+			Uploader:                    config.Uploader,
 		}
-		//etcdBackupResourceSetConfig(config)
+		// etcdBackupResourceSetConfig(config)
 
 		resources, err = newETCDBackupResourceSet(c)
 		if err != nil {
