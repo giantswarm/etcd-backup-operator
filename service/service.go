@@ -150,6 +150,9 @@ func New(config Config) (*Service, error) {
 			config.Viper.GetString(config.Flag.Service.ETCDv3.Cert),
 			config.Viper.GetString(config.Flag.Service.ETCDv3.Key),
 		)
+		if err != nil {
+			return nil, microerror.Mask(err)
+		}
 
 		c := controller.ETCDBackupConfig{
 			K8sClient: k8sClient,

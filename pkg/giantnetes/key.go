@@ -12,8 +12,6 @@ const (
 	awsCAPI = "awsCAPI"
 	azure   = "azure"
 	kvm     = "kvm"
-
-	fileMode = 0600
 )
 
 var azureSupportFrom *semver.Version = semver.Must(semver.NewVersion("0.2.0"))

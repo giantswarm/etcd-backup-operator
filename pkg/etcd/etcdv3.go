@@ -95,8 +95,11 @@ func (b V3Backup) Create() (string, error) {
 	}
 
 	outFile, err := os.Create(fpath)
+	if err != nil {
+		return "", microerror.Mask(err)
+	}
 	// handle err
-	defer outFile.Close()
+	defer func() { _ = outFile.Close() }()
 	_, err = io.Copy(outFile, snapshot)
 	if err != nil {
 		return "", microerror.Mask(err)
