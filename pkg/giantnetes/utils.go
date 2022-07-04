@@ -157,23 +157,19 @@ func (u *Utils) checkClusterVersionSupport(ctx context.Context, cluster Cluster)
 }
 
 func (u *Utils) getEtcdTLSCfg(ctx context.Context, cluster Cluster) (*tls.Config, error) {
-
 	if cluster.provider == CAPI {
 		t, err := u.getCAPIEtcdTLSCfg(ctx, cluster.clusterKey)
 		if err != nil {
 			return nil, microerror.Mask(err)
 		}
 		return t, nil
-
 	} else {
 		t, err := u.getLegacyEtcdTLSCfg(ctx, cluster.clusterKey)
 		if err != nil {
 			return nil, microerror.Mask(err)
 		}
-
 		return t, nil
 	}
-
 }
 
 // Fetch ETCD client certs.

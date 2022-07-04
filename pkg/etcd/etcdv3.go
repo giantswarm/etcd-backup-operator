@@ -128,7 +128,7 @@ func (b V3Backup) Create() (string, error) {
 	*b.filename = *b.filename + key.TgzExt
 	fpath = filepath.Join(b.getTmpDir(), *b.filename)
 
-	b.Logger.Log("level", "info", "msg", "Etcd v3 backup created successfully")
+	b.Logger.Log("level", "info", "msg", "Etcd v3 backup created successfully", "file", b.filename)
 	return fpath, nil
 }
 
