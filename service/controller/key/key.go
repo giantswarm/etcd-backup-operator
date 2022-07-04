@@ -4,7 +4,6 @@ import (
 	"context"
 	"crypto/tls"
 	"crypto/x509"
-	"errors"
 	"fmt"
 	"io/ioutil"
 
@@ -91,12 +90,12 @@ func TLSConfigFromCertFiles(ca string, cert string, key string) (*tls.Config, er
 func RESTConfig(ctx context.Context, c client.Reader, cluster client.ObjectKey) (*restclient.Config, error) {
 	kubeConfig, err := kcfg.FromSecret(ctx, c, cluster)
 	if err != nil {
-		return nil, errors.New(fmt.Sprintf("failed to retrieve kubeconfig secret for Cluster %s/%s : %s", cluster.Namespace, cluster.Name, err))
+		return nil, microerror.Maskf(executionFailedError, "failed to retrieve kubeconfig secret for Cluster %s/%s : %s", cluster.Namespace, cluster.Name, err)
 	}
 
 	restConfig, err := clientcmd.RESTConfigFromKubeConfig(kubeConfig)
 	if err != nil {
-		return nil, errors.New(fmt.Sprintf("failed to create REST configuration for Cluster %s/%s : %s", cluster.Namespace, cluster.Name, err))
+		return nil, microerror.Maskf(executionFailedError, "failed to create REST configuration for Cluster %s/%s : %s", cluster.Namespace, cluster.Name, err)
 	}
 
 	return restConfig, nil
