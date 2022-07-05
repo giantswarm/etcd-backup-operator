@@ -24,7 +24,7 @@ data:
       s3:
         bucket: "{{ .Values.aws.s3bucket }}"
         region: "{{ .Values.aws.s3region }}"
-      skipManagementClusterBackup: {{.Values.skipManagementClusterBackup}}
+      skipmanagementclusterbackup: {{.Values.skipManagementClusterBackup}}
       etcdv2:
         datadir: "{{ if eq .Values.provider.kind "kvm" }}/var/lib/etcd{{ end }}"
       etcdv3:
