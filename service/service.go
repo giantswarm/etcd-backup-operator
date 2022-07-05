@@ -5,7 +5,6 @@ package service
 import (
 	"context"
 	"crypto/tls"
-	"fmt"
 	"os"
 	"sync"
 
@@ -149,11 +148,11 @@ func New(config Config) (*Service, error) {
 			return nil, microerror.Mask(err)
 		}
 
-		skipMCBackup := config.Viper.GetBool(config.Flag.Service.SkipManagementClusterBackup)
-		fmt.Printf("\n\nloaded viper config skipMCBackup %t\n\n", skipMCBackup)
+		skipMCBackup := true // config.Viper.GetBool(config.Flag.Service.SkipManagementClusterBackup)
+		// fmt.Printf("\n\nloaded viper config skipMCBackup %t\n\n", skipMCBackup)
 
 		var tlsConfig *tls.Config = nil
-		if !skipMCBackup {
+		/*if !skipMCBackup {
 			tlsConfig, err = key.TLSConfigFromCertFiles(
 				config.Viper.GetString(config.Flag.Service.ETCDv3.CaCert),
 				config.Viper.GetString(config.Flag.Service.ETCDv3.Cert),
@@ -162,7 +161,7 @@ func New(config Config) (*Service, error) {
 			if err != nil {
 				return nil, microerror.Mask(err)
 			}
-		}
+		}*/
 
 		c := controller.ETCDBackupConfig{
 			K8sClient: k8sClient,
