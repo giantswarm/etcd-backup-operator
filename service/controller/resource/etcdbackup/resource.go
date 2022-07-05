@@ -45,7 +45,7 @@ func New(config Config) (*Resource, error) {
 	if config.K8sClient == nil {
 		return nil, microerror.Maskf(invalidConfigError, "%T.k8sClient must not be empty", config)
 	}
-	if !config.ETCDv2Settings.AreComplete() && !config.ETCDv3Settings.AreComplete() {
+	if !config.SkipManagementClusterBackup && !config.ETCDv2Settings.AreComplete() && !config.ETCDv3Settings.AreComplete() {
 		return nil, microerror.Maskf(invalidConfigError, "Either %T.ETCDv2Settings or %T.ETCDv3Settings must be defined", config, config)
 	}
 	if config.Installation == "" {
