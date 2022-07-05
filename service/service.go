@@ -150,7 +150,7 @@ func New(config Config) (*Service, error) {
 		}
 
 		skipMCBackup := config.Viper.GetBool(config.Flag.Service.SkipManagementClusterBackup)
-		fmt.Printf("loaded viper config skipMCBackup %t", skipMCBackup)
+		fmt.Printf("\n\nloaded viper config skipMCBackup %t\n\n", skipMCBackup)
 
 		var tlsConfig *tls.Config = nil
 		if !skipMCBackup {
