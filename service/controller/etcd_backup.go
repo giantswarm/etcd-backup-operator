@@ -31,7 +31,8 @@ type ETCDBackup struct {
 }
 
 func validateETCDBackupConfig(config ETCDBackupConfig) error {
-	if !config.ETCDv2Settings.AreComplete() && !config.ETCDv3Settings.AreComplete() {
+
+	if !config.SkipManagementClusterBackup && !config.ETCDv2Settings.AreComplete() && !config.ETCDv3Settings.AreComplete() {
 		return microerror.Maskf(invalidConfigError, "Either %T.ETCDv2Settings or %T.ETCDv3Settings must be defined", config, config)
 	}
 	if config.Installation == "" {

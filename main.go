@@ -107,6 +107,7 @@ func mainE(ctx context.Context) error {
 	daemonCommand.PersistentFlags().String(f.Service.Kubernetes.TLS.CAFile, "", "Certificate authority file path to use to authenticate with Kubernetes.")
 	daemonCommand.PersistentFlags().String(f.Service.Kubernetes.TLS.CrtFile, "", "Certificate file path to use to authenticate with Kubernetes.")
 	daemonCommand.PersistentFlags().String(f.Service.Kubernetes.TLS.KeyFile, "", "Key file path to use to authenticate with Kubernetes.")
+	daemonCommand.PersistentFlags().Bool(f.Service.SkipManagementClusterBackup, false, "Skip management cluster backup.")
 	daemonCommand.PersistentFlags().String(f.Service.S3.Bucket, "", "AWS S3 Bucket name.")
 	daemonCommand.PersistentFlags().String(f.Service.S3.Region, "", "AWS S3 Region name.")
 	daemonCommand.PersistentFlags().String(f.Service.ETCDv2.DataDir, "", "ETCD v2 Data Dir path.")
