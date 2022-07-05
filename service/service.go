@@ -5,7 +5,6 @@ package service
 import (
 	"context"
 	"crypto/tls"
-	"fmt"
 	"os"
 	"sync"
 
@@ -150,7 +149,6 @@ func New(config Config) (*Service, error) {
 		}
 
 		skipMCBackup := config.Viper.GetBool(config.Flag.Service.SkipManagementClusterBackup)
-		fmt.Printf("\n\nloaded viper config skipMCBackup %t\n\n", skipMCBackup)
 
 		var tlsConfig *tls.Config = nil
 		if !skipMCBackup {
