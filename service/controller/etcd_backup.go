@@ -31,7 +31,6 @@ type ETCDBackup struct {
 }
 
 func validateETCDBackupConfig(config ETCDBackupConfig) error {
-
 	if !config.SkipManagementClusterBackup && !config.ETCDv2Settings.AreComplete() && !config.ETCDv3Settings.AreComplete() {
 		return microerror.Maskf(invalidConfigError, "Either %T.ETCDv2Settings or %T.ETCDv3Settings must be defined", config, config)
 	}
@@ -101,8 +100,6 @@ func newETCDBackupResourceSets(config ETCDBackupConfig) ([]resource.Interface, e
 			Uploader:                    config.Uploader,
 			SkipManagementClusterBackup: config.SkipManagementClusterBackup,
 		}
-		// etcdBackupResourceSetConfig(config)
-
 		resources, err = newETCDBackupResourceSet(c)
 		if err != nil {
 			return nil, microerror.Mask(err)
