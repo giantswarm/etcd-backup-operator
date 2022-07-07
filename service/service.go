@@ -4,6 +4,7 @@ package service
 
 import (
 	"context"
+	"crypto/tls"
 	"os"
 	"sync"
 
@@ -17,6 +18,7 @@ import (
 	"github.com/giantswarm/micrologger"
 	"github.com/spf13/viper"
 	"k8s.io/client-go/rest"
+	capi "sigs.k8s.io/cluster-api/api/v1beta1"
 
 	"github.com/giantswarm/etcd-backup-operator/v3/flag"
 	"github.com/giantswarm/etcd-backup-operator/v3/pkg/giantnetes"
@@ -123,6 +125,7 @@ func New(config Config) (*Service, error) {
 				backupv1alpha1.AddToScheme,
 				infrastructurev1alpha3.AddToScheme,
 				providerv1alpha1.AddToScheme,
+				capi.AddToScheme,
 			},
 			RestConfig: restConfig,
 		}
@@ -145,6 +148,20 @@ func New(config Config) (*Service, error) {
 			return nil, microerror.Mask(err)
 		}
 
+		skipMCBackup := config.Viper.GetBool(config.Flag.Service.SkipManagementClusterBackup)
+
+		var tlsConfig *tls.Config = nil
+		if !skipMCBackup {
+			tlsConfig, err = key.TLSConfigFromCertFiles(
+				config.Viper.GetString(config.Flag.Service.ETCDv3.CaCert),
+				config.Viper.GetString(config.Flag.Service.ETCDv3.Cert),
+				config.Viper.GetString(config.Flag.Service.ETCDv3.Key),
+			)
+			if err != nil {
+				return nil, microerror.Mask(err)
+			}
+		}
+
 		c := controller.ETCDBackupConfig{
 			K8sClient: k8sClient,
 			Logger:    config.Logger,
@@ -153,14 +170,13 @@ func New(config Config) (*Service, error) {
 			},
 			ETCDv3Settings: giantnetes.ETCDv3Settings{
 				Endpoints: config.Viper.GetString(config.Flag.Service.ETCDv3.Endpoints),
-				CaCert:    config.Viper.GetString(config.Flag.Service.ETCDv3.CaCert),
-				Key:       config.Viper.GetString(config.Flag.Service.ETCDv3.Key),
-				Cert:      config.Viper.GetString(config.Flag.Service.ETCDv3.Cert),
+				TLSConfig: tlsConfig,
 			},
-			EncryptionPwd: os.Getenv(key.EncryptionPassword),
-			Installation:  config.Viper.GetString(config.Flag.Service.Installation),
-			SentryDSN:     config.Viper.GetString(config.Flag.Service.Sentry.DSN),
-			Uploader:      uploader,
+			EncryptionPwd:               os.Getenv(key.EncryptionPassword),
+			Installation:                config.Viper.GetString(config.Flag.Service.Installation),
+			SentryDSN:                   config.Viper.GetString(config.Flag.Service.Sentry.DSN),
+			SkipManagementClusterBackup: skipMCBackup,
+			Uploader:                    uploader,
 		}
 
 		etcdBackupController, err = controller.NewETCDBackup(c)

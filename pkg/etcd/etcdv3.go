@@ -2,9 +2,9 @@ package etcd
 
 import (
 	"context"
-	"encoding/json"
-	"errors"
+	"crypto/tls"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -13,41 +13,73 @@ import (
 	"github.com/giantswarm/microerror"
 	"github.com/giantswarm/micrologger"
 	"github.com/mholt/archiver/v3"
+	clientv3 "go.etcd.io/etcd/client/v3"
+	"google.golang.org/grpc"
 
 	"github.com/giantswarm/etcd-backup-operator/v3/pkg/etcd/internal/encrypt"
-	"github.com/giantswarm/etcd-backup-operator/v3/pkg/etcd/internal/exec"
 	"github.com/giantswarm/etcd-backup-operator/v3/pkg/etcd/key"
+	"github.com/giantswarm/etcd-backup-operator/v3/pkg/etcd/proxy"
 )
 
 type V3Backup struct {
-	CACert    string
-	Cert      string
 	EncPass   string
 	Endpoints string
 	Logger    micrologger.Logger
-	Key       string
 	Prefix    string
 
-	filename *string
-	tmpDir   *string
+	etcdClient *clientv3.Client
+	filename   *string
+	tmpDir     *string
 }
 
-func NewV3Backup(caCert string, cert string, encPass string, endpoints string, logger micrologger.Logger, key string, prefix string) V3Backup {
+func NewV3Backup(tlsConfig *tls.Config, p *proxy.Proxy, encPass string, endpoints string, logger micrologger.Logger, prefix string) (V3Backup, error) {
 	filename := ""
 	tmpDir := ""
 
+	etcdClient, err := createEtcdV3Client(endpoints, tlsConfig, p)
+	if err != nil {
+		return V3Backup{}, microerror.Mask(err)
+	}
+
 	return V3Backup{
-		CACert:    caCert,
-		Cert:      cert,
 		EncPass:   encPass,
 		Endpoints: endpoints,
 		Logger:    logger,
-		Key:       key,
 		Prefix:    prefix,
 
-		filename: &filename,
-		tmpDir:   &tmpDir,
+		etcdClient: etcdClient,
+		filename:   &filename,
+		tmpDir:     &tmpDir,
+	}, nil
+}
+
+func createEtcdV3Client(endpoint string, tlsConfig *tls.Config, p *proxy.Proxy) (*clientv3.Client, error) {
+	dialOpt := []grpc.DialOption{
+		grpc.WithBlock(), // block until the underlying connection is up
 	}
+
+	// add proxy dialer if proxy is not nil
+	if p != nil {
+		dialer, err := proxy.NewDialer(*p)
+		if err != nil {
+			return nil, microerror.Mask(err)
+		}
+
+		dialOpt = append(dialOpt, grpc.WithContextDialer(dialer.DialContextWithAddr))
+	}
+
+	c, err := clientv3.New(clientv3.Config{
+		Endpoints:   []string{endpoint},
+		DialTimeout: time.Second * 60,
+		DialOptions: dialOpt,
+		TLS:         tlsConfig,
+	})
+
+	if err != nil {
+		return nil, microerror.Mask(err)
+	}
+
+	return c, nil
 }
 
 // Cleanup clears temporary directory
@@ -57,6 +89,7 @@ func (b V3Backup) Cleanup() {
 
 // Create etcd in temporary directory.
 func (b V3Backup) Create() (string, error) {
+	ctx := context.Background()
 	err := b.compactAndDefrag()
 	if err != nil {
 		return "", microerror.Mask(err)
@@ -68,16 +101,19 @@ func (b V3Backup) Create() (string, error) {
 	// Full path to file.
 	fpath := filepath.Join(b.getTmpDir(), *b.filename)
 
-	etcdctlArgs := []string{
-		"snapshot",
-		"save",
-		fpath,
-		"--dial-timeout=10s",
-		"--command-timeout=30s",
+	// Create a etcd.
+	snapshot, err := b.etcdClient.Snapshot(ctx)
+	if err != nil {
+		return "", microerror.Mask(err)
 	}
 
-	// Create a etcd.
-	_, err = b.runEtcdctlCmd(etcdctlArgs)
+	outFile, err := os.Create(fpath)
+	if err != nil {
+		return "", microerror.Mask(err)
+	}
+	// handle err
+	defer func() { _ = outFile.Close() }()
+	_, err = io.Copy(outFile, snapshot)
 	if err != nil {
 		return "", microerror.Mask(err)
 	}
@@ -92,7 +128,7 @@ func (b V3Backup) Create() (string, error) {
 	*b.filename = *b.filename + key.TgzExt
 	fpath = filepath.Join(b.getTmpDir(), *b.filename)
 
-	b.Logger.Log("level", "info", "msg", "Etcd v3 backup created successfully")
+	b.Logger.Log("level", "info", "msg", "Etcd v3 backup created successfully", "file", b.filename)
 	return fpath, nil
 }
 
@@ -138,28 +174,19 @@ func (b V3Backup) getTmpDir() string {
 }
 
 func (b V3Backup) compactAndDefrag() error {
-	b.Logger.Debugf(context.Background(), "Compacting etcd instance")
+	ctx := context.Background()
+	b.Logger.Debugf(ctx, "Compacting etcd instance")
 	// Get latest revision.
-	output, err := b.runEtcdctlCmd([]string{
-		"endpoint",
-		"status",
-		`--write-out=json`,
-	})
+	s, err := b.etcdClient.Status(ctx, b.Endpoints)
+
 	if err != nil {
 		return microerror.Mask(err)
 	}
 
-	revision, err := getRevision(output)
-	if err != nil {
-		return microerror.Mask(err)
-	}
+	b.Logger.Debugf(context.Background(), "Revision is %d", s.Header.Revision)
 
-	b.Logger.Debugf(context.Background(), "Revision is %d", revision)
+	_, err = b.etcdClient.Compact(ctx, s.Header.Revision)
 
-	_, err = b.runEtcdctlCmd([]string{
-		"compact",
-		fmt.Sprintf("%d", revision),
-	})
 	if err != nil {
 		return microerror.Mask(err)
 	}
@@ -168,11 +195,8 @@ func (b V3Backup) compactAndDefrag() error {
 
 	b.Logger.Debugf(context.Background(), "Defragging etcd instance")
 
-	_, err = b.runEtcdctlCmd([]string{
-		"defrag",
-		"--command-timeout=60s",
-		"--dial-timeout=60s",
-	})
+	_, err = b.etcdClient.Defragment(ctx, b.Endpoints)
+
 	if err != nil {
 		return microerror.Mask(err)
 	}
@@ -180,54 +204,4 @@ func (b V3Backup) compactAndDefrag() error {
 	b.Logger.Debugf(context.Background(), "Defragged etcd instance")
 
 	return nil
-}
-
-func (b V3Backup) runEtcdctlCmd(etcdctlArgs []string) ([]byte, error) {
-	etcdctlEnvs := []string{"ETCDCTL_API=3"}
-
-	if b.Endpoints != "" {
-		etcdctlArgs = append(etcdctlArgs, "--endpoints", b.Endpoints)
-	}
-	if b.CACert != "" {
-		etcdctlArgs = append(etcdctlArgs, "--cacert", b.CACert)
-	}
-	if b.Cert != "" {
-		etcdctlArgs = append(etcdctlArgs, "--cert", b.Cert)
-	}
-	if b.Key != "" {
-		etcdctlArgs = append(etcdctlArgs, "--key", b.Key)
-	}
-
-	log, err := exec.Cmd(key.EtcdctlCmd, etcdctlArgs, etcdctlEnvs, b.Logger)
-	if err != nil {
-		return nil, errors.New(string(log))
-	}
-
-	return log, nil
-}
-
-func getRevision(output []byte) (int64, error) {
-	type endpointStatusOutputStatusHeader struct {
-		Revision int64
-	}
-
-	type endpointStatusOutputStatus struct {
-		Header endpointStatusOutputStatusHeader
-	}
-
-	type endpointStatusOutput struct {
-		Status endpointStatusOutputStatus
-	}
-
-	var status []endpointStatusOutput
-	err := json.Unmarshal(output, &status)
-	if err != nil {
-		return 0, microerror.Mask(err)
-	}
-
-	if len(status) == 0 {
-		return 0, microerror.Maskf(emptyEndpointHealthError, "The etcdctl endpoint status command returned zero results.")
-	}
-
-	return status[0].Status.Header.Revision, nil
 }

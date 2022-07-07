@@ -1,14 +1,19 @@
 package giantnetes
 
+import (
+	"crypto/tls"
+
+	"github.com/giantswarm/etcd-backup-operator/v3/pkg/etcd/proxy"
+)
+
 type ETCDv2Settings struct {
 	DataDir string
 }
 
 type ETCDv3Settings struct {
 	Endpoints string
-	CaCert    string
-	Key       string
-	Cert      string
+	Proxy     *proxy.Proxy
+	TLSConfig *tls.Config
 }
 
 type ETCDInstance struct {
@@ -21,9 +26,6 @@ type TLSClientConfig struct {
 	CAData  []byte
 	KeyData []byte
 	CrtData []byte
-	CAFile  string
-	CrtFile string
-	KeyFile string
 }
 
 func (s ETCDv2Settings) AreComplete() bool {
@@ -31,5 +33,5 @@ func (s ETCDv2Settings) AreComplete() bool {
 }
 
 func (s ETCDv3Settings) AreComplete() bool {
-	return s.Endpoints != "" && s.Cert != "" && s.CaCert != "" && s.Key != ""
+	return s.Endpoints != "" && s.TLSConfig != nil
 }

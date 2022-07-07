@@ -42,6 +42,9 @@
         "etcdEndpoints": {
             "type": "string"
         },
+        "skipManagementClusterBackup": {
+            "type": "boolean"
+        },
         "image": {
             "type": "object",
             "properties": {

@@ -15,24 +15,27 @@ const (
 )
 
 type Config struct {
-	K8sClient      k8sclient.Interface
-	Logger         micrologger.Logger
-	ETCDv2Settings giantnetes.ETCDv2Settings
-	ETCDv3Settings giantnetes.ETCDv3Settings
-	EncryptionPwd  string
-	Installation   string
-	Uploader       storage.Uploader
+	K8sClient                   k8sclient.Interface
+	Logger                      micrologger.Logger
+	ETCDv2Settings              giantnetes.ETCDv2Settings
+	ETCDv3Settings              giantnetes.ETCDv3Settings
+	EncryptionPwd               string
+	Installation                string
+	Uploader                    storage.Uploader
+	SkipManagementClusterBackup bool
 }
 
 type Resource struct {
-	logger         micrologger.Logger
-	k8sClient      k8sclient.Interface
-	stateMachine   state.Machine
-	etcdV2Settings giantnetes.ETCDv2Settings
-	etcdV3Settings giantnetes.ETCDv3Settings
-	encryptionPwd  string
-	installation   string
-	uploader       storage.Uploader
+	logger       micrologger.Logger
+	k8sClient    k8sclient.Interface
+	stateMachine state.Machine
+
+	etcdV2Settings              giantnetes.ETCDv2Settings
+	etcdV3Settings              giantnetes.ETCDv3Settings
+	encryptionPwd               string
+	installation                string
+	uploader                    storage.Uploader
+	skipManagementClusterBackup bool
 }
 
 func New(config Config) (*Resource, error) {
@@ -42,7 +45,7 @@ func New(config Config) (*Resource, error) {
 	if config.K8sClient == nil {
 		return nil, microerror.Maskf(invalidConfigError, "%T.k8sClient must not be empty", config)
 	}
-	if !config.ETCDv2Settings.AreComplete() && !config.ETCDv3Settings.AreComplete() {
+	if !config.SkipManagementClusterBackup && !config.ETCDv2Settings.AreComplete() && !config.ETCDv3Settings.AreComplete() {
 		return nil, microerror.Maskf(invalidConfigError, "Either %T.ETCDv2Settings or %T.ETCDv3Settings must be defined", config, config)
 	}
 	if config.Installation == "" {
@@ -53,13 +56,14 @@ func New(config Config) (*Resource, error) {
 	}
 
 	r := &Resource{
-		logger:         config.Logger,
-		k8sClient:      config.K8sClient,
-		etcdV2Settings: config.ETCDv2Settings,
-		etcdV3Settings: config.ETCDv3Settings,
-		encryptionPwd:  config.EncryptionPwd,
-		installation:   config.Installation,
-		uploader:       config.Uploader,
+		logger:                      config.Logger,
+		k8sClient:                   config.K8sClient,
+		etcdV2Settings:              config.ETCDv2Settings,
+		etcdV3Settings:              config.ETCDv3Settings,
+		encryptionPwd:               config.EncryptionPwd,
+		installation:                config.Installation,
+		uploader:                    config.Uploader,
+		skipManagementClusterBackup: config.SkipManagementClusterBackup,
 	}
 
 	r.configureStateMachine()
