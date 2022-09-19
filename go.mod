@@ -1,6 +1,6 @@
 module github.com/giantswarm/etcd-backup-operator/v3
 
-go 1.19
+go 1.18
 
 require (
 	github.com/aws/aws-sdk-go v1.44.100
