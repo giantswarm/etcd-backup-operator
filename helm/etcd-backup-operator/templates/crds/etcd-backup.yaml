@@ -1,4 +1,4 @@
-{{- if not (.Capabilities.APIVersions.Has "etcdbackups.backup.giantswarm.io") }}
+{{- if not (.Capabilities.APIVersions.Has "backup.giantswarm.io/v1alpha1/ETCDBackup") }}
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
