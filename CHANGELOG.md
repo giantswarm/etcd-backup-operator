@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added CRD to helm chart.
+
 ## [3.2.0] - 2022-07-06
 
 - Add functionality to backup CAPI clusters.
