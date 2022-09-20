@@ -16,9 +16,9 @@ import (
 	clientv3 "go.etcd.io/etcd/client/v3"
 	"google.golang.org/grpc"
 
-	"github.com/giantswarm/etcd-backup-operator/v3/pkg/etcd/internal/encrypt"
-	"github.com/giantswarm/etcd-backup-operator/v3/pkg/etcd/key"
-	"github.com/giantswarm/etcd-backup-operator/v3/pkg/etcd/proxy"
+	"github.com/giantswarm/etcd-backup-operator/v4/pkg/etcd/internal/encrypt"
+	"github.com/giantswarm/etcd-backup-operator/v4/pkg/etcd/key"
+	"github.com/giantswarm/etcd-backup-operator/v4/pkg/etcd/proxy"
 )
 
 type V3Backup struct {

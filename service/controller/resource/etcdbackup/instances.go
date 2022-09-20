@@ -9,8 +9,8 @@ import (
 	"github.com/giantswarm/microerror"
 	"github.com/giantswarm/operatorkit/v7/pkg/controller/context/reconciliationcanceledcontext"
 
-	"github.com/giantswarm/etcd-backup-operator/v3/pkg/giantnetes"
-	"github.com/giantswarm/etcd-backup-operator/v3/service/controller/key"
+	"github.com/giantswarm/etcd-backup-operator/v4/pkg/giantnetes"
+	"github.com/giantswarm/etcd-backup-operator/v4/service/controller/key"
 )
 
 func (r *Resource) runBackupOnAllInstances(ctx context.Context, obj interface{}, handler func(context.Context, giantnetes.ETCDInstance, *v1alpha1.ETCDInstanceBackupStatusIndex) bool) (bool, error) {

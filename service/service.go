@@ -20,13 +20,13 @@ import (
 	"k8s.io/client-go/rest"
 	capi "sigs.k8s.io/cluster-api/api/v1beta1"
 
-	"github.com/giantswarm/etcd-backup-operator/v3/flag"
-	"github.com/giantswarm/etcd-backup-operator/v3/pkg/giantnetes"
-	"github.com/giantswarm/etcd-backup-operator/v3/pkg/project"
-	"github.com/giantswarm/etcd-backup-operator/v3/pkg/storage"
-	"github.com/giantswarm/etcd-backup-operator/v3/service/collector"
-	"github.com/giantswarm/etcd-backup-operator/v3/service/controller"
-	"github.com/giantswarm/etcd-backup-operator/v3/service/controller/key"
+	"github.com/giantswarm/etcd-backup-operator/v4/flag"
+	"github.com/giantswarm/etcd-backup-operator/v4/pkg/giantnetes"
+	"github.com/giantswarm/etcd-backup-operator/v4/pkg/project"
+	"github.com/giantswarm/etcd-backup-operator/v4/pkg/storage"
+	"github.com/giantswarm/etcd-backup-operator/v4/service/collector"
+	"github.com/giantswarm/etcd-backup-operator/v4/service/controller"
+	"github.com/giantswarm/etcd-backup-operator/v4/service/controller/key"
 )
 
 // Config represents the configuration used to create a new service.
