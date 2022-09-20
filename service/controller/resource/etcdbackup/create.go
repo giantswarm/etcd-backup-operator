@@ -7,8 +7,8 @@ import (
 	"github.com/giantswarm/microerror"
 	"github.com/giantswarm/operatorkit/v7/pkg/controller/context/reconciliationcanceledcontext"
 
-	"github.com/giantswarm/etcd-backup-operator/v3/service/controller/key"
-	"github.com/giantswarm/etcd-backup-operator/v3/service/controller/resource/etcdbackup/internal/state"
+	"github.com/giantswarm/etcd-backup-operator/v4/service/controller/key"
+	"github.com/giantswarm/etcd-backup-operator/v4/service/controller/resource/etcdbackup/internal/state"
 )
 
 const (

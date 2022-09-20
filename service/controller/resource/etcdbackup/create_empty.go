@@ -3,7 +3,7 @@ package etcdbackup
 import (
 	"context"
 
-	"github.com/giantswarm/etcd-backup-operator/v3/service/controller/resource/etcdbackup/internal/state"
+	"github.com/giantswarm/etcd-backup-operator/v4/service/controller/resource/etcdbackup/internal/state"
 )
 
 // Sets the initial state.
