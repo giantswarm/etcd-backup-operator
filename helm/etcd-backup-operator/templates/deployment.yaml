@@ -26,7 +26,13 @@ spec:
         # Tolerate master taint
         - key: node-role.kubernetes.io/master
           operator: Exists
+          effect: NoSchedule      
+{{- if semverCompare ">=1.24-0" .Capabilities.KubeVersion.GitVersion }}
+        # Tolerate control-plane taint
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
           effect: NoSchedule
+{{- end }}
         # Container creates etcd backups.
         # Run container in host network mode on G8s masters
         # to be able to use 127.0.0.1 as etcd address.
@@ -34,7 +40,11 @@ spec:
         # to etcd data directory. To achive that,
         # mount /var/lib/etcd3 as a volume.
       nodeSelector:
+{{- if semverCompare ">=1.24-0" .Capabilities.KubeVersion.GitVersion }}
+        node-role.kubernetes.io/control-plane: ""
+{{- else }}
         node-role.kubernetes.io/master: ""
+{{- end }}
       volumes:
       - name: {{ include "name" . }}-configmap
         configMap:

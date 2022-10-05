@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- `etcd-backup-operator` is now compatible with Kubernetes Versions >= `v1.24`
+
 ## [4.0.0] - 2022-09-20
 
 ### Added
