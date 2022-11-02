@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Added option to set pod's `priorityClassName`.
+
 ### Fixed
 
 - `etcd-backup-operator` is now compatible with Kubernetes Versions >= `v1.24`

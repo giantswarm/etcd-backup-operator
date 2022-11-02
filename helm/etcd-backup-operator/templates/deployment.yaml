@@ -19,6 +19,9 @@ spec:
       labels:
         {{- include "labels.selector" . | nindent 8 }}
     spec:
+{{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+{{- end }}
       restartPolicy: Always
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
