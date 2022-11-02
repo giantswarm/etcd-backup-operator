@@ -42,9 +42,6 @@
         "etcdEndpoints": {
             "type": "string"
         },
-        "skipManagementClusterBackup": {
-            "type": "boolean"
-        },
         "image": {
             "type": "object",
             "properties": {
@@ -79,6 +76,9 @@
                     }
                 }
             }
+        },
+        "priorityClassName": {
+            "type": "string"
         },
         "project": {
             "type": "object",
@@ -128,6 +128,9 @@
                     "type": "integer"
                 }
             }
+        },
+        "skipManagementClusterBackup": {
+            "type": "boolean"
         },
         "testingEnvironment": {
             "type": "boolean"
