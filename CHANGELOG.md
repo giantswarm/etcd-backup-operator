@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Added option to set pod's `priorityClassName`.
+- Use `github.com/nats-io/nats-server` version `v2.9.3` and `golang.org/x/text` version `v0.3.8` to avoid vulnerabilities.
+
 ### Fixed
 
 - `etcd-backup-operator` is now compatible with Kubernetes Versions >= `v1.24`
