@@ -49,8 +49,10 @@ func (r *Resource) doV3Backup(ctx context.Context, etcdInstance giantnetes.ETCDI
 
 		backupper, err := etcd.NewV3Backup(etcdSettings.TLSConfig, etcdSettings.Proxy, r.encryptionPwd, etcdSettings.Endpoints, r.logger, key.FilenamePrefix(r.installation, instanceStatus.Name))
 		if err != nil {
-			r.logger.LogCtx(ctx, "level", "error", "message", fmt.Sprintf("Failed to repare v3 backup instance %s", instanceStatus.Name), "reason", microerror.Pretty(err, true))
-			return false
+			r.logger.LogCtx(ctx, "level", "error", "message", fmt.Sprintf("Failed to prepare v3 backup instance %s", instanceStatus.Name), "reason", microerror.Pretty(err, true))
+			instanceStatus.V3.LatestError = err.Error()
+			instanceStatus.V3.Status = instanceBackupStateFailed
+			return true
 		}
 
 		backupAttemptResult, err := r.performBackup(ctx, backupper, instanceStatus.Name)
