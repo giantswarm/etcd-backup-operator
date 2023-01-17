@@ -267,7 +267,7 @@ func (u *Utils) getEtcdEndpoint(ctx context.Context, cluster Cluster) (string, e
 				return "", microerror.Maskf(executionFailedError, "error getting aws crd for guest cluster %#q with error %#q", cluster.clusterKey.Name, err)
 			}
 			if crd.Spec.Cluster.DNS.Domain == "" {
-				return "", microerror.Maskf(executionFailedError, "awscluster %#q does not have and cluster domain set in spec.cluster.dns.domain", cluster.clusterKey.Name)
+				return "", microerror.Maskf(executionFailedError, "awscluster %#q does not have any cluster domain set in spec.cluster.dns.domain", cluster.clusterKey.Name)
 			}
 			etcdEndpoint = AwsCAPIEtcdEndpoint(cluster.clusterKey.Name, crd.Spec.Cluster.DNS.Domain)
 			break
