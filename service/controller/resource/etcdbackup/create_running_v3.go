@@ -52,7 +52,7 @@ func (r *Resource) doV3Backup(ctx context.Context, etcdInstance giantnetes.ETCDI
 			r.logger.LogCtx(ctx, "level", "error", "message", fmt.Sprintf("Failed to prepare v3 backup instance %s", instanceStatus.Name), "reason", microerror.Pretty(err, true))
 			instanceStatus.V3.LatestError = err.Error()
 			instanceStatus.V3.Status = instanceBackupStateFailed
-			return false
+			return true
 		}
 
 		backupAttemptResult, err := r.performBackup(ctx, backupper, instanceStatus.Name)
