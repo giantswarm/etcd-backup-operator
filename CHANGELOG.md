@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Correctly mark a backup task as failed when etcd client can't be initialized.
+- Check cluster domain is set or fail backup early.
 
 ## [4.2.0] - 2023-01-17
 
