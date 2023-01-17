@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.2.0] - 2023-01-17
+
 ### Changed
 
 - Log error reason when the preparation for v3 backup fails.
@@ -216,7 +218,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First release.
 
-[Unreleased]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.1.0...HEAD
+[Unreleased]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.2.0...HEAD
+[4.2.0]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.1.0...v4.2.0
 [4.1.0]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.0.0...v4.1.0
 [4.0.0]: https://github.com/giantswarm/etcd-backup-operator/compare/v3.2.0...v4.0.0
 [3.2.0]: https://github.com/giantswarm/etcd-backup-operator/compare/v3.1.0...v3.2.0
