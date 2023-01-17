@@ -5,7 +5,7 @@ import (
 	"crypto/tls"
 	"fmt"
 	"io"
-	"io/ioutil"
+	"io/ioutil" //nolint
 	"os"
 	"path/filepath"
 	"time"
