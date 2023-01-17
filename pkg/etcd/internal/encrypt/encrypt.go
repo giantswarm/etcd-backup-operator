@@ -2,7 +2,7 @@ package encrypt
 
 import (
 	"bytes"
-	"io/ioutil"
+	"io/ioutil" //nolint
 	"os"
 
 	"github.com/giantswarm/microerror"

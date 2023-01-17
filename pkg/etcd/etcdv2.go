@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io/ioutil" //nolint
 	"os"
 	"path/filepath"
 	"time"

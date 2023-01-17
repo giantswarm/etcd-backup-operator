@@ -5,7 +5,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
-	"io/ioutil"
+	"io/ioutil" //nolint
 
 	backupv1alpha1 "github.com/giantswarm/apiextensions-backup/api/v1alpha1"
 	"github.com/giantswarm/microerror"
