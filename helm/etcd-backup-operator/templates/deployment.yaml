@@ -22,6 +22,10 @@ spec:
 {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
 {{- end }}
+      securityContext:
+        {{- with .Values.podSecurityContext }}
+          {{- . | toYaml | nindent 8 }}
+        {{- end }}
       restartPolicy: Always
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
@@ -98,6 +102,10 @@ spec:
             port: {{ .Values.service.port }}
           initialDelaySeconds: 30
           timeoutSeconds: 1
+        securityContext:
+          {{- with .Values.securityContext }}
+            {{- . | toYaml | nindent 10 }}
+          {{- end }}
         resources:
           requests:
             cpu: 100m
