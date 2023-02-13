@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added the use of the runtime/default seccomp profile.
-- Added option to set `etcdBackupPassphrase` which enables encryption of the backup.
+- Added option to set `etcdBackupEncryptionPassword` which enables encryption of the backup.
 
 ## [4.2.1] - 2023-01-17
 

@@ -91,11 +91,11 @@ spec:
               secretKeyRef:
                 name: {{ include "resource.default.name" . }}
                 key: ETCDBACKUP_AWS_SECRET_KEY
-          - name: ETCDBACKUP_PASSPHRASE
+          - name: ENCRYPTION_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: {{ include "resource.default.name" . }}
-                key: ETCDBACKUP_PASSPHRASE
+                key: ETCDBACKUP_ENCRYPTION_PASSWORD
         livenessProbe:
           httpGet:
             path: /healthz
