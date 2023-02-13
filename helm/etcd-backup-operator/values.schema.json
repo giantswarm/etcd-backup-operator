@@ -168,6 +168,9 @@
                     "type": "boolean"
                 }
             }
+        },
+        "etcdBackupPassphrase": {
+            "type": "string"
         }
     }
 }

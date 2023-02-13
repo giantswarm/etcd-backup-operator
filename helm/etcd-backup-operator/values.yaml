@@ -58,3 +58,6 @@ podSecurityContext:
 securityContext:
   seccompProfile:
     type: RuntimeDefault
+
+# Set a passphrase to enable encryption
+etcdBackupPassphrase: ""
