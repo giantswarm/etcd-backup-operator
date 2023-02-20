@@ -36,6 +36,9 @@
         "clientKeyFileName": {
             "type": "string"
         },
+        "etcdBackupEncryptionPassword": {
+            "type": "string"
+        },
         "etcdDataDir": {
             "type": "string"
         },
