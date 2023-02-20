@@ -7,11 +7,11 @@ require (
 	github.com/coreos/go-semver v0.3.0
 	github.com/dlclark/regexp2 v1.7.0
 	github.com/giantswarm/apiextensions-backup v0.2.1
-	github.com/giantswarm/apiextensions/v6 v6.4.0
+	github.com/giantswarm/apiextensions/v6 v6.5.0
 	github.com/giantswarm/backoff v1.0.0
 	github.com/giantswarm/exporterkit v1.0.0
 	github.com/giantswarm/k8sclient/v7 v7.0.1
-	github.com/giantswarm/k8smetadata v0.12.0
+	github.com/giantswarm/k8smetadata v0.20.0
 	github.com/giantswarm/microendpoint v1.0.0
 	github.com/giantswarm/microerror v0.4.0
 	github.com/giantswarm/microkit v1.0.0
