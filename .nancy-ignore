@@ -1,13 +1,13 @@
 # Consul - no fix yet
-CVE-2022-29153 until=2023-02-01
-CVE-2022-24687 until=2023-02-01
-CVE-2021-23772 until=2023-02-01
-sonatype-2021-1485 until=2023-02-01
-sonatype-2021-0276 until=2023-02-01
+CVE-2022-29153 until=2024-02-01
+CVE-2022-24687 until=2024-02-01
+CVE-2021-23772 until=2024-02-01
+sonatype-2021-1485 until=2024-02-01
+sonatype-2021-0276 until=2024-02-01
 
 # Hashicorp consul /api and /sdk are no longer intended for public use and don't have newer tags.
 # Waiting for direct dependencies to move away from them.
-CVE-2021-41803 until=2023-12-03
-sonatype-2022-0204 until=2023-02-01
+CVE-2021-41803 until=2024-12-03
+sonatype-2022-0204 until=2024-02-01
 
-sonatype-2022-6522  until=2023-02-01
+sonatype-2022-6522  until=2024-02-01
