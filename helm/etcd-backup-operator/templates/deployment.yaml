@@ -34,7 +34,7 @@ spec:
         - key: node-role.kubernetes.io/master
           operator: Exists
           effect: NoSchedule      
-{{- if semverCompare ">=1.24-0" .Capabilities.KubeVersion.GitVersion }}
+{{- if semverCompare ">=1.24.0" .Capabilities.KubeVersion.Version }}
         # Tolerate control-plane taint
         - key: node-role.kubernetes.io/control-plane
           operator: Exists
@@ -47,7 +47,7 @@ spec:
         # to etcd data directory. To achive that,
         # mount /var/lib/etcd3 as a volume.
       nodeSelector:
-{{- if semverCompare ">=1.24-0" .Capabilities.KubeVersion.GitVersion }}
+{{- if semverCompare ">=1.24.0" .Capabilities.KubeVersion.Version }}
         node-role.kubernetes.io/control-plane: ""
 {{- else }}
         node-role.kubernetes.io/master: ""
