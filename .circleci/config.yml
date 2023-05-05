@@ -100,21 +100,6 @@ workflows:
               only: /^v.*/
 
       - architect/push-to-app-collection:
-          context: "architect"
-          name: push-etcd-backup-operator-to-openstack-app-collection
-          app_name: "etcd-backup-operator"
-          app_collection_repo: "openstack-app-collection"
-          requires:
-            - push-etcd-backup-operator-to-control-plane-app-catalog
-          filters:
-            # Do not trigger the job on commit.
-            branches:
-              ignore: /.*/
-            # Trigger the job also on git tag.
-            tags:
-              only: /^v.*/
-
-      - architect/push-to-app-collection:
           context: architect
           name: push-to-cloud-director-app-collection
           app_name: "etcd-backup-operator"
