@@ -1,0 +1,29 @@
+apiVersion: kyverno.io/v2alpha1
+kind: PolicyException
+metadata:
+  name: {{ include "resource.default.name" . }}-exceptions
+  namespace: {{ include "resource.default.name" . }}
+spec:
+  exceptions:
+  - policyName: disallow-host-namespaces
+    ruleNames:
+    - host-namespaces 
+    - autogen-host-namespaces
+  - policyName: disallow-host-path
+    ruleNames:
+    - host-path
+    - autogen-host-path
+  - policyName: restrict-volume-types
+    ruleNames:
+    - restricted-volumes
+    - autogen-restricted-volumes
+  match:
+    any:
+    - resources:
+        kinds:
+        - Deployment
+        - Pod
+        namespaces:
+        - {{ include "resource.default.namespace" . }}
+        names:
+        - {{ include "resource.default.name" . }}*
