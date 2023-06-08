@@ -90,10 +90,6 @@
                             "type": "string"
                         }
                     }
-                },
-                "runAsNonRoot": {
-                    "type": "boolean",
-                    "default": true
                 }
             }
         },

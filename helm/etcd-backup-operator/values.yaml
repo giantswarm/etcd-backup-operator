@@ -51,7 +51,6 @@ priorityClassName: "giantswarm-critical"
 
 # Add seccomp to pod security context
 podSecurityContext:
-  runAsNonRoot: true
   seccompProfile:
     type: RuntimeDefault
 

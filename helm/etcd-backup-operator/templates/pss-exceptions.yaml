@@ -17,6 +17,10 @@ spec:
     ruleNames:
     - restricted-volumes
     - autogen-restricted-volumes
+  - policyName: require-run-as-nonroot 
+    ruleNames:
+    - run-as-non-root 
+    - autogen-run-as-non-root
   match:
     any:
     - resources:
