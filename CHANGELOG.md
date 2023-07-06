@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added required values for pss policies.
+- Added pss exceptions for volumes and ports.
+
 ### Removed
 
 - Stop pushing to `openstack-app-collection`.
