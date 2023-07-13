@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.4.0] - 2023-07-13
+
+### Added
+
+- Added required values for pss policies.
+- Added pss exceptions for volumes and ports.
+
 ### Removed
 
 - Stop pushing to `openstack-app-collection`.
@@ -242,7 +249,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First release.
 
-[Unreleased]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.3.1...HEAD
+[Unreleased]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.4.0...HEAD
+[4.4.0]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.3.1...v4.4.0
 [4.3.1]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.3.0...v4.3.1
 [4.3.0]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.2.1...v4.3.0
 [4.2.1]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.2.0...v4.2.1
