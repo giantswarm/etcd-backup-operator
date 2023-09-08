@@ -3,7 +3,7 @@ module github.com/giantswarm/etcd-backup-operator/v4
 go 1.18
 
 require (
-	github.com/aws/aws-sdk-go v1.45.4
+	github.com/aws/aws-sdk-go v1.45.6
 	github.com/coreos/go-semver v0.3.1
 	github.com/dlclark/regexp2 v1.10.0
 	github.com/giantswarm/apiextensions-backup v0.2.1
