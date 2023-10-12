@@ -1,6 +1,8 @@
 apiVersion: kyverno.io/v2alpha1
 kind: PolicyException
 metadata:
+  annotations:
+    "helm.sh/hook": "pre-install,pre-upgrade"
   name: {{ include "resource.default.name" . }}-exceptions
   namespace: {{ include "resource.default.namespace" . }}
 spec:

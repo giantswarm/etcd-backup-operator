@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Add helm hook annotations to PolicyExceptions CRs.
 - Update `golang.org/x/net` package to `v0.13.0`.
 - Update `google.golang.org/grpc` package to `v1.57.0`.
 
