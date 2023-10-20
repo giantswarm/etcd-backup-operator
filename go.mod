@@ -23,7 +23,7 @@ require (
 	github.com/prometheus/client_golang v1.16.0
 	github.com/spf13/viper v1.16.0
 	go.etcd.io/etcd/client/v3 v3.5.9
-	golang.org/x/crypto v0.13.0
+	golang.org/x/crypto v0.14.0
 	google.golang.org/grpc v1.58.1
 	k8s.io/api v0.24.1
 	k8s.io/apimachinery v0.24.1
@@ -103,8 +103,8 @@ require (
 	golang.org/x/net v0.13.0 // indirect
 	golang.org/x/oauth2 v0.10.0 // indirect
 	golang.org/x/sync v0.3.0 // indirect
-	golang.org/x/sys v0.12.0 // indirect
-	golang.org/x/term v0.12.0 // indirect
+	golang.org/x/sys v0.13.0 // indirect
+	golang.org/x/term v0.13.0 // indirect
 	golang.org/x/text v0.13.0 // indirect
 	golang.org/x/time v0.1.0 // indirect
 	gomodules.xyz/jsonpatch/v2 v2.2.0 // indirect
@@ -140,6 +140,7 @@ replace (
 	github.com/nats-io/nats-server/v2 v2.5.0 => github.com/nats-io/nats-server/v2 v2.9.3
 
 	github.com/valyala/fasthttp v1.6.0 => github.com/valyala/fasthttp v1.38.0
+	golang.org/x/net => golang.org/x/net v0.17.0
 	golang.org/x/text v0.3.7 => golang.org/x/text v0.3.8
 	sigs.k8s.io/cluster-api => sigs.k8s.io/cluster-api v1.0.4
 )
