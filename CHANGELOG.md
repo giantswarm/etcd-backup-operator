@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Add PolicyException to `etcd-backup-operator-scheduler`.
+
 ## [4.4.1] - 2023-10-23
 
 ### Changed
