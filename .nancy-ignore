@@ -19,3 +19,4 @@ CVE-2023-29401
 
 # golang/google.golang.org/grpc@v1.49.0
 CVE-2023-32731 until=2023-07-30
+CVE-2023-47090 until=2024-02-04 # github.com/nats-io/nats-server/v2@v2.9.3
