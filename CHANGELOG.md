@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.4.2] - 2023-11-06
+
 - Add PolicyException to `etcd-backup-operator-scheduler`.
 
 ## [4.4.1] - 2023-10-23
@@ -259,7 +261,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First release.
 
-[Unreleased]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.4.1...HEAD
+[Unreleased]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.4.2...HEAD
+[4.4.2]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.4.1...v4.4.2
 [4.4.1]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.4.0...v4.4.1
 [4.4.0]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.3.1...v4.4.0
 [4.3.1]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.3.0...v4.3.1
