@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.4.3] - 2023-11-23
 
+### Changed
+
+- Set 50m min cpu in VPA
+
 ## [4.4.2] - 2023-11-06
 
 - Add PolicyException to `etcd-backup-operator-scheduler`.
