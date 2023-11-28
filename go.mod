@@ -22,7 +22,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.16.0
 	github.com/spf13/viper v1.16.0
-	go.etcd.io/etcd/client/v3 v3.5.9
+	go.etcd.io/etcd/client/v3 v3.5.10
 	golang.org/x/crypto v0.16.0
 	google.golang.org/grpc v1.59.0
 	k8s.io/api v0.24.1
@@ -95,8 +95,8 @@ require (
 	github.com/subosito/gotenv v1.4.2 // indirect
 	github.com/ulikunitz/xz v0.5.10 // indirect
 	github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8 // indirect
-	go.etcd.io/etcd/api/v3 v3.5.9 // indirect
-	go.etcd.io/etcd/client/pkg/v3 v3.5.9 // indirect
+	go.etcd.io/etcd/api/v3 v3.5.10 // indirect
+	go.etcd.io/etcd/client/pkg/v3 v3.5.10 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
 	go.uber.org/zap v1.21.0 // indirect
