@@ -294,9 +294,7 @@ func (u *Utils) getEtcdEndpoint(ctx context.Context, cluster Cluster) (string, e
 		}
 	case CAPI:
 		{
-			// for CAPI endpoint we need to fetch workload cluster k8s client and look for controlplane nodes
-			var nodeList v1.NodeList
-
+			// for CAPI endpoint we need to fetch workload cluster k8s client and look for etcd pods
 			targetClusterRESTConfig, err := key.RESTConfig(ctx, crdClient, cluster.clusterKey)
 			if err != nil {
 				return "", microerror.Maskf(executionFailedError, "error fetching CAPI cluster rest config for cluster  %#q with error %#q", cluster.clusterKey.Name, err)
@@ -307,18 +305,21 @@ func (u *Utils) getEtcdEndpoint(ctx context.Context, cluster Cluster) (string, e
 				return "", microerror.Maskf(executionFailedError, "error creating CAPI cluster kubernetes client for cluster  %#q with error %#q", cluster.clusterKey.Name, err)
 			}
 
-			err = targetCtrlClient.List(ctx, &nodeList, ctrl.HasLabels{LabelCAPIControlPlaneNode})
+			// Specify the label for etcd pods
+			labelSelector := client.MatchingLabels(map[string]string{EtcdLabelComponent: EtcdLabelValue})
+
+			// List pods with the specified label
+			podList := v1.PodList{}
+			err = targetCtrlClient.List(ctx, &podList, labelSelector)
 			if err != nil {
 				return "", microerror.Maskf(executionFailedError, "error creating CAPI cluster kubernetes client for cluster  %#q with error %#q", cluster.clusterKey.Name, err)
 			}
 
-			if len(nodeList.Items) == 0 {
-				return "", microerror.Maskf(executionFailedError, "error getting etcd endpoint , no control plane nodes found,  cluster  %#q with error %#q", cluster.clusterKey.Name, err)
+			if len(podList.Items) == 0 {
+				return "", microerror.Maskf(executionFailedError, "error getting etcd endpoint, no etcd pods found in cluster  %#q with error %#q", cluster.clusterKey.Name, err)
 			}
 
-			nodeName := nodeList.Items[0].Name
-
-			etcdEndpoint = CAPIEtcdEndpoint(componentETCD, nodeName)
+			etcdEndpoint = podList.Items[0].Name
 			break
 		}
 	}
