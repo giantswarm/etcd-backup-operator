@@ -38,7 +38,7 @@ func NewV3Backup(tlsConfig *tls.Config, p *proxy.Proxy, encPass string, endpoint
 
 	etcdClient, err := createEtcdV3Client(endpoints, tlsConfig, p)
 	if err != nil {
-		return V3Backup{}, err
+		return V3Backup{}, microerror.Mask(err)
 	}
 
 	return V3Backup{
@@ -70,17 +70,13 @@ func createEtcdV3Client(endpoint string, tlsConfig *tls.Config, p *proxy.Proxy) 
 
 	c, err := clientv3.New(clientv3.Config{
 		Endpoints:   []string{endpoint},
-		DialTimeout: time.Second * 90,
+		DialTimeout: time.Second * 60,
 		DialOptions: dialOpt,
 		TLS:         tlsConfig,
 	})
 
 	if err != nil {
-		fmt.Printf("%s: Failed to create etcd client", time.Now())
-		fmt.Println("tlsConfig", &tlsConfig)
-		fmt.Println("dialOpt", dialOpt)
-		fmt.Println("endpoint", endpoint)
-		return nil, err
+		return nil, microerror.Mask(err)
 	}
 
 	return c, nil
