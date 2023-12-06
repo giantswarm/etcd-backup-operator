@@ -306,7 +306,7 @@ func (u *Utils) getEtcdEndpoint(ctx context.Context, cluster Cluster) (string, e
 			}
 
 			// Specify the label for etcd pods
-			labelSelector := client.MatchingLabels(map[string]string{EtcdLabelComponent: EtcdLabelValue})
+			labelSelector := client.MatchingLabels(map[string]string{EtcdLabelComponentKey: EtcdLabelComponentValue, EtcdLabelTierKey: EtcdLabelTierValue})
 
 			// List pods with the specified label
 			podList := v1.PodList{}

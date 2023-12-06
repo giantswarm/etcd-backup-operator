@@ -15,8 +15,10 @@ const (
 )
 
 const (
-	EtcdLabelComponent = "component"
-	EtcdLabelValue     = "etcd"
+	EtcdLabelComponentKey   = "component"
+	EtcdLabelComponentValue = "etcd"
+	EtcdLabelTierKey        = "tier"
+	EtcdLabelTierValue      = "control-plane"
 )
 
 var azureSupportFrom *semver.Version = semver.Must(semver.NewVersion("0.2.0"))
