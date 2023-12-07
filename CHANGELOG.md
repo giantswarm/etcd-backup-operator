@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Refactor how we get etcd endpoints in CAPI clusters.
+- Packages updates.
+
 ## [4.4.3] - 2023-11-23
 
 ### Changed
