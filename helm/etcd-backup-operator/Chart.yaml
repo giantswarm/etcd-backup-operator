@@ -5,5 +5,5 @@ home: "https://github.com/giantswarm/etcd-backup-operator"
 version: "[[ .Version ]]"
 appVersion: "[[ .AppVersion ]]"
 annotations:
-  application.giantswarm.io/team: "phoenix"
+  application.giantswarm.io/team: team-turtles
   config.giantswarm.io/version: 1.x.x
