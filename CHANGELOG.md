@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.4.4] - 2023-12-07
+
 ### Changed
 
 - Refactor how we get etcd endpoints in CAPI clusters.
@@ -272,7 +274,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First release.
 
-[Unreleased]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.4.3...HEAD
+[Unreleased]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.4.4...HEAD
+[4.4.4]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.4.3...v4.4.4
 [4.4.3]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.4.2...v4.4.3
 [4.4.2]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.4.1...v4.4.2
 [4.4.1]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.4.0...v4.4.1
