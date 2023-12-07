@@ -15,9 +15,10 @@ const (
 )
 
 const (
-	componentETCD = "etcd"
-
-	LabelCAPIControlPlaneNode = "node-role.kubernetes.io/control-plane=''"
+	EtcdLabelComponentKey   = "component"
+	EtcdLabelComponentValue = "etcd"
+	EtcdLabelTierKey        = "tier"
+	EtcdLabelTierValue      = "control-plane"
 )
 
 var azureSupportFrom *semver.Version = semver.Must(semver.NewVersion("0.2.0"))
@@ -32,8 +33,4 @@ func AzureEtcdEndpoint(etcdDomain string) string {
 
 func KVMEtcdEndpoint(etcdDomain string) string {
 	return fmt.Sprintf("https://%s:443", etcdDomain)
-}
-
-func CAPIEtcdEndpoint(component string, nodeName string) string {
-	return fmt.Sprintf("%s-%s", component, nodeName)
 }
