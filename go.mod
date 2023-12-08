@@ -5,7 +5,7 @@ go 1.21
 toolchain go1.21.4
 
 require (
-	github.com/aws/aws-sdk-go v1.48.15
+	github.com/aws/aws-sdk-go v1.48.16
 	github.com/coreos/go-semver v0.3.1
 	github.com/dlclark/regexp2 v1.10.0
 	github.com/giantswarm/apiextensions-backup v0.2.1
