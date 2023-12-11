@@ -5,7 +5,7 @@ go 1.21
 toolchain go1.21.4
 
 require (
-	github.com/aws/aws-sdk-go v1.48.14
+	github.com/aws/aws-sdk-go v1.48.16
 	github.com/coreos/go-semver v0.3.1
 	github.com/dlclark/regexp2 v1.10.0
 	github.com/giantswarm/apiextensions-backup v0.2.1
@@ -23,7 +23,7 @@ require (
 	github.com/mholt/archiver/v3 v3.5.1
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.17.0
-	github.com/spf13/viper v1.18.0
+	github.com/spf13/viper v1.18.1
 	go.etcd.io/etcd/client/v3 v3.5.11
 	golang.org/x/crypto v0.16.0
 	google.golang.org/grpc v1.59.0
