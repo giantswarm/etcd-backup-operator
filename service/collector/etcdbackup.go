@@ -11,6 +11,7 @@ import (
 	"github.com/giantswarm/microerror"
 	"github.com/giantswarm/micrologger"
 	"github.com/prometheus/client_golang/prometheus"
+	capi "sigs.k8s.io/cluster-api/api/v1beta1"
 
 	"github.com/giantswarm/etcd-backup-operator/v4/service/controller/key"
 )
@@ -290,6 +291,20 @@ func (d *ETCDBackup) getTenantClusterIDs(ctx context.Context) ([]string, error) 
 				// Only backup cluster if it was not marked for delete.
 				if kvmConfig.ObjectMeta.DeletionTimestamp.IsZero() {
 					ret = append(ret, kvmConfig.Name)
+				}
+			}
+		}
+	}
+
+	// CAPI
+	{
+		crdList := capi.ClusterList{}
+		err := crdClient.List(ctx, &crdList)
+		if err == nil {
+			for _, cluster := range crdList.Items {
+				// Only backup cluster if it was not marked for delete.
+				if cluster.DeletionTimestamp == nil {
+					ret = append(ret, cluster.Name)
 				}
 			}
 		}

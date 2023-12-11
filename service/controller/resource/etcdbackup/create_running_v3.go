@@ -71,7 +71,7 @@ func (r *Resource) doV3Backup(ctx context.Context, etcdInstance giantnetes.ETCDI
 			instanceStatus.V3.Status = instanceBackupStateFailed
 		}
 	} else {
-		r.logger.LogCtx(ctx, "level", "info", "message", fmt.Sprintf("V3 backup skipped for %s because ETCD V2 setting are not set.", instanceStatus.Name))
+		r.logger.LogCtx(ctx, "level", "info", "message", fmt.Sprintf("V3 backup skipped for %s because ETCD V3 settings are not set.", instanceStatus.Name))
 		instanceStatus.V3.Status = instanceBackupStateSkipped
 	}
 
