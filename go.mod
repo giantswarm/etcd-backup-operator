@@ -26,7 +26,7 @@ require (
 	github.com/spf13/viper v1.18.1
 	go.etcd.io/etcd/client/v3 v3.5.11
 	golang.org/x/crypto v0.16.0
-	google.golang.org/grpc v1.59.0
+	google.golang.org/grpc v1.60.0
 	k8s.io/api v0.28.3
 	k8s.io/apimachinery v0.28.3
 	k8s.io/client-go v0.28.3
