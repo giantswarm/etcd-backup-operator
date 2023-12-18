@@ -13,7 +13,7 @@ project:
   commit: "[[ .SHA ]]"
 
 registry:
-  domain: docker.io
+  domain: gsoci.azurecr.io
 
 testingEnvironment: false
 provider:
@@ -61,7 +61,7 @@ securityContext:
     type: RuntimeDefault
   capabilities:
     drop:
-    - ALL
+      - ALL
 
 # Set a password to enable backup encryption
 etcdBackupEncryptionPassword: ""

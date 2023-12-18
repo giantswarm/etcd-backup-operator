@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Configure `gsoci.azurecr.io` as the default container image registry.
+
 ## [4.4.6] - 2023-12-11
 
 ## [4.4.5] - 2023-12-07
@@ -21,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Refactor how we get etcd endpoints in CAPI clusters.
 - Packages updates.
+
 
 ## [4.4.3] - 2023-11-23
 
