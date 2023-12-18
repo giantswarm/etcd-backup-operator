@@ -11,6 +11,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Configure `gsoci.azurecr.io` as the default container image registry.
 
+## [4.4.6] - 2023-12-11
+
+## [4.4.5] - 2023-12-07
+
+### Changed
+
+- Changed ownership to team-turtles.
+
+## [4.4.4] - 2023-12-07
+
+### Changed
+
+- Refactor how we get etcd endpoints in CAPI clusters.
+- Packages updates.
+
+
 ## [4.4.3] - 2023-11-23
 
 ### Changed
@@ -271,7 +287,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First release.
 
-[Unreleased]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.4.3...HEAD
+[Unreleased]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.4.6...HEAD
+[4.4.6]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.4.5...v4.4.6
+[4.4.5]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.4.4...v4.4.5
+[4.4.4]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.4.3...v4.4.4
 [4.4.3]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.4.2...v4.4.3
 [4.4.2]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.4.1...v4.4.2
 [4.4.1]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.4.0...v4.4.1
