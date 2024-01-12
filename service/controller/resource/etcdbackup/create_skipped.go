@@ -16,7 +16,7 @@ func (r *Resource) backupSkippedTransition(ctx context.Context, obj interface{},
 		return "", microerror.Mask(err)
 	}
 
-	err = r.cleanup(ctx, customObject)
+	err = r.cleanupSkippedCR(ctx, customObject)
 	if err != nil {
 		return "", microerror.Mask(err)
 	}
