@@ -6,7 +6,6 @@ import (
 	"path/filepath"
 	"time"
 
-	backupv1alpha1 "github.com/giantswarm/apiextensions-backup/api/v1alpha1"
 	"github.com/giantswarm/backoff"
 	"github.com/giantswarm/microerror"
 
@@ -47,24 +46,6 @@ func (r *Resource) performBackup(ctx context.Context, backupper etcd.Backupper, 
 func (r *Resource) backupAttempt(ctx context.Context, b etcd.Backupper) (*metrics.BackupAttemptResult, error) {
 	var err error
 	version := b.Version()
-
-	backups := backupv1alpha1.ETCDBackupList{}
-	err = r.k8sClient.CtrlClient().List(ctx, &backups)
-	if err != nil {
-		return nil, microerror.Mask(err)
-	}
-
-	var latestBackup backupv1alpha1.ETCDBackup
-	for _, backup := range backups.Items {
-		if latestBackup.Name < backup.Name {
-			latestBackup = backup
-		}
-	}
-
-	if latestBackup.Status.FinishedTimestamp.IsZero() {
-		r.logger.LogCtx(ctx, "level", "debug", "message", "Backup is already running, skipping")
-		return metrics.NewSkippedBackupAttemptResult(latestBackup.Status.StartedTimestamp.UnixMilli()), nil
-	}
 
 	r.logger.LogCtx(ctx, "level", "debug", "message", "Creating backup file")
 	start := time.Now()
