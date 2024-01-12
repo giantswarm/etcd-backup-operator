@@ -48,7 +48,7 @@ func (r *Resource) backupAttempt(ctx context.Context, b etcd.Backupper) (*metric
 	var err error
 	version := b.Version()
 
-	// List all etcdbackup CRs in the same namespace
+	// List all etcdbackup CRs
 	backups := backupv1alpha1.ETCDBackupList{}
 	err = r.k8sClient.CtrlClient().List(ctx, &backups)
 	if err != nil {
