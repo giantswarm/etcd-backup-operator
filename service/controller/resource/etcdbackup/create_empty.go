@@ -34,7 +34,7 @@ func (r *Resource) backupEmptyTransition(ctx context.Context, obj interface{}, c
 	}
 
 	if cr.Name != latestBackup.Name {
-		r.logger.LogCtx(ctx, "level", "debug", "message", "backup is not the latest, skipping")
+		r.logger.LogCtx(ctx, "level", "debug", "message", "backup object is not the latest one, skipping...")
 		return backupStateSkipped, nil
 	}
 
