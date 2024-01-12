@@ -20,6 +20,17 @@ func NewSuccessfulBackupAttemptResult(backupSize int64, creationTime int64, encr
 	}
 }
 
+func NewSkippedBackupAttemptResult(creationTime int64) *BackupAttemptResult {
+	return &BackupAttemptResult{
+		Successful:                false,
+		BackupSizeMeasurement:     -1,
+		CreationTimeMeasurement:   creationTime,
+		EncryptionTimeMeasurement: -1,
+		UploadTimeMeasurement:     -1,
+		Filename:                  "",
+	}
+}
+
 func NewFailedBackupAttemptResult() *BackupAttemptResult {
 	return &BackupAttemptResult{
 		Successful:                false,
