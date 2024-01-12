@@ -17,13 +17,13 @@ func (r *Resource) backupEmptyTransition(ctx context.Context, obj interface{}, c
 
 	cr, ok := obj.(*backupv1alpha1.ETCDBackup)
 	if !ok {
-		return instanceBackupStateFailed, microerror.Mask(fmt.Errorf("expected v1alpha1.EtcdBackup, got %T", obj))
+		return "", microerror.Mask(fmt.Errorf("expected v1alpha1.EtcdBackup, got %T", obj))
 	}
 
 	backups := backupv1alpha1.ETCDBackupList{}
 	err = r.k8sClient.CtrlClient().List(ctx, &backups)
 	if err != nil {
-		return instanceBackupStateSkipped, microerror.Mask(err)
+		return "", microerror.Mask(err)
 	}
 
 	var latestBackup backupv1alpha1.ETCDBackup
@@ -35,12 +35,7 @@ func (r *Resource) backupEmptyTransition(ctx context.Context, obj interface{}, c
 
 	if cr.Name != latestBackup.Name {
 		r.logger.LogCtx(ctx, "level", "debug", "message", "Backup is not the latest, skipping")
-		return instanceBackupStateSkipped, nil
-	}
-
-	if latestBackup.Status.FinishedTimestamp.IsZero() {
-		r.logger.LogCtx(ctx, "level", "debug", "message", "Backup is already running, skipping")
-		return instanceBackupStateSkipped, nil
+		return backupStateSkipped, nil
 	}
 
 	return backupStatePending, nil
