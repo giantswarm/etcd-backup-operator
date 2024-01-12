@@ -5,8 +5,9 @@ import (
 	"fmt"
 
 	backupv1alpha1 "github.com/giantswarm/apiextensions-backup/api/v1alpha1"
-	"github.com/giantswarm/etcd-backup-operator/v4/service/controller/resource/etcdbackup/internal/state"
 	"github.com/giantswarm/microerror"
+
+	"github.com/giantswarm/etcd-backup-operator/v4/service/controller/resource/etcdbackup/internal/state"
 )
 
 // Sets the initial state.
