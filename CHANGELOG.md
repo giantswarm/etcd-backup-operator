@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Skip reconciling etcdbackup CR's if a newer one is pending.
 - Configure `gsoci.azurecr.io` as the default container image registry.
 
 ## [4.4.6] - 2023-12-11
