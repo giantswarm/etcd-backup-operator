@@ -28,7 +28,7 @@ func (r *Resource) backupEmptyTransition(ctx context.Context, obj interface{}, c
 
 	var latestBackup backupv1alpha1.ETCDBackup
 	for _, backup := range backups.Items {
-		if latestBackup.Name < backup.Name {
+		if latestBackup.CreationTimestamp.Time.Before(backup.CreationTimestamp.Time) {
 			latestBackup = backup
 		}
 	}
