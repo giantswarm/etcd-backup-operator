@@ -21,6 +21,7 @@ const (
 	backupStateRunningV3BackupCompleted = "V3BackupCompleted"
 	backupStateCompleted                = "Completed"
 	backupStateFailed                   = "Failed"
+	backupStateSkipped                  = "Skipped"
 
 	// Instance States.
 	instanceBackupStatePending   = "Pending"
@@ -33,7 +34,8 @@ const (
 	maxBackupAttempts = int8(3)
 
 	// Default values.
-	crKeepTimeoutSeconds = 7 * 24 * 60 * 60
+	crKeepTimeoutSeconds        = 7 * 24 * 60 * 60
+	crSkippedKeepTimeoutSeconds = 60 * 60
 )
 
 // configureStateMachine configures and returns state machine that is driven by
@@ -48,6 +50,7 @@ func (r *Resource) configureStateMachine() {
 		backupStateRunningV3BackupCompleted: r.backupRunningV3BackupCompletedTransition,
 		backupStateCompleted:                r.backupCompletedTransition,
 		backupStateFailed:                   r.backupFailedTransition,
+		backupStateSkipped:                  r.backupSkippedTransition,
 	}
 
 	r.stateMachine = sm
