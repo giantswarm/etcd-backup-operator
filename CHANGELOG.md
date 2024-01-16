@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.5.0] - 2024-01-16
+
 ### Changed
 
 - Skip reconciling etcdbackup CR's if a newer one is pending.
@@ -288,7 +290,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First release.
 
-[Unreleased]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.4.6...HEAD
+[Unreleased]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.5.0...HEAD
+[4.5.0]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.4.6...v4.5.0
 [4.4.6]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.4.5...v4.4.6
 [4.4.5]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.4.4...v4.4.5
 [4.4.4]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.4.3...v4.4.4
