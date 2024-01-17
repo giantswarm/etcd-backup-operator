@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Opt-out PSP for Kubernetes v1.25.
+
 ## [4.5.0] - 2024-01-16
 
 ### Changed
