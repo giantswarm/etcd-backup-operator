@@ -65,3 +65,7 @@ securityContext:
 
 # Set a password to enable backup encryption
 etcdBackupEncryptionPassword: ""
+
+global:
+  podSecurityStandards:
+    enforced: false
