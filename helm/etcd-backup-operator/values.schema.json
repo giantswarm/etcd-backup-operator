@@ -45,6 +45,19 @@
         "etcdEndpoints": {
             "type": "string"
         },
+        "global": {
+            "type": "object",
+            "properties": {
+                "podSecurityStandards": {
+                    "type": "object",
+                    "properties": {
+                        "enforced": {
+                            "type": "boolean"
+                        }
+                    }
+                }
+            }
+        },
         "image": {
             "type": "object",
             "properties": {
@@ -144,15 +157,7 @@
                     "type": "boolean",
                     "default": false
                 },
-                "seccompProfile": {
-                    "type": "object",
-                    "properties": {
-                        "type": {
-                            "type": "string"
-                        }
-                    }
-                },
-                "capabilities":{
+                "capabilities": {
                     "type": "object",
                     "properties": {
                         "drop": {
@@ -161,6 +166,14 @@
                                 "type": "string"
                             },
                             "default": ["ALL"]
+                        }
+                    }
+                },
+                "seccompProfile": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string"
                         }
                     }
                 }
