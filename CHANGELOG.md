@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.6.0] - 2024-01-17
+
 ### Changed
 
 - Opt-out PSP for Kubernetes v1.25.
@@ -294,7 +296,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First release.
 
-[Unreleased]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.5.0...HEAD
+[Unreleased]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.6.0...HEAD
+[4.6.0]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.5.0...v4.6.0
 [4.5.0]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.4.6...v4.5.0
 [4.4.6]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.4.5...v4.4.6
 [4.4.5]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.4.4...v4.4.5
