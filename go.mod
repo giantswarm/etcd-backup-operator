@@ -25,7 +25,7 @@ require (
 	github.com/prometheus/client_golang v1.18.0
 	github.com/spf13/viper v1.18.2
 	go.etcd.io/etcd/client/v3 v3.5.12
-	golang.org/x/crypto v0.19.0
+	golang.org/x/crypto v0.20.0
 	google.golang.org/grpc v1.62.0
 	k8s.io/api v0.28.3
 	k8s.io/apimachinery v0.28.3
@@ -105,7 +105,7 @@ require (
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.25.0 // indirect
 	golang.org/x/exp v0.0.0-20231110203233-9a3e6036ecaa // indirect
-	golang.org/x/net v0.20.0 // indirect
+	golang.org/x/net v0.21.0 // indirect
 	golang.org/x/oauth2 v0.16.0 // indirect
 	golang.org/x/sync v0.6.0 // indirect
 	golang.org/x/sys v0.17.0 // indirect
