@@ -146,6 +146,6 @@ replace (
 	github.com/valyala/fasthttp v1.6.0 => github.com/valyala/fasthttp v1.38.0
 	// Fixes CVE-2023-47108
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.20.0 => go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.46.1
-	golang.org/x/net => golang.org/x/net v0.21.0
+	golang.org/x/net => golang.org/x/net v0.22.0
 	golang.org/x/text v0.3.7 => golang.org/x/text v0.3.8
 )
