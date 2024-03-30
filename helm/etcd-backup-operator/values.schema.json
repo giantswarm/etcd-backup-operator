@@ -106,6 +106,9 @@
                 }
             }
         },
+        "port": {
+            "type": "integer"
+        },
         "priorityClassName": {
             "type": "string"
         },
@@ -176,14 +179,6 @@
                             "type": "string"
                         }
                     }
-                }
-            }
-        },
-        "service": {
-            "type": "object",
-            "properties": {
-                "port": {
-                    "type": "integer"
                 }
             }
         },

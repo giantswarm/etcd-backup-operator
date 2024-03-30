@@ -5,12 +5,9 @@ metadata:
   namespace: {{ include "resource.default.namespace" . }}
   labels:
     {{- include "labels.common" . | nindent 4 }}
-    giantswarm.io/monitoring: "true"
-  annotations:
-    prometheus.io/scrape: "true"
 spec:
   ports:
   - name: metrics
-    port: {{ .Values.service.port }}
+    port: {{ .Values.port }}
   selector:
     {{- include "labels.selector" . | nindent 4 }}

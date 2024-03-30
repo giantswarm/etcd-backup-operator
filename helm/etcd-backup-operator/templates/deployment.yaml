@@ -99,7 +99,7 @@ spec:
         livenessProbe:
           httpGet:
             path: /healthz
-            port: {{ .Values.service.port }}
+            port: {{ .Values.port }}
           initialDelaySeconds: 30
           timeoutSeconds: 1
         securityContext:

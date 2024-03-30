@@ -11,7 +11,7 @@ spec:
       {{- include "labels.selector" . | nindent 6 }}
   ingress:
   - ports:
-    - port: {{ .Values.service.port }}
+    - port: {{ .Values.port }}
       protocol: TCP
   egress:
   - {}

@@ -12,7 +12,7 @@ data:
         debug:
           server: true
       listen:
-        address: "http://0.0.0.0:{{ .Values.service.port }}"
+        address: "http://0.0.0.0:{{ .Values.port }}"
     service:
       kubernetes:
         address: ''
