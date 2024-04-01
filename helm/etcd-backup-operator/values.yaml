@@ -10,7 +10,8 @@ project:
   branch: "[[ .Branch ]]"
   commit: "[[ .SHA ]]"
 
-port: 8050
+service:
+  port: 8050
 
 registry:
   domain: gsoci.azurecr.io
