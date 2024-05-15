@@ -5,7 +5,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
-	"io/ioutil" //nolint
+	"os"
 
 	backupv1alpha1 "github.com/giantswarm/apiextensions-backup/api/v1alpha1"
 	"github.com/giantswarm/microerror"
@@ -63,17 +63,17 @@ func PrepareTLSConfig(caData []byte, crtData []byte, keyData []byte) (*tls.Confi
 }
 
 func TLSConfigFromCertFiles(ca string, cert string, key string) (*tls.Config, error) {
-	caData, err := ioutil.ReadFile(ca)
+	caData, err := os.ReadFile(ca)
 	if err != nil {
 		return nil, microerror.Mask(err)
 	}
 
-	crtData, err := ioutil.ReadFile(cert)
+	crtData, err := os.ReadFile(cert)
 	if err != nil {
 		return nil, microerror.Mask(err)
 	}
 
-	keyData, err := ioutil.ReadFile(key)
+	keyData, err := os.ReadFile(key)
 	if err != nil {
 		return nil, microerror.Mask(err)
 	}

@@ -2,7 +2,6 @@ package encrypt
 
 import (
 	"bytes"
-	"io/ioutil" //nolint
 	"os"
 
 	"github.com/giantswarm/microerror"
@@ -30,7 +29,7 @@ func data(value []byte, pass string) (ciphertext []byte, err error) {
 
 // Encrypts file from srcPath and writes encrypted data to dstPart.
 func File(srcPath string, dstPart string, passphrase string) error {
-	contents, err := ioutil.ReadFile(srcPath)
+	contents, err := os.ReadFile(srcPath)
 	if err != nil {
 		return microerror.Mask(err)
 	}
@@ -40,7 +39,7 @@ func File(srcPath string, dstPart string, passphrase string) error {
 		return microerror.Mask(err)
 	}
 
-	err = ioutil.WriteFile(dstPart, encData, os.FileMode(0600))
+	err = os.WriteFile(dstPart, encData, os.FileMode(0600))
 	if err != nil {
 		return microerror.Mask(err)
 	}

@@ -5,7 +5,6 @@ import (
 	"crypto/tls"
 	"fmt"
 	"io"
-	"io/ioutil" //nolint
 	"os"
 	"path/filepath"
 	"time"
@@ -162,7 +161,7 @@ func (b V3Backup) Version() string {
 
 func (b V3Backup) getTmpDir() string {
 	if len(*b.tmpDir) == 0 {
-		tmpDir, err := ioutil.TempDir("", "")
+		tmpDir, err := os.MkdirTemp("", "")
 		if err != nil {
 			panic(err)
 		}
