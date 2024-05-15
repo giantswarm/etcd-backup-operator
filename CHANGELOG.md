@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Remove deprecated packages and grpc DialOption.
+
 ## [4.7.0] - 2024-04-01
 
 ### Changed

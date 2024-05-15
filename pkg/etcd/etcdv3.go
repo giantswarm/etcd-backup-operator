@@ -5,7 +5,6 @@ import (
 	"crypto/tls"
 	"fmt"
 	"io"
-	"io/ioutil" //nolint
 	"os"
 	"path/filepath"
 	"time"
@@ -54,9 +53,7 @@ func NewV3Backup(tlsConfig *tls.Config, p *proxy.Proxy, encPass string, endpoint
 }
 
 func createEtcdV3Client(endpoint string, tlsConfig *tls.Config, p *proxy.Proxy) (*clientv3.Client, error) {
-	dialOpt := []grpc.DialOption{
-		grpc.WithBlock(), // block until the underlying connection is up
-	}
+	dialOpt := []grpc.DialOption{}
 
 	// add proxy dialer if proxy is not nil
 	if p != nil {
@@ -162,7 +159,7 @@ func (b V3Backup) Version() string {
 
 func (b V3Backup) getTmpDir() string {
 	if len(*b.tmpDir) == 0 {
-		tmpDir, err := ioutil.TempDir("", "")
+		tmpDir, err := os.MkdirTemp("", "")
 		if err != nil {
 			panic(err)
 		}
