@@ -8,7 +8,7 @@ The operator is meant to be run on the CP and can perform both V2 and V3 ETCD ba
 
 ## Branches
 
-- `master`
+- `main`
   - When updated, it triggers a deployment on all installations.
   
 ## Getting Project
