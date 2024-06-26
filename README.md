@@ -1,19 +1,19 @@
-[![CircleCI](https://circleci.com/gh/giantswarm/etcd-backup-operator.svg?&style=shield&circle-token=cfd916d774b98d091010b3cfd102168b77bfc635)](https://circleci.com/gh/giantswarm/etcd-backup-operator)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/giantswarm/etcd-backup-operator.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/giantswarm/etcd-backup-operator)
 
 # etcd-backup-operator
 
 The `etcd-backup-operator` takes backups of ETCD instances on both the control plane and tenant clusters.
 
-The operator is meant to be run on the CP and can perform both V2 and V3 ETCD backups (see https://www.mirantis.com/blog/everything-you-ever-wanted-to-know-about-using-etcd-with-kubernetes-v1-6-but-were-afraid-to-ask/).  
+The operator is meant to be run on the management cluster and can perform both V2 and V3 ETCD backup.
 
 ## Branches
 
 - `main`
-  - When updated, it triggers a deployment on all installations.
+  - When released, it triggers a deployment on all installations.
   
 ## Getting Project
 
-Clone the git repository: https://github.com/giantswarm/etcd-backup-operator.git
+Clone the Git repository: https://github.com/giantswarm/etcd-backup-operator.git
 
 ### How to build
 
@@ -31,6 +31,7 @@ Use `opsctl` the usual way. This project uses the `app` method (`opsctl deploy .
 ## Running
 
 Example command run:
+
 ```
 export AWS_ACCESS_KEY_ID=<S3 access key ID>
 export AWS_SECRET_ACCESS_KEY=<S3 secret access key>
@@ -84,13 +85,12 @@ You can schedule different cron datetimes to different clusters like it is expla
 
 ```yaml
 schedules:
-  - cronjob: 0 */6 * * *
-    clusters: '^(?!<cluster-id>)' #all clusters but the id defined
-  - cronjob: 0 3 * * * *
-    clusters: '<cluster-id>' # only one cluster
+- cronjob: 0 */6 * * *
+  clusters: '^(?!<cluster-id>)' # all clusters but the id defined
+- cronjob: 0 3 * * * *
+  clusters: '<cluster-id>' # only one cluster
 ```
 
 ## License
 
-etcd-backup-operator is under the Apache 2.0 license. See the [LICENSE](LICENSE) file for
-details.
+etcd-backup-operator is under the Apache 2.0 license. See the [LICENSE](LICENSE) file for details.

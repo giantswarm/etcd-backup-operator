@@ -1,14 +1,12 @@
 module github.com/giantswarm/etcd-backup-operator/v4
 
-go 1.21
-
-toolchain go1.22.4
+go 1.22.4
 
 require (
 	github.com/aws/aws-sdk-go v1.54.8
 	github.com/coreos/go-semver v0.3.1
 	github.com/dlclark/regexp2 v1.11.0
-	github.com/giantswarm/apiextensions-backup v0.2.1
+	github.com/giantswarm/apiextensions-backup v0.2.2
 	github.com/giantswarm/apiextensions/v6 v6.6.0
 	github.com/giantswarm/backoff v1.0.1
 	github.com/giantswarm/exporterkit v1.2.0
@@ -133,18 +131,6 @@ require (
 )
 
 replace (
-	github.com/coreos/etcd v3.3.10+incompatible => github.com/coreos/etcd v3.3.25+incompatible
-	github.com/coreos/etcd v3.3.13+incompatible => github.com/coreos/etcd v3.3.25+incompatible
-	github.com/dgrijalva/jwt-go => github.com/dgrijalva/jwt-go/v4 v4.0.0-preview1
-	github.com/gogo/protobuf v1.3.1 => github.com/gogo/protobuf v1.3.2
-	github.com/labstack/echo/v4 => github.com/labstack/echo/v4 v4.12.0
-	github.com/microcosm-cc/bluemonday v1.0.2 => github.com/microcosm-cc/bluemonday v1.0.19
-
-	github.com/nats-io/nats-server/v2 v2.5.0 => github.com/nats-io/nats-server/v2 v2.9.3
-
-	github.com/valyala/fasthttp v1.6.0 => github.com/valyala/fasthttp v1.38.0
-	// Fixes CVE-2023-47108
-	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.20.0 => go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.46.1
 	golang.org/x/net => golang.org/x/net v0.26.0
-	golang.org/x/text v0.3.7 => golang.org/x/text v0.3.8
+	golang.org/x/text => golang.org/x/text v0.16.0
 )
