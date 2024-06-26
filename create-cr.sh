@@ -1,24 +1,25 @@
-#!/bin/sh
+#!/usr/bin/env sh
+# Get name, guest backup & clusters regex.
+name="etcd-backup-$(date "+%Y%m%d%H%M%S")"
+guest_backup="${1}"
+clusters_regex="${2:-.*}"
 
-name="etcd-backup-$(date +'%Y%m%d%H%M%S')"
-guestBackup="$1"
-clustersRegex=${2:-".*"}
-
-if [ "$guestBackup" != "true" ] && [ "$guestBackup" != "false" ]
+# Check guest backup.
+if [ "${guest_backup}" != "true" ] && [ "${guest_backup}" != "false" ]
 then
+  # Print usage.
   echo "Usage: ${0} <true|false>"
+  # Exit erroneously.
   exit 1
 fi
 
-TEMPLATE=$(cat <<-END
-apiVersion: "backup.giantswarm.io/v1alpha1"
-kind: "ETCDBackup"
+# Create etcd backup.
+kubectl create --filename - <<END
+apiVersion: backup.giantswarm.io/v1alpha1
+kind: ETCDBackup
 metadata:
-  name: "${name}"
+  name: ${name}
 spec:
-  guestBackup: $guestBackup
-  clustersRegex: $clustersRegex
+  guestBackup: ${guest_backup}
+  clustersRegex: "${clusters_regex}"
 END
-)
-
-echo "$TEMPLATE" | kubectl apply -f -
