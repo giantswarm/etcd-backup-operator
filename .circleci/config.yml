@@ -1,95 +1,46 @@
+version: 2.1
+
 orbs:
   architect: giantswarm/architect@5.2.1
 
-version: 2.1
 workflows:
-  version: 2
   build:
     jobs:
       - architect/go-build:
-          name: go-build-etcd-backup-operator
+          name: go-build
           binary: etcd-backup-operator
           filters:
-            # Trigger the job also on git tag.
             tags:
               only: /^v.*/
 
       - architect/push-to-registries:
-          context: architect
           name: push-to-registries
+          context: architect
           requires:
-            - go-build-etcd-backup-operator
+            - go-build
           filters:
-            # Trigger the job also on git tag.
             tags:
               only: /^v.*/
 
       - architect/push-to-app-catalog:
-          context: "architect"
-          name: push-etcd-backup-operator-to-control-plane-app-catalog
-          app_catalog: "control-plane-catalog"
-          app_catalog_test: "control-plane-test-catalog"
-          chart: "etcd-backup-operator"
-          # Make sure docker image is successfully built.
+          name: push-to-control-plane-catalog
+          context: architect
+          chart: etcd-backup-operator
+          app_catalog: control-plane-catalog
+          app_catalog_test: control-plane-test-catalog
           requires:
             - push-to-registries
           filters:
-            # Trigger the job also on git tag.
             tags:
               only: /^v.*/
 
       - architect/push-to-app-collection:
-          context: "architect"
-          name: push-etcd-backup-operator-to-aws-app-collection
-          app_name: "etcd-backup-operator"
-          app_collection_repo: "aws-app-collection"
-          requires:
-            - push-etcd-backup-operator-to-control-plane-app-catalog
-          filters:
-            # Do not trigger the job on commit.
-            branches:
-              ignore: /.*/
-            # Trigger the job also on git tag.
-            tags:
-              only: /^v.*/
-
-      - architect/push-to-app-collection:
-          context: "architect"
-          name: push-etcd-backup-operator-to-azure-app-collection
-          app_name: "etcd-backup-operator"
-          app_collection_repo: "azure-app-collection"
-          requires:
-            - push-etcd-backup-operator-to-control-plane-app-catalog
-          filters:
-            # Do not trigger the job on commit.
-            branches:
-              ignore: /.*/
-            # Trigger the job also on git tag.
-            tags:
-              only: /^v.*/
-
-      - architect/push-to-app-collection:
-          context: "architect"
-          name: push-etcd-backup-operator-to-vsphere-app-collection
-          app_name: "etcd-backup-operator"
-          app_collection_repo: "vsphere-app-collection"
-          requires:
-            - push-etcd-backup-operator-to-control-plane-app-catalog
-          filters:
-            # Do not trigger the job on commit.
-            branches:
-              ignore: /.*/
-            # Trigger the job also on git tag.
-            tags:
-              only: /^v.*/
-
-      - architect/push-to-app-collection:
+          name: push-to-aws-app-collection
           context: architect
-          name: push-to-cloud-director-app-collection
-          app_name: "etcd-backup-operator"
-          app_collection_repo: "cloud-director-app-collection"
+          app_name: etcd-backup-operator
+          app_collection_repo: aws-app-collection
           requires:
-            - push-etcd-backup-operator-to-control-plane-app-catalog
+            - push-to-control-plane-catalog
           filters:
             branches:
               ignore: /.*/
@@ -97,12 +48,25 @@ workflows:
               only: /^v.*/
 
       - architect/push-to-app-collection:
+          name: push-to-azure-app-collection
           context: architect
+          app_name: etcd-backup-operator
+          app_collection_repo: azure-app-collection
+          requires:
+            - push-to-control-plane-catalog
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/
+
+      - architect/push-to-app-collection:
           name: push-to-capa-app-collection
-          app_name: "etcd-backup-operator"
-          app_collection_repo: "capa-app-collection"
+          context: architect
+          app_name: etcd-backup-operator
+          app_collection_repo: capa-app-collection
           requires:
-            - push-etcd-backup-operator-to-control-plane-app-catalog
+            - push-to-control-plane-catalog
           filters:
             branches:
               ignore: /.*/
@@ -110,12 +74,12 @@ workflows:
               only: /^v.*/
 
       - architect/push-to-app-collection:
-          context: architect
           name: push-to-capz-app-collection
-          app_name: "etcd-backup-operator"
-          app_collection_repo: "capz-app-collection"
+          context: architect
+          app_name: etcd-backup-operator
+          app_collection_repo: capz-app-collection
           requires:
-            - push-etcd-backup-operator-to-control-plane-app-catalog
+            - push-to-control-plane-catalog
           filters:
             branches:
               ignore: /.*/
@@ -123,12 +87,38 @@ workflows:
               only: /^v.*/
 
       - architect/push-to-app-collection:
-          context: architect
           name: push-to-gcp-app-collection
-          app_name: "etcd-backup-operator"
-          app_collection_repo: "gcp-app-collection"
+          context: architect
+          app_name: etcd-backup-operator
+          app_collection_repo: gcp-app-collection
           requires:
-            - push-etcd-backup-operator-to-control-plane-app-catalog
+            - push-to-control-plane-catalog
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/
+
+      - architect/push-to-app-collection:
+          name: push-to-cloud-director-app-collection
+          context: architect
+          app_name: etcd-backup-operator
+          app_collection_repo: cloud-director-app-collection
+          requires:
+            - push-to-control-plane-catalog
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/
+
+      - architect/push-to-app-collection:
+          name: push-to-vsphere-app-collection
+          context: architect
+          app_name: etcd-backup-operator
+          app_collection_repo: vsphere-app-collection
+          requires:
+            - push-to-control-plane-catalog
           filters:
             branches:
               ignore: /.*/
