@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Support skipping backup of Vintage AWS clusters by adding the annotation `giantswarm.io/etcd-backup-operator-skip-backup=true` to the `AWSCluster` object. This can be used for clusters which got migrated to CAPI.
+
 ### Changed
 
 - Remove deprecated packages and grpc DialOption.

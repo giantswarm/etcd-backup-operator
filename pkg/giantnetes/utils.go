@@ -27,6 +27,8 @@ import (
 const (
 	certificateLabel      = "giantswarm.io/certificate"
 	certificateLabelValue = "calico-etcd-client"
+
+	skipEtcdBackupAnnotation = "giantswarm.io/etcd-backup-operator-skip-backup"
 )
 
 type Utils struct {
@@ -65,6 +67,17 @@ func (u *Utils) GetTenantClusters(ctx context.Context) ([]ETCDInstance, error) {
 
 	for _, cluster := range clusterList {
 		u.logger.LogCtx(ctx, "level", "debug", fmt.Sprintf("Preparing instance entry for tenant clusters %s", cluster.clusterKey.Name))
+
+		// Check if the cluster backup should be skipped
+		backupSkipped, err := u.isClusterSkipped(ctx, cluster)
+		if err != nil {
+			u.logger.LogCtx(ctx, "level", "error", "msg", fmt.Sprintf("Failed to check if backup should be skipped for cluster %s", cluster.clusterKey.Name), "reason", err)
+			continue
+		}
+		if backupSkipped {
+			u.logger.LogCtx(ctx, "level", "debug", "msg", fmt.Sprintf("Backup for cluster %s is skipped explicitly", cluster.clusterKey.Name))
+			continue
+		}
 
 		// Check if the cluster release version has support for ETCD backup.
 		versionSupported, err := u.checkClusterVersionSupport(ctx, cluster)
@@ -109,6 +122,31 @@ func (u *Utils) GetTenantClusters(ctx context.Context) ([]ETCDInstance, error) {
 		})
 	}
 	return instances, nil
+}
+
+// isClusterSkipped checks if cluster should be skipped from guest cluster backup.
+func (u *Utils) isClusterSkipped(ctx context.Context, cluster Cluster) (bool, error) {
+	crdClient := u.K8sClient.CtrlClient()
+
+	switch cluster.provider {
+	case awsCAPI:
+		crd := v1alpha3.AWSCluster{}
+		err := crdClient.Get(ctx, cluster.clusterKey, &crd)
+		if err != nil {
+			return false, microerror.Maskf(executionFailedError, "error getting aws crd for guest cluster %#q with error %#q", cluster.clusterKey.Name, err)
+		}
+
+		if crd.Annotations[skipEtcdBackupAnnotation] == "true" {
+			return true, nil
+		}
+	case azure:
+		return false, nil
+	case kvm:
+		return false, nil
+	case CAPI:
+		return false, nil
+	}
+	return false, nil
 }
 
 // Check if cluster release version has guest cluster backup support.
