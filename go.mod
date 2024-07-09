@@ -28,7 +28,7 @@ require (
 	k8s.io/api v0.30.2
 	k8s.io/apimachinery v0.30.2
 	k8s.io/client-go v0.30.2
-	sigs.k8s.io/cluster-api v1.7.3
+	sigs.k8s.io/cluster-api v1.7.4
 	sigs.k8s.io/controller-runtime v0.18.4
 )
 
