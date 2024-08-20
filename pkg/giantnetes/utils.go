@@ -164,7 +164,7 @@ func (u *Utils) checkClusterVersionSupport(ctx context.Context, cluster Cluster)
 			crd := providerv1alpha1.AzureConfig{}
 			err := crdClient.Get(ctx, cluster.clusterKey, &crd)
 			if err != nil {
-				return false, microerror.Maskf(executionFailedError, fmt.Sprintf("failed to get azure crd %#q with error %#q", cluster.clusterKey.Name, err))
+				return false, microerror.Maskf(executionFailedError, "failed to get azure crd %#q with error %#q", cluster.clusterKey.Name, err)
 			}
 			var version string
 			{
@@ -176,7 +176,7 @@ func (u *Utils) checkClusterVersionSupport(ctx context.Context, cluster Cluster)
 				}
 			}
 			if version == "" {
-				return false, microerror.Maskf(executionFailedError, fmt.Sprintf("failed to get cluster version from AzureConfig %#q", cluster.clusterKey.Name))
+				return false, microerror.Maskf(executionFailedError, "failed to get cluster version from AzureConfig %#q", cluster.clusterKey.Name)
 			}
 			return stringVersionCmp(version, semver.New("0.0.0"), azureSupportFrom)
 		}
