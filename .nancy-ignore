@@ -1,2 +1,6 @@
 # pkg:golang/github.com/mholt/archiver/v3@v3.5.1
 CVE-2024-0406
+
+# pkg:golang/golang.org/x/net@v0.28.0
+CVE-2024-8421
+
