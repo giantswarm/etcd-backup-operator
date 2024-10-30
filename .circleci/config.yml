@@ -21,6 +21,10 @@ workflows:
           filters:
             tags:
               only: /^v.*/
+            branches:
+              ignore:
+                - main
+                - master
 
       - architect/push-to-app-catalog:
           name: push-to-control-plane-catalog
@@ -33,6 +37,10 @@ workflows:
           filters:
             tags:
               only: /^v.*/
+            branches:
+              ignore:
+                - main
+                - master
 
       - architect/push-to-app-collection:
           name: push-to-aws-app-collection
