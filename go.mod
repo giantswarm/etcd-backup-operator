@@ -25,7 +25,7 @@ require (
 	github.com/prometheus/client_golang v1.20.5
 	github.com/spf13/viper v1.19.0
 	go.etcd.io/etcd/client/v3 v3.5.17
-	golang.org/x/crypto v0.29.0
+	golang.org/x/crypto v0.30.0
 	google.golang.org/grpc v1.68.1
 	k8s.io/api v0.30.3
 	k8s.io/apimachinery v0.30.3
@@ -108,9 +108,9 @@ require (
 	golang.org/x/net v0.29.0 // indirect
 	golang.org/x/oauth2 v0.23.0 // indirect
 	golang.org/x/sync v0.10.0 // indirect
-	golang.org/x/sys v0.27.0 // indirect
-	golang.org/x/term v0.26.0 // indirect
-	golang.org/x/text v0.20.0 // indirect
+	golang.org/x/sys v0.28.0 // indirect
+	golang.org/x/term v0.27.0 // indirect
+	golang.org/x/text v0.21.0 // indirect
 	golang.org/x/time v0.5.0 // indirect
 	gomodules.xyz/jsonpatch/v2 v2.4.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20240903143218-8af14fe29dc1 // indirect
@@ -133,6 +133,6 @@ require (
 )
 
 replace (
-	golang.org/x/net => golang.org/x/net v0.31.0
+	golang.org/x/net => golang.org/x/net v0.32.0
 	golang.org/x/text => golang.org/x/text v0.21.0
 )
