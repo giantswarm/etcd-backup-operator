@@ -25,7 +25,7 @@ require (
 	github.com/prometheus/client_golang v1.20.5
 	github.com/spf13/viper v1.19.0
 	go.etcd.io/etcd/client/v3 v3.5.17
-	golang.org/x/crypto v0.30.0
+	golang.org/x/crypto v0.31.0
 	google.golang.org/grpc v1.68.1
 	k8s.io/api v0.30.3
 	k8s.io/apimachinery v0.30.3
