@@ -95,10 +95,10 @@ workflows:
               only: /^v.*/
 
       - architect/push-to-app-collection:
-          name: push-to-gcp-app-collection
+          name: push-to-proxmox-app-collection
           context: architect
           app_name: etcd-backup-operator
-          app_collection_repo: gcp-app-collection
+          app_collection_repo: proxmox-app-collection
           requires:
             - push-to-control-plane-catalog
           filters:
