@@ -29,6 +29,7 @@ workflows:
       - architect/push-to-app-catalog:
           name: push-to-control-plane-catalog
           context: architect
+          executor: app-build-suite
           chart: etcd-backup-operator
           app_catalog: control-plane-catalog
           app_catalog_test: control-plane-test-catalog
@@ -38,9 +39,7 @@ workflows:
             tags:
               only: /^v.*/
             branches:
-              ignore:
-                - main
-                - master
+              only: /.*/ 
 
       - architect/push-to-app-collection:
           name: push-to-aws-app-collection

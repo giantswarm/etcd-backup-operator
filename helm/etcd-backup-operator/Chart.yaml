@@ -1,9 +1,15 @@
-apiVersion: "v1"
-name: "etcd-backup-operator"
+apiVersion: v2
+name: etcd-backup-operator
 description: "Helm chart for etcd-backup-operator."
 home: "https://github.com/giantswarm/etcd-backup-operator"
-version: "[[ .Version ]]"
-appVersion: "[[ .AppVersion ]]"
+version: 0.0.1-dev
+appVersion: 0.0.1-dev
+icon: https://s.giantswarm.io/app-icons/giantswarm/1/dark.svg
 annotations:
   application.giantswarm.io/team: turtles
   config.giantswarm.io/version: 1.x.x
+  ui.giantswarm.io/logo: https://s.giantswarm.io/app-icons/giantswarm/1/dark.svg
+restrictions:
+  clusterSingleton: true
+  fixedNamespace: kube-system
+  gpuInstances: false
