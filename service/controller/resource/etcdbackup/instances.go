@@ -3,6 +3,7 @@ package etcdbackup
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/dlclark/regexp2"
 	"github.com/giantswarm/apiextensions-backup/api/v1alpha1"
@@ -89,11 +90,26 @@ func (r *Resource) runBackupOnAllInstances(ctx context.Context, obj interface{},
 			if err != nil {
 				return false, microerror.Mask(err)
 			}
+
+			clustersToExclude := make(map[string]struct{})
+			if customObject.Spec.clustersToExclude != nil {
+				cs := strings.Split(customObject.Spec.clustersToExclude, ",")
+				for _, c := range cs {
+					tc := strings.TrimSpace(c)
+					clustersToExclude[tc] = struct{}{}
+				}
+			}
+
 			re := regexp2.MustCompile(customObject.Spec.ClustersRegex, 0)
 			for _, guestInstance := range guestInstances {
-				if isMatch, _ := re.MatchString(guestInstance.Name); isMatch {
-					instances = append(instances, guestInstance)
+				if isMatch, _ := re.MatchString(guestInstance.Name); !isMatch {
+					continue
 				}
+				if _, isExcluded := clustersToExclude[guestInstance.Name]; !isExcluded {
+					continue
+				}
+
+				instances = append(instances, guestInstance)
 			}
 		}
 	}
