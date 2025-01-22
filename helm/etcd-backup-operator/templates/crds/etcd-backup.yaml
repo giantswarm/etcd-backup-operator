@@ -59,6 +59,11 @@ spec:
                     clusters have to be backed up
                   nullable: true
                   type: string
+                clustersToExclude:
+                  description: ClustersToExclude is a list of cluster IDs comma separated
+                    that should be excluded from the backup
+                  nullable: true
+                  type: string
                 guestBackup:
                   description: GuestBackup is a boolean indicating if the workload clusters
                     have to be backed up

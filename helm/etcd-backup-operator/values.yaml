@@ -32,8 +32,10 @@ schedules:
     clusters: ".*"
   # - cronjob: 0 */6 * * *
   #   clusters: '^(?!<cluster-id>)' #all clusters but the id defined
+  #   clusters_to_exclude: '<cluster-id>, <cluster-id2>'
   # - cronjob: 0 3 * * * *
   #   clusters: '<cluster-id>' # only one cluster
+  #   clusters_to_exclude: '<cluster-id>, <cluster-id2>'
 
 etcdDataDir: ""
 clientCertsDir: "/etc/kubernetes/ssl/etcd/"
