@@ -143,6 +143,8 @@ func New(config Config) (*Service, error) {
 			Bucket:          config.Viper.GetString(config.Flag.Service.S3.Bucket),
 			Region:          config.Viper.GetString(config.Flag.Service.S3.Region),
 			SecretAccessKey: os.Getenv(key.EnvAWSSecretAccessKey),
+			Endpoint:        config.Viper.GetString(config.Flag.Service.S3.Endpoint),
+			ForcePathStyle:  config.Viper.GetBool(config.Flag.Service.S3.ForcePathStyle),
 		})
 		if err != nil {
 			return nil, microerror.Mask(err)
