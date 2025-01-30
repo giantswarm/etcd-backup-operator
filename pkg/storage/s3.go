@@ -16,6 +16,8 @@ type S3Config struct {
 	Bucket          string
 	Region          string
 	SecretAccessKey string
+	Endpoint        string
+	ForcePathStyle  bool
 }
 
 type S3Upload struct {
@@ -23,6 +25,8 @@ type S3Upload struct {
 	bucket          string
 	region          string
 	secretAccessKey string
+	endpoint        string
+	forcePathStyle  bool
 }
 
 func NewS3Upload(config S3Config) (*S3Upload, error) {
@@ -44,23 +48,33 @@ func NewS3Upload(config S3Config) (*S3Upload, error) {
 		bucket:          config.Bucket,
 		region:          config.Region,
 		secretAccessKey: config.SecretAccessKey,
+		endpoint:        config.Endpoint,
+		forcePathStyle:  config.ForcePathStyle,
 	}, nil
 }
 
 func (upload S3Upload) Upload(fpath string) (int64, error) {
 	// Login to AWS S3Upload
 	creds := credentials.NewStaticCredentials(upload.accessKeyID, upload.secretAccessKey, "")
-	sess, err := session.NewSession(&aws.Config{
+
+	awsConfig := &aws.Config{
 		Credentials: creds,
 		Region:      &upload.region,
-	})
+	}
+
+	if upload.endpoint != "" {
+		awsConfig.Endpoint = aws.String(upload.endpoint)
+	}
+	if upload.forcePathStyle {
+		awsConfig.S3ForcePathStyle = aws.Bool(true)
+	}
+
+	sess, err := session.NewSession(awsConfig)
 	if err != nil {
 		return -1, microerror.Mask(err)
 	}
 
-	svc := s3.New(sess, &aws.Config{
-		Region: &upload.region,
-	})
+	svc := s3.New(sess)
 
 	// Upload.
 	file, err := os.Open(fpath)
