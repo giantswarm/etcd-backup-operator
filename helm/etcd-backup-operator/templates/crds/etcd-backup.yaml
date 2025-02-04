@@ -59,6 +59,11 @@ spec:
                     clusters have to be backed up
                   nullable: true
                   type: string
+                clustersToExcludeRegex:
+                  description: clustersToExcludeRegex is a regexp string indicating which workload
+                    clusters will not to be backed up
+                  nullable: true
+                  type: string
                 guestBackup:
                   description: GuestBackup is a boolean indicating if the workload clusters
                     have to be backed up
