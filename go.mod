@@ -2,7 +2,7 @@ module github.com/giantswarm/etcd-backup-operator/v4
 
 go 1.22.7
 
-toolchain go1.23.6
+toolchain go1.24.0
 
 require (
 	github.com/aws/aws-sdk-go v1.55.6
