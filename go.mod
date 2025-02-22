@@ -1,6 +1,6 @@
 module github.com/giantswarm/etcd-backup-operator/v4
 
-go 1.22.7
+go 1.23.0
 
 toolchain go1.24.0
 
@@ -25,7 +25,7 @@ require (
 	github.com/prometheus/client_golang v1.21.0
 	github.com/spf13/viper v1.19.0
 	go.etcd.io/etcd/client/v3 v3.5.18
-	golang.org/x/crypto v0.33.0
+	golang.org/x/crypto v0.34.0
 	google.golang.org/grpc v1.70.0
 	k8s.io/api v0.30.3
 	k8s.io/apimachinery v0.30.3
