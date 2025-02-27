@@ -52,7 +52,7 @@ go run -mod=vendor main.go daemon \
 
 - `--service.kubernetes.incluster`: (Optional, defaults to `false`) Whether to use the in-cluster config to authenticate with Kubernetes.
 - `--service.kubernetes.address`: (Optional, defaults to `http://127.0.0.1:6443`) Address used to connect to Kubernetes. When empty in-cluster config is created.
-- `--service.kubernetes.kubeconfig`: (Optional) KubeConfig used to connect to Kubernetes. When empty other settings are used.
+- `--service.kubernetes.kubeconfig`: (Optional) KubeConfig (formatted as JSON string) used to connect to Kubernetes. When empty other settings are used.
 - `--service.kubernetes.tls.cafile`: (Optional) Certificate authority file path to use to authenticate with Kubernetes.
 - `--service.kubernetes.tls.crtfile`: (Optional) Certificate file path to use to authenticate with Kubernetes.
 - `--service.kubernetes.tls.keyfile`: (Optional) Key file path to use to authenticate with Kubernetes.
@@ -61,6 +61,8 @@ go run -mod=vendor main.go daemon \
 
 - `--service.s3.bucket`: (Required) AWS S3 Bucket name.
 - `--service.s3.region`: (Required) AWS S3 Region name.
+- `--service.s3.endpoint`: (Optional) Custom S3 endpoint URL.
+- `--service.s3.force-path-style`: (Optional, defaults to `false`) Enable path-style S3 URLs.
 
 #### ETCD connection settings:
 

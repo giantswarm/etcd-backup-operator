@@ -2,7 +2,7 @@ module github.com/giantswarm/etcd-backup-operator/v4
 
 go 1.23.0
 
-toolchain go1.23.5
+toolchain go1.24.0
 
 require (
 	github.com/aws/aws-sdk-go v1.55.6
@@ -14,9 +14,9 @@ require (
 	github.com/giantswarm/exporterkit v1.2.0
 	github.com/giantswarm/k8sclient/v7 v7.2.0
 	github.com/giantswarm/k8smetadata v0.25.0
-	github.com/giantswarm/microendpoint v1.1.1
+	github.com/giantswarm/microendpoint v1.1.2
 	github.com/giantswarm/microerror v0.4.1
-	github.com/giantswarm/microkit v1.0.2
+	github.com/giantswarm/microkit v1.0.3
 	github.com/giantswarm/micrologger v1.1.2
 	github.com/giantswarm/operatorkit/v7 v7.3.0
 	github.com/google/go-cmp v0.6.0
@@ -136,6 +136,6 @@ require (
 )
 
 replace (
-	golang.org/x/net => golang.org/x/net v0.34.0
-	golang.org/x/text => golang.org/x/text v0.21.0
+	golang.org/x/net => golang.org/x/net v0.35.0
+	golang.org/x/text => golang.org/x/text v0.22.0
 )
