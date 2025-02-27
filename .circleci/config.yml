@@ -19,12 +19,12 @@ workflows:
           requires:
             - go-build
           filters:
-            tags:
-              only: /^v.*/
             branches:
               ignore:
                 - main
                 - master
+            tags:
+              only: /^v.*/
 
       - architect/push-to-app-catalog:
           name: push-to-control-plane-catalog
@@ -35,12 +35,12 @@ workflows:
           requires:
             - push-to-registries
           filters:
-            tags:
-              only: /^v.*/
             branches:
               ignore:
                 - main
                 - master
+            tags:
+              only: /^v.*/
 
       - architect/push-to-app-collection:
           name: push-to-aws-app-collection
