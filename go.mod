@@ -19,18 +19,18 @@ require (
 	github.com/giantswarm/microkit v1.0.3
 	github.com/giantswarm/micrologger v1.1.2
 	github.com/giantswarm/operatorkit/v7 v7.3.0
-	github.com/google/go-cmp v0.6.0
+	github.com/google/go-cmp v0.7.0
 	github.com/mholt/archiver/v3 v3.5.1
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.21.0
 	github.com/spf13/viper v1.19.0
-	go.etcd.io/etcd/client/v3 v3.5.17
-	golang.org/x/crypto v0.33.0
-	google.golang.org/grpc v1.69.4
+	go.etcd.io/etcd/client/v3 v3.5.18
+	golang.org/x/crypto v0.35.0
+	google.golang.org/grpc v1.70.0
 	k8s.io/api v0.32.2
 	k8s.io/apimachinery v0.32.2
 	k8s.io/client-go v0.32.2
-	sigs.k8s.io/cluster-api v1.9.4
+	sigs.k8s.io/cluster-api v1.8.5
 	sigs.k8s.io/controller-runtime v0.20.2
 )
 
@@ -56,6 +56,7 @@ require (
 	github.com/go-logr/logr v1.4.2 // indirect
 	github.com/go-openapi/jsonpointer v0.21.0 // indirect
 	github.com/go-openapi/jsonreference v0.21.0 // indirect
+	github.com/go-openapi/jsonreference v0.20.2 // indirect
 	github.com/go-openapi/swag v0.23.0 // indirect
 	github.com/go-stack/stack v1.8.1 // indirect
 	github.com/gobuffalo/flect v1.0.3 // indirect
