@@ -89,11 +89,18 @@ func (r *Resource) runBackupOnAllInstances(ctx context.Context, obj interface{},
 			if err != nil {
 				return false, microerror.Mask(err)
 			}
-			re := regexp2.MustCompile(customObject.Spec.ClustersRegex, 0)
+
+			clustersToIncludeRegex := regexp2.MustCompile(customObject.Spec.ClustersRegex, 0)
+			clustersToExcludeRegex := regexp2.MustCompile(customObject.Spec.ClustersToExcludeRegex, 0)
 			for _, guestInstance := range guestInstances {
-				if isMatch, _ := re.MatchString(guestInstance.Name); isMatch {
-					instances = append(instances, guestInstance)
+				if isMatch, _ := clustersToIncludeRegex.MatchString(guestInstance.Name); !isMatch {
+					continue
 				}
+				if isMatch, _ := clustersToExcludeRegex.MatchString(guestInstance.Name); isMatch {
+					continue
+				}
+
+				instances = append(instances, guestInstance)
 			}
 		}
 	}

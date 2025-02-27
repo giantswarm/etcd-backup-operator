@@ -25,5 +25,8 @@ spec:
             args:
             - {{ not $.Values.testingEnvironment | quote }}
             - {{ $schedule.clusters | quote }}
+            {{- if $schedule.clusters_to_exclude }}
+            - {{ $schedule.clusters_to_exclude | quote }}
+            {{- end }}
           restartPolicy: Never
 {{- end }}
