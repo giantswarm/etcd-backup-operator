@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added support for excluding clusters by defining a regex.
+
 ## [4.9.0] - 2025-01-30
 
 ### Added
