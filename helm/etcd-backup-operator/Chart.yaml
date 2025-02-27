@@ -1,9 +1,8 @@
-apiVersion: "v1"
-name: "etcd-backup-operator"
-description: "Helm chart for etcd-backup-operator."
-home: "https://github.com/giantswarm/etcd-backup-operator"
-version: "[[ .Version ]]"
-appVersion: "[[ .AppVersion ]]"
+apiVersion: v2
+name: etcd-backup-operator
+description: A Helm chart for the etcd-backup-operator.
+version: [[ .Version ]]
+appVersion: [[ .AppVersion ]]
+home: https://github.com/giantswarm/etcd-backup-operator
 annotations:
-  application.giantswarm.io/team: turtles
-  config.giantswarm.io/version: 1.x.x
+  application.giantswarm.io/team: tenet
