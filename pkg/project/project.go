@@ -5,7 +5,7 @@ var (
 	gitSHA      = "n/a"
 	name        = "etcd-backup-operator"
 	source      = "https://github.com/giantswarm/etcd-backup-operator"
-	version     = "4.10.0"
+	version     = "4.10.1-dev"
 )
 
 func Description() string {
