@@ -3,7 +3,7 @@
 name="etcd-backup-$(date "+%Y%m%d%H%M%S")"
 guest_backup="${1}"
 clusters_regex="${2:-.*}"
-clusters_to_exclude_regex="${3:-.*}"
+clusters_to_exclude_regex="${3:-^$}"
 
 # Check guest backup.
 if [ "${guest_backup}" != "true" ] && [ "${guest_backup}" != "false" ]
