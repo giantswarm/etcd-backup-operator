@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add toggle to skip CRD installation via `crds.install: false` when deploying multiple instances of the operator.
+
 ## [4.10.1] - 2025-03-18
 
 ### Fixed

@@ -72,3 +72,6 @@ etcdBackupEncryptionPassword: ""
 global:
   podSecurityStandards:
     enforced: false
+
+crds:
+  install: true  # Set to false to skip CRD installation
