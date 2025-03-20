@@ -13,4 +13,5 @@ type Service struct {
 	ETCDv3                      ETCDv3Settings
 	Installation                string
 	Sentry                      Sentry
+	BackupDestination           string
 }

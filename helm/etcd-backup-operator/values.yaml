@@ -49,6 +49,9 @@ installation: ""
 verticalPodAutoscaler:
   enabled: true
 
+# Primary backup destination or customer-specific
+backupDestination: "primary"
+
 # priorityClassName used by the pod.
 priorityClassName: "giantswarm-critical"
 

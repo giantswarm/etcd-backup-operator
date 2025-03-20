@@ -28,5 +28,6 @@ spec:
             {{- if $schedule.clusters_to_exclude }}
             - {{ $schedule.clusters_to_exclude | quote }}
             {{- end }}
+            - {{ $.Values.backupDestination | quote }}
           restartPolicy: Never
 {{- end }}

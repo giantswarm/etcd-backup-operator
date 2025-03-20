@@ -7,6 +7,7 @@ import (
 	"github.com/giantswarm/micrologger"
 	"github.com/giantswarm/operatorkit/v7/pkg/controller"
 	"github.com/giantswarm/operatorkit/v7/pkg/resource"
+	"k8s.io/apimachinery/pkg/labels"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	"github.com/giantswarm/etcd-backup-operator/v4/pkg/giantnetes"
@@ -24,6 +25,7 @@ type ETCDBackupConfig struct {
 	SentryDSN                   string
 	Uploader                    storage.Uploader
 	SkipManagementClusterBackup bool
+	BackupDestination           string
 }
 
 type ETCDBackup struct {
@@ -39,6 +41,9 @@ func validateETCDBackupConfig(config ETCDBackupConfig) error {
 	}
 	if config.Uploader == nil {
 		return microerror.Maskf(invalidConfigError, "%T.Uploader must be defined", config)
+	}
+	if config.BackupDestination == "" {
+		return microerror.Maskf(invalidConfigError, "%T.BackupDestination must be defined", config)
 	}
 	return nil
 }
@@ -66,6 +71,9 @@ func NewETCDBackup(config ETCDBackupConfig) (*ETCDBackup, error) {
 			},
 			Name:      project.Name() + "-etcd-backup-controller",
 			SentryDSN: config.SentryDSN,
+			Selector: labels.SelectorFromSet(labels.Set{
+				"backup.giantswarm.io/destination": config.BackupDestination,
+			}),
 		}
 
 		operatorkitController, err = controller.New(c)
@@ -99,6 +107,7 @@ func newETCDBackupResourceSets(config ETCDBackupConfig) ([]resource.Interface, e
 			Installation:                config.Installation,
 			Uploader:                    config.Uploader,
 			SkipManagementClusterBackup: config.SkipManagementClusterBackup,
+			BackupDestination:           config.BackupDestination,
 		}
 		resources, err = newETCDBackupResourceSet(c)
 		if err != nil {
