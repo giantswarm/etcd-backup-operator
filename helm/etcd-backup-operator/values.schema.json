@@ -36,6 +36,14 @@
         "clientKeyFileName": {
             "type": "string"
         },
+        "crds": {
+            "type": "object",
+            "properties": {
+                "install": {
+                    "type": "boolean"
+                }
+            }
+        },
         "etcdBackupEncryptionPassword": {
             "type": "string"
         },
