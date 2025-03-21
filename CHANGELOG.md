@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.12.0] - 2025-03-21
 
+### Added
+
+- Add BackupDestination label to support multiple operator instances
+
 ## [4.11.0] - 2025-03-20
 
 ### Added
