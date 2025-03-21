@@ -24,6 +24,9 @@
                 }
             }
         },
+        "backupDestination": {
+            "type": "string"
+        },
         "clientCaCertFileName": {
             "type": "string"
         },

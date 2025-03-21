@@ -27,6 +27,9 @@ spec:
             - {{ $schedule.clusters | quote }}
             {{- if $schedule.clusters_to_exclude }}
             - {{ $schedule.clusters_to_exclude | quote }}
+            {{- else }}
+            - "^$"  # Default empty regex when not specified
             {{- end }}
+            - {{ $.Values.backupDestination | quote }}
           restartPolicy: Never
 {{- end }}

@@ -61,6 +61,9 @@ func New(config Config) (*Service, error) {
 	} else {
 		serviceAddress = ""
 	}
+	if config.Viper.GetString(config.Flag.Service.BackupDestination) == "" {
+		return nil, microerror.Maskf(invalidConfigError, "BackupDestination must not be empty.")
+	}
 	if config.Viper.GetString(config.Flag.Service.S3.Bucket) == "" {
 		return nil, microerror.Maskf(invalidConfigError, "S3Uploader bucket must not be empty.")
 	}
@@ -179,6 +182,7 @@ func New(config Config) (*Service, error) {
 			SentryDSN:                   config.Viper.GetString(config.Flag.Service.Sentry.DSN),
 			SkipManagementClusterBackup: skipMCBackup,
 			Uploader:                    uploader,
+			BackupDestination:           config.Viper.GetString(config.Flag.Service.BackupDestination),
 		}
 
 		etcdBackupController, err = controller.NewETCDBackup(c)
