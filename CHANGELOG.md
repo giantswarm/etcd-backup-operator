@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.12.0] - 2025-03-21
+
+### Added
+
+- Add BackupDestination label to support multiple operator instances
+
 ## [4.11.0] - 2025-03-20
 
 ### Added
@@ -351,7 +357,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First release.
 
-[Unreleased]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.11.0...HEAD
+[Unreleased]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.12.0...HEAD
+[4.12.0]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.11.0...v4.12.0
 [4.11.0]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.10.1...v4.11.0
 [4.10.1]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.10.0...v4.10.1
 [4.10.0]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.9.0...v4.10.0
