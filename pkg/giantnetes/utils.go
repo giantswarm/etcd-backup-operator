@@ -18,7 +18,6 @@ import (
 	capi "sigs.k8s.io/cluster-api/api/v1beta1"
 	"sigs.k8s.io/cluster-api/util/secret"
 	"sigs.k8s.io/controller-runtime/pkg/client"
-	ctrl "sigs.k8s.io/controller-runtime/pkg/client"
 
 	"github.com/giantswarm/etcd-backup-operator/v4/pkg/etcd/proxy"
 	"github.com/giantswarm/etcd-backup-operator/v4/service/controller/key"
@@ -37,7 +36,7 @@ type Utils struct {
 }
 
 type Cluster struct {
-	clusterKey ctrl.ObjectKey
+	clusterKey client.ObjectKey
 	provider   string
 }
 
@@ -211,7 +210,7 @@ func (u *Utils) getEtcdTLSCfg(ctx context.Context, cluster Cluster) (*tls.Config
 }
 
 // Fetch ETCD client certs.
-func (u *Utils) getLegacyEtcdTLSCfg(ctx context.Context, clusterKey ctrl.ObjectKey) (*tls.Config, error) {
+func (u *Utils) getLegacyEtcdTLSCfg(ctx context.Context, clusterKey client.ObjectKey) (*tls.Config, error) {
 	k8sClient := u.K8sClient.CtrlClient()
 	secrets := v1.SecretList{}
 	err := k8sClient.List(ctx, &secrets, client.MatchingLabels{
@@ -263,11 +262,11 @@ func (u *Utils) getEtcdProxy(ctx context.Context, cluster Cluster, tlsConfig *tl
 }
 
 // Fetch ETCD client certs for CAPI cluster.
-func (u *Utils) getCAPIEtcdTLSCfg(ctx context.Context, clusterKey ctrl.ObjectKey) (*tls.Config, error) {
+func (u *Utils) getCAPIEtcdTLSCfg(ctx context.Context, clusterKey client.ObjectKey) (*tls.Config, error) {
 	ctrlClient := u.K8sClient.CtrlClient()
 
 	etcdCerts := &v1.Secret{}
-	etcdCertsObjectKey := ctrl.ObjectKey{
+	etcdCertsObjectKey := client.ObjectKey{
 		Namespace: clusterKey.Namespace,
 		Name:      fmt.Sprintf("%s-etcd", clusterKey.Name),
 	}
@@ -380,7 +379,7 @@ func (u *Utils) getAllWorkloadClusters(ctx context.Context, crdCLient client.Cli
 			for _, awsClusterObj := range crdList.Items {
 				// Only backup cluster if it was not marked for delete.
 				if awsClusterObj.DeletionTimestamp == nil {
-					clusterList = append(clusterList, Cluster{clusterKey: ctrl.ObjectKey{Name: awsClusterObj.Name, Namespace: awsClusterObj.Namespace}, provider: awsCAPI})
+					clusterList = append(clusterList, Cluster{clusterKey: client.ObjectKey{Name: awsClusterObj.Name, Namespace: awsClusterObj.Namespace}, provider: awsCAPI})
 				}
 			}
 		} else if isMissingCRDError(err) {
@@ -399,7 +398,7 @@ func (u *Utils) getAllWorkloadClusters(ctx context.Context, crdCLient client.Cli
 			for _, azureConfig := range crdList.Items {
 				// Only backup cluster if it was not marked for delete.
 				if azureConfig.DeletionTimestamp == nil {
-					clusterList = append(clusterList, Cluster{clusterKey: ctrl.ObjectKey{Name: azureConfig.Name, Namespace: azureConfig.Namespace}, provider: azure})
+					clusterList = append(clusterList, Cluster{clusterKey: client.ObjectKey{Name: azureConfig.Name, Namespace: azureConfig.Namespace}, provider: azure})
 				}
 			}
 		} else if isMissingCRDError(err) {
@@ -418,7 +417,7 @@ func (u *Utils) getAllWorkloadClusters(ctx context.Context, crdCLient client.Cli
 			for _, kvmConfig := range crdList.Items {
 				// Only backup cluster if it was not marked for delete.
 				if kvmConfig.DeletionTimestamp == nil {
-					clusterList = append(clusterList, Cluster{clusterKey: ctrl.ObjectKey{Name: kvmConfig.Name, Namespace: kvmConfig.Namespace}, provider: kvm})
+					clusterList = append(clusterList, Cluster{clusterKey: client.ObjectKey{Name: kvmConfig.Name, Namespace: kvmConfig.Namespace}, provider: kvm})
 				}
 			}
 		} else if isMissingCRDError(err) {
@@ -438,7 +437,7 @@ func (u *Utils) getAllWorkloadClusters(ctx context.Context, crdCLient client.Cli
 				// Only backup cluster if it was not marked for delete.
 				// and if the control and infrastructure is ready
 				if cluster.DeletionTimestamp == nil && cluster.Status.ControlPlaneReady && cluster.Status.InfrastructureReady {
-					clusterList = append(clusterList, Cluster{clusterKey: ctrl.ObjectKey{Name: cluster.Name, Namespace: cluster.Namespace}, provider: CAPI})
+					clusterList = append(clusterList, Cluster{clusterKey: client.ObjectKey{Name: cluster.Name, Namespace: cluster.Namespace}, provider: CAPI})
 				}
 			}
 		} else {

@@ -22,14 +22,14 @@ func data(value []byte, pass string) (ciphertext []byte, err error) {
 		return nil, microerror.Mask(err)
 	}
 
-	encrypter.Close()
+	encrypter.Close() //nolint:errcheck,gosec
 
 	return buf.Bytes(), nil
 }
 
 // Encrypts file from srcPath and writes encrypted data to dstPart.
 func File(srcPath string, dstPart string, passphrase string) error {
-	contents, err := os.ReadFile(srcPath)
+	contents, err := os.ReadFile(srcPath) //nolint:gosec
 	if err != nil {
 		return microerror.Mask(err)
 	}

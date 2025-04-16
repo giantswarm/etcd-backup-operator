@@ -81,7 +81,7 @@ func createEtcdV3Client(endpoint string, tlsConfig *tls.Config, p *proxy.Proxy) 
 
 // Cleanup clears temporary directory
 func (b V3Backup) Cleanup() {
-	os.RemoveAll(b.getTmpDir())
+	os.RemoveAll(b.getTmpDir()) //nolint:errcheck,gosec
 }
 
 // Create etcd in temporary directory.
@@ -104,7 +104,7 @@ func (b V3Backup) Create() (string, error) {
 		return "", microerror.Mask(err)
 	}
 
-	outFile, err := os.Create(fpath)
+	outFile, err := os.Create(fpath) //nolint:gosec
 	if err != nil {
 		return "", microerror.Mask(err)
 	}
