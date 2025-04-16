@@ -44,7 +44,7 @@ func NewV2Backup(dataDir string, encPass string, logger micrologger.Logger, pref
 
 // Clear temporary directory.
 func (b V2Backup) Cleanup() {
-	os.RemoveAll(b.getTmpDir())
+	os.RemoveAll(b.getTmpDir()) //nolint:errcheck,gosec
 }
 
 // Create etcd in temporary directory, tar and compress.

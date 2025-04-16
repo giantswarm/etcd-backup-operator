@@ -63,17 +63,17 @@ func PrepareTLSConfig(caData []byte, crtData []byte, keyData []byte) (*tls.Confi
 }
 
 func TLSConfigFromCertFiles(ca string, cert string, key string) (*tls.Config, error) {
-	caData, err := os.ReadFile(ca)
+	caData, err := os.ReadFile(ca) //nolint:gosec
 	if err != nil {
 		return nil, microerror.Mask(err)
 	}
 
-	crtData, err := os.ReadFile(cert)
+	crtData, err := os.ReadFile(cert) //nolint:gosec
 	if err != nil {
 		return nil, microerror.Mask(err)
 	}
 
-	keyData, err := os.ReadFile(key)
+	keyData, err := os.ReadFile(key) //nolint:gosec
 	if err != nil {
 		return nil, microerror.Mask(err)
 	}

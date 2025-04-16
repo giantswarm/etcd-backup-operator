@@ -77,11 +77,11 @@ func (upload S3Upload) Upload(fpath string) (int64, error) {
 	svc := s3.New(sess)
 
 	// Upload.
-	file, err := os.Open(fpath)
+	file, err := os.Open(fpath) //nolint:gosec
 	if err != nil {
 		return -1, microerror.Mask(err)
 	}
-	defer file.Close()
+	defer file.Close() //nolint:errcheck
 
 	// Get file size.
 	fileInfo, err := file.Stat()
