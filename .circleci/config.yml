@@ -8,6 +8,7 @@ workflows:
     jobs:
       - architect/go-build:
           name: go-build
+          resource_class: large
           binary: etcd-backup-operator
           filters:
             tags:
