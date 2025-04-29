@@ -18,6 +18,7 @@ type S3Config struct {
 	SecretAccessKey string
 	Endpoint        string
 	ForcePathStyle  bool
+	EnableIRSA      bool
 }
 
 type S3Upload struct {
@@ -27,22 +28,26 @@ type S3Upload struct {
 	secretAccessKey string
 	endpoint        string
 	forcePathStyle  bool
+	enableIRSA      bool
 }
 
 func NewS3Upload(config S3Config) (*S3Upload, error) {
-	if config.AccessKeyID == "" {
-		return nil, microerror.Maskf(invalidConfigError, "%T.AccessKeyID must be defined", config)
+	if !config.EnableIRSA {
+		if config.AccessKeyID == "" {
+			return nil, microerror.Maskf(invalidConfigError, "%T.AccessKeyID must be defined when not using IRSA", config)
+		}
+		if config.SecretAccessKey == "" {
+			return nil, microerror.Maskf(invalidConfigError, "%T.SecretAccessKey must be defined when not using IRSA", config)
+		}
 	}
+
 	if config.Bucket == "" {
 		return nil, microerror.Maskf(invalidConfigError, "%T.Bucket must be defined", config)
 	}
 	if config.Region == "" {
 		return nil, microerror.Maskf(invalidConfigError, "%T.Region must be defined", config)
+	}
 
-	}
-	if config.SecretAccessKey == "" {
-		return nil, microerror.Maskf(invalidConfigError, "%T.SecretAccessKey must be defined", config)
-	}
 	return &S3Upload{
 		accessKeyID:     config.AccessKeyID,
 		bucket:          config.Bucket,
@@ -50,16 +55,21 @@ func NewS3Upload(config S3Config) (*S3Upload, error) {
 		secretAccessKey: config.SecretAccessKey,
 		endpoint:        config.Endpoint,
 		forcePathStyle:  config.ForcePathStyle,
+		enableIRSA:      config.EnableIRSA,
 	}, nil
 }
 
 func (upload S3Upload) Upload(fpath string) (int64, error) {
-	// Login to AWS S3Upload
-	creds := credentials.NewStaticCredentials(upload.accessKeyID, upload.secretAccessKey, "")
-
+	// Configure AWS session
 	awsConfig := &aws.Config{
-		Credentials: creds,
-		Region:      &upload.region,
+		Region: &upload.region,
+	}
+
+	// Set credentials based on authentication method
+	if !upload.enableIRSA {
+		// Use static credentials if IRSA is not enabled
+		creds := credentials.NewStaticCredentials(upload.accessKeyID, upload.secretAccessKey, "")
+		awsConfig.Credentials = creds
 	}
 
 	if upload.endpoint != "" {

@@ -63,6 +63,23 @@ go run -mod=vendor main.go daemon \
 - `--service.s3.region`: (Required) AWS S3 Region name.
 - `--service.s3.endpoint`: (Optional) Custom S3 endpoint URL.
 - `--service.s3.force-path-style`: (Optional, defaults to `false`) Enable path-style S3 URLs.
+- `--service.enableIRSA`: (Optional, defaults to `false`) Enable IAM Roles for Service Accounts (IRSA) for S3 access instead of using static credentials.
+- `--service.roleArn`: (Optional) AWS IAM Role ARN to use when IRSA is enabled.
+
+#### AWS Authentication:
+
+There are two ways to authenticate with AWS for S3 access:
+
+1. **Static Credentials** (default method):
+   - Set environment variables `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`
+
+2. **IAM Roles for Service Accounts (IRSA)**:
+   - Enable with `--service.enableIRSA=true`
+   - Specify the role ARN with `--service.roleArn=arn:aws:iam::ACCOUNT_ID:role/ROLE_NAME`
+   - Ensure the Kubernetes service account is properly annotated with `eks.amazonaws.com/role-arn`
+   - No static credentials needed when using IRSA
+
+When IRSA is enabled, the operator will use the AWS SDK's credential chain to authenticate, which will automatically use the IAM role associated with the service account.
 
 #### ETCD connection settings:
 

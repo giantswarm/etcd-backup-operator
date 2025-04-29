@@ -14,4 +14,5 @@ type Service struct {
 	Installation                string
 	Sentry                      Sentry
 	BackupDestination           string
+	EnableIRSA                  string
 }

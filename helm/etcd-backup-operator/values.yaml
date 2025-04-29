@@ -23,6 +23,8 @@ provider:
 aws:
   s3bucket: ""
   s3region: ""
+  enableIRSA: false
+  roleArn: ""
   credentials:
     awsAccessKey: ""
     awsSecretKey: ""

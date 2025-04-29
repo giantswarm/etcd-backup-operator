@@ -16,6 +16,12 @@
                         }
                     }
                 },
+                "enableIRSA": {
+                    "type": "boolean"
+                },
+                "roleArn": {
+                    "type": "string"
+                },
                 "s3bucket": {
                     "type": "string"
                 },

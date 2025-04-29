@@ -141,14 +141,20 @@ func New(config Config) (*Service, error) {
 
 	var etcdBackupController *controller.ETCDBackup
 	{
-		uploader, err := storage.NewS3Upload(storage.S3Config{
-			AccessKeyID:     os.Getenv(key.EnvAWSAccessKeyID),
-			Bucket:          config.Viper.GetString(config.Flag.Service.S3.Bucket),
-			Region:          config.Viper.GetString(config.Flag.Service.S3.Region),
-			SecretAccessKey: os.Getenv(key.EnvAWSSecretAccessKey),
-			Endpoint:        config.Viper.GetString(config.Flag.Service.S3.Endpoint),
-			ForcePathStyle:  config.Viper.GetBool(config.Flag.Service.S3.ForcePathStyle),
-		})
+		s3Config := storage.S3Config{
+			Bucket:         config.Viper.GetString(config.Flag.Service.S3.Bucket),
+			Region:         config.Viper.GetString(config.Flag.Service.S3.Region),
+			Endpoint:       config.Viper.GetString(config.Flag.Service.S3.Endpoint),
+			ForcePathStyle: config.Viper.GetBool(config.Flag.Service.S3.ForcePathStyle),
+		}
+		if !config.Viper.GetBool(config.Flag.Service.EnableIRSA) {
+			s3Config.AccessKeyID = os.Getenv(key.EnvAWSAccessKeyID)
+			s3Config.SecretAccessKey = os.Getenv(key.EnvAWSSecretAccessKey)
+		} else {
+			s3Config.EnableIRSA = true
+		}
+
+		uploader, err := storage.NewS3Upload(s3Config)
 		if err != nil {
 			return nil, microerror.Mask(err)
 		}
