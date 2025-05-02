@@ -120,6 +120,7 @@ func mainE(ctx context.Context) error {
 	daemonCommand.PersistentFlags().String(f.Service.ETCDv3.Endpoints, "", "Endpoints for ETCD v3 connection")
 	daemonCommand.PersistentFlags().String(f.Service.Installation, "", "Name of the installation")
 	daemonCommand.PersistentFlags().String(f.Service.Sentry.DSN, "", "DSN of the Sentry instance to forward errors to.")
+	daemonCommand.PersistentFlags().Bool(f.Service.EnableIRSA, false, "Enable IAM Roles for Service Accounts (IRSA) for S3 access.")
 
 	err = newCommand.CobraCommand().Execute()
 	if err != nil {
