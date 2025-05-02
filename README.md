@@ -63,6 +63,9 @@ go run -mod=vendor main.go daemon \
 - `--service.s3.region`: (Required) AWS S3 Region name.
 - `--service.s3.endpoint`: (Optional) Custom S3 endpoint URL.
 - `--service.s3.force-path-style`: (Optional, defaults to `false`) Enable path-style S3 URLs.
+
+#### IAM Roles for Service Accounts (IRSA) settings:
+
 - `--service.enableIRSA`: (Optional, defaults to `false`) Enable IAM Roles for Service Accounts (IRSA) for S3 access instead of using static credentials.
 - `--service.roleArn`: (Optional) AWS IAM Role ARN to use when IRSA is enabled.
 

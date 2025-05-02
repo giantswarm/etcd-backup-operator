@@ -14,7 +14,7 @@ data:
       listen:
         address: "http://0.0.0.0:{{ .Values.service.port }}"
     service:
-      enableIRSA: {{ .Values.aws.enableIRSA }}
+      enableIRSA: {{ .Values.aws.irsa.enabled }}
       backupDestination: "{{ .Values.backupDestination }}"
       kubernetes:
         address: ''
