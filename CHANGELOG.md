@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.13.0] - 2025-05-06
+
 ### Added
 
 - Add option to use IAM Roles for Service Accounts (IRSA) for `etcd-backup-operator`.
@@ -365,7 +367,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First release.
 
-[Unreleased]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.12.0...HEAD
+[Unreleased]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.13.0...HEAD
+[4.13.0]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.12.0...v4.13.0
 [4.12.0]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.11.0...v4.12.0
 [4.11.0]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.10.1...v4.11.0
 [4.10.1]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.10.0...v4.10.1
