@@ -44,32 +44,6 @@ workflows:
               only: /^v.*/
 
       - architect/push-to-app-collection:
-          name: push-to-aws-app-collection
-          context: architect
-          app_name: etcd-backup-operator
-          app_collection_repo: aws-app-collection
-          requires:
-            - push-to-control-plane-catalog
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^v.*/
-
-      - architect/push-to-app-collection:
-          name: push-to-azure-app-collection
-          context: architect
-          app_name: etcd-backup-operator
-          app_collection_repo: azure-app-collection
-          requires:
-            - push-to-control-plane-catalog
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^v.*/
-
-      - architect/push-to-app-collection:
           name: push-to-capa-app-collection
           context: architect
           app_name: etcd-backup-operator
