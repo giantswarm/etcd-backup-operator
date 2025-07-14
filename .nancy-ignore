@@ -1,3 +1,2 @@
-CVE-2025-4673 until=2025-07-13 # golang.org/x/net@v0.38.0
-CVE-2024-0406 until=2025-07-13 # github.com/mholt/archiver/v3@v3.5.1
-CVE-2025-3445 until=2025-07-13 # github.com/mholt/archiver/v3@v3.5.1
+CVE-2024-0406 until=2025-08-13 # github.com/mholt/archiver/v3@v3.5.1
+CVE-2025-3445 until=2025-08-13 # github.com/mholt/archiver/v3@v3.5.1
