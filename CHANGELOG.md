@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Go: Update dependencies.
 
+### Fixed
+
+- Fix IRSA authentication in AWS China regions by setting regional STS endpoint.
+
 ## [4.13.0] - 2025-05-06
 
 ### Added

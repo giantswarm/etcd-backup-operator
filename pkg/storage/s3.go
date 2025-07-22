@@ -3,9 +3,11 @@ package storage
 import (
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/aws/endpoints"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/giantswarm/microerror"
@@ -77,6 +79,13 @@ func (upload S3Upload) Upload(fpath string) (int64, error) {
 	}
 	if upload.forcePathStyle {
 		awsConfig.S3ForcePathStyle = aws.Bool(true)
+	}
+
+	// For China regions, ensure correct partition handling
+	if upload.enableIRSA {
+		if strings.HasPrefix(upload.region, "cn-") {
+			awsConfig.STSRegionalEndpoint = endpoints.RegionalSTSEndpoint
+		}
 	}
 
 	sess, err := session.NewSession(awsConfig)
