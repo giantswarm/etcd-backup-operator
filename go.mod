@@ -25,9 +25,9 @@ require (
 	go.etcd.io/etcd/client/v3 v3.6.4
 	golang.org/x/crypto v0.41.0
 	google.golang.org/grpc v1.74.2
-	k8s.io/api v0.33.3
-	k8s.io/apimachinery v0.33.3
-	k8s.io/client-go v0.33.3
+	k8s.io/api v0.33.4
+	k8s.io/apimachinery v0.33.4
+	k8s.io/client-go v0.33.4
 	sigs.k8s.io/cluster-api v1.10.4
 	sigs.k8s.io/controller-runtime v0.21.0
 )
