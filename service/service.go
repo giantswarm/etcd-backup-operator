@@ -18,7 +18,7 @@ import (
 	"github.com/giantswarm/micrologger"
 	"github.com/spf13/viper"
 	"k8s.io/client-go/rest"
-	capi "sigs.k8s.io/cluster-api/api/v1beta1"
+	capi "sigs.k8s.io/cluster-api/api/core/v1beta1"
 
 	"github.com/giantswarm/etcd-backup-operator/v4/flag"
 	"github.com/giantswarm/etcd-backup-operator/v4/pkg/giantnetes"
