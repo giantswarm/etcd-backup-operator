@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Go: Update dependencies.
 - Go: Downgrade Cluster API to v1.10.5.
+- Update Kyverno API to v2 for policy exceptions
 
 ## [4.13.0] - 2025-05-06
 
