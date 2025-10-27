@@ -1,2 +1,2 @@
-CVE-2024-0406 until=2025-09-12 # github.com/mholt/archiver/v3@v3.5.1
-CVE-2025-3445 until=2025-09-12 # github.com/mholt/archiver/v3@v3.5.1
+CVE-2024-0406 until=2025-11-26 # github.com/mholt/archiver/v3@v3.5.1
+CVE-2025-3445 until=2025-11-26 # github.com/mholt/archiver/v3@v3.5.1
