@@ -1,0 +1,14 @@
+checks:
+  exclude:
+    # Privileged operator - requires host network for etcd communication
+    - host-network
+    # Probe port not exposed as containerPort
+    - liveness-port
+    # Backup operations require filesystem write access
+    - no-read-only-root-fs
+    # etcd backup requires root access
+    - run-as-non-root
+    # CronJob resources should be set based on actual usage data
+    - unset-cpu-requirements
+    - unset-memory-requirements
+
