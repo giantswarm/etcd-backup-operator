@@ -1,0 +1,8 @@
+replace-chart-version-with-git: true
+replace-app-version-with-git: true
+generate-metadata: true
+chart-dir: ./helm/etcd-backup-operator
+destination: build
+catalog-base-url: https://giantswarm.github.io/control-plane-test-catalog/
+kubelinter-config: .abs/.kube-linter.yaml
+
