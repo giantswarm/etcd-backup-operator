@@ -1,14 +1,11 @@
 image:
   name: "giantswarm/etcd-backup-operator"
-  tag: "[[ .Version ]]"
+  tag: ""
 pod:
   user:
     id: 1000
   group:
     id: 1000
-project:
-  branch: "[[ .Branch ]]"
-  commit: "[[ .SHA ]]"
 
 service:
   port: 8050
