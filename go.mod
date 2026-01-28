@@ -16,7 +16,7 @@ require (
 	github.com/giantswarm/microerror v0.4.1
 	github.com/giantswarm/microkit v1.0.4
 	github.com/giantswarm/micrologger v1.1.2
-	github.com/giantswarm/operatorkit/v7 v7.3.0
+	github.com/giantswarm/operatorkit/v7 v7.4.0
 	github.com/google/go-cmp v0.7.0
 	github.com/mholt/archiver/v3 v3.5.1
 	github.com/pkg/errors v0.9.1
@@ -45,7 +45,8 @@ require (
 	github.com/evanphx/json-patch/v5 v5.9.11 // indirect
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
 	github.com/fxamacker/cbor/v2 v2.9.0 // indirect
-	github.com/getsentry/sentry-go v0.40.0 // indirect
+	github.com/getsentry/sentry-go v0.42.0 // indirect
+	github.com/giantswarm/k8sclient/v8 v8.1.0 // indirect
 	github.com/giantswarm/to v0.4.2 // indirect
 	github.com/giantswarm/versionbundle v1.1.0 // indirect
 	github.com/go-kit/kit v0.13.0 // indirect
@@ -134,7 +135,7 @@ require (
 	k8s.io/component-base v0.35.0 // indirect
 	k8s.io/klog/v2 v2.130.1 // indirect
 	k8s.io/kube-openapi v0.0.0-20251125145642-4e65d59e963e // indirect
-	k8s.io/utils v0.0.0-20251218160917-61b37f7a4624 // indirect
+	k8s.io/utils v0.0.0-20260108192941-914a6e750570 // indirect
 	sigs.k8s.io/json v0.0.0-20250730193827-2d320260d730 // indirect
 	sigs.k8s.io/randfill v1.0.0 // indirect
 	sigs.k8s.io/structured-merge-diff/v6 v6.3.2-0.20260122202528-d9cc6641c482 // indirect
