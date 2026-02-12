@@ -24,7 +24,7 @@ require (
 	github.com/spf13/viper v1.21.0
 	go.etcd.io/etcd/client/v3 v3.6.7
 	golang.org/x/crypto v0.48.0
-	google.golang.org/grpc v1.78.0
+	google.golang.org/grpc v1.79.0
 	k8s.io/api v0.35.1
 	k8s.io/apimachinery v0.35.1
 	k8s.io/client-go v0.35.1
@@ -109,7 +109,6 @@ require (
 	go.etcd.io/etcd/api/v3 v3.6.7 // indirect
 	go.etcd.io/etcd/client/pkg/v3 v3.6.7 // indirect
 	go.opentelemetry.io/otel v1.39.0 // indirect
-	go.opentelemetry.io/otel/sdk/metric v1.39.0 // indirect
 	go.opentelemetry.io/otel/trace v1.39.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.1 // indirect
