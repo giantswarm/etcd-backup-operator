@@ -15,7 +15,7 @@ import (
 	"github.com/giantswarm/micrologger"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	capi "sigs.k8s.io/cluster-api/api/v1beta1"
+	capi "sigs.k8s.io/cluster-api/api/core/v1beta2"
 	"sigs.k8s.io/cluster-api/util/secret"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
@@ -436,7 +436,9 @@ func (u *Utils) getAllWorkloadClusters(ctx context.Context, crdCLient client.Cli
 			for _, cluster := range crdList.Items {
 				// Only backup cluster if it was not marked for delete.
 				// and if the control and infrastructure is ready
-				if cluster.DeletionTimestamp == nil && cluster.Status.ControlPlaneReady && cluster.Status.InfrastructureReady {
+				if cluster.DeletionTimestamp == nil &&
+				cluster.Status.Initialization.ControlPlaneInitialized != nil && *cluster.Status.Initialization.ControlPlaneInitialized &&
+				cluster.Status.Initialization.InfrastructureProvisioned != nil && *cluster.Status.Initialization.InfrastructureProvisioned {
 					clusterList = append(clusterList, Cluster{clusterKey: client.ObjectKey{Name: cluster.Name, Namespace: cluster.Namespace}, provider: CAPI})
 				}
 			}

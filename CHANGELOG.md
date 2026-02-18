@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Bump Cluster API to v1.12.3 and migrate from `v1beta1` to `v1beta2` API.
 - Migrate to App Build Suite (ABS) for Helm chart building.
 
 ## [4.13.1] - 2025-12-19
