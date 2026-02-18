@@ -27,7 +27,7 @@ func (r *Resource) backupRunningV3BackupCompletedTransition(ctx context.Context,
 	}
 
 	for _, i := range customObject.Status.Instances {
-		if i.Error != "" || i.V2.Status == instanceBackupStateFailed || i.V3.Status == instanceBackupStateFailed {
+		if i.Error != "" || i.V3.Status == instanceBackupStateFailed {
 			return backupStateFailed, nil
 		}
 	}

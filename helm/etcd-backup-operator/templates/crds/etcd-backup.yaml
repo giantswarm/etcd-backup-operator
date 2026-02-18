@@ -89,51 +89,6 @@ spec:
                       name:
                         description: Name of the workload cluster or management cluster
                         type: string
-                      v2:
-                        description: Status of the V2 backup for this instance
-                        nullable: true
-                        properties:
-                          backupFileSize:
-                            description: Size of the backup file
-                            format: int64
-                            type: integer
-                          creationTime:
-                            description: Time took by the backup creation process
-                            format: int64
-                            type: integer
-                          encryptionTime:
-                            description: Time took by the backup encryption process
-                            format: int64
-                            type: integer
-                          filename:
-                            description: Filename is the name of the backup file.
-                            nullable: true
-                            type: string
-                          finishedTimestamp:
-                            description: Timestamp when the last (final) attempt was
-                              made (when the Phase became either 'Completed' or 'Failed'
-                            format: date-time
-                            nullable: true
-                            type: string
-                          latestError:
-                            description: Latest backup error message
-                            type: string
-                          startedTimestamp:
-                            description: Timestamp when the first attempt was made
-                            format: date-time
-                            nullable: true
-                            type: string
-                          status:
-                            description: Status of this instance's backup job (can be
-                              'Pending', 'Running'. 'Completed', 'Failed')
-                            type: string
-                          uploadTime:
-                            description: Time took by the backup upload process
-                            format: int64
-                            type: integer
-                        required:
-                          - status
-                        type: object
                       v3:
                         description: Status of the V3 backup for this instance
                         nullable: true

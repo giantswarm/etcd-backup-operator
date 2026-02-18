@@ -43,7 +43,6 @@ func (r *Resource) runBackupOnAllInstances(ctx context.Context, obj interface{},
 			if id == key.ManagementCluster {
 				instances = append(instances, giantnetes.ETCDInstance{
 					Name:   key.ManagementCluster,
-					ETCDv2: r.etcdV2Settings,
 					ETCDv3: r.etcdV3Settings,
 				},
 				)
@@ -61,7 +60,6 @@ func (r *Resource) runBackupOnAllInstances(ctx context.Context, obj interface{},
 					r.logger.LogCtx(ctx, "level", "error", "message", fmt.Sprintf("cluster %q was not found", id))
 					instanceStatus := r.findOrInitializeInstanceStatus(ctx, customObject, id)
 					instanceStatus.Error = "No cluster found with such name or unable to initialize etcd client due to missing data. Please check etcd-backup-operator logs for more details."
-					instanceStatus.V2 = nil
 					instanceStatus.V3 = nil
 					customObject.Status.Instances[id] = instanceStatus
 					err = r.persistCustomObjectStatus(ctx, customObject)
@@ -77,7 +75,6 @@ func (r *Resource) runBackupOnAllInstances(ctx context.Context, obj interface{},
 		if !r.skipManagementClusterBackup {
 			cp := giantnetes.ETCDInstance{
 				Name:   key.ManagementCluster,
-				ETCDv2: r.etcdV2Settings,
 				ETCDv3: r.etcdV3Settings,
 			}
 			instances = append(instances, cp)

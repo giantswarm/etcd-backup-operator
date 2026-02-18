@@ -70,15 +70,6 @@ func New(config Config) (*Service, error) {
 	if config.Viper.GetString(config.Flag.Service.S3.Region) == "" {
 		return nil, microerror.Maskf(invalidConfigError, "S3Uploader region must not be empty.")
 	}
-	// If ETCDv2 data dir is empty, all the ETCDv3 settings must be specified.
-	if config.Viper.GetString(config.Flag.Service.ETCDv2.DataDir) == "" {
-		if config.Viper.GetString(config.Flag.Service.ETCDv3.Endpoints) == "" ||
-			config.Viper.GetString(config.Flag.Service.ETCDv3.Key) == "" ||
-			config.Viper.GetString(config.Flag.Service.ETCDv3.CaCert) == "" ||
-			config.Viper.GetString(config.Flag.Service.ETCDv3.Cert) == "" {
-			return nil, microerror.Maskf(invalidConfigError, "One of ETCDv2 or ETCDv3 settings must be specified.")
-		}
-	}
 	// If any of the ETCDv3 Flags are set, than all have to be set.
 	if config.Viper.GetString(config.Flag.Service.ETCDv3.Endpoints) != "" ||
 		config.Viper.GetString(config.Flag.Service.ETCDv3.Key) != "" ||
@@ -176,9 +167,6 @@ func New(config Config) (*Service, error) {
 		c := controller.ETCDBackupConfig{
 			K8sClient: k8sClient,
 			Logger:    config.Logger,
-			ETCDv2Settings: giantnetes.ETCDv2Settings{
-				DataDir: config.Viper.GetString(config.Flag.Service.ETCDv2.DataDir),
-			},
 			ETCDv3Settings: giantnetes.ETCDv3Settings{
 				Endpoints: config.Viper.GetString(config.Flag.Service.ETCDv3.Endpoints),
 				TLSConfig: tlsConfig,

@@ -113,7 +113,6 @@ func mainE(ctx context.Context) error {
 	daemonCommand.PersistentFlags().String(f.Service.S3.Region, "", "AWS S3 Region name.")
 	daemonCommand.PersistentFlags().String(f.Service.S3.Endpoint, "", "Custom AWS S3 Endpoint.")
 	daemonCommand.PersistentFlags().Bool(f.Service.S3.ForcePathStyle, false, "Enable path-style S3 URLs.")
-	daemonCommand.PersistentFlags().String(f.Service.ETCDv2.DataDir, "", "ETCD v2 Data Dir path.")
 	daemonCommand.PersistentFlags().String(f.Service.ETCDv3.Cert, "", "Client certificate for ETCD v3 connection")
 	daemonCommand.PersistentFlags().String(f.Service.ETCDv3.CaCert, "", "Client CA certificate for ETCD v3 connection")
 	daemonCommand.PersistentFlags().String(f.Service.ETCDv3.Key, "", "Client private key for ETCD v3 connection")

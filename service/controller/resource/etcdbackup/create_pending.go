@@ -31,5 +31,5 @@ func (r *Resource) backupPendingTransition(ctx context.Context, obj interface{},
 
 	// No need to cancel the reconciliation: the state is changing so this will be done in EnsureCreated.
 
-	return backupStateRunningV2BackupRunning, nil
+	return backupStateRunningV3BackupRunning, nil
 }

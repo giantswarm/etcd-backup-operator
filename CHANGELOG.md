@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+
+- Remove etcd v2 backup support. No clusters use etcd v2 anymore.
+
 ### Changed
 
 - Bump Cluster API to v1.12.3 and migrate from `v1beta1` to `v1beta2` API.
