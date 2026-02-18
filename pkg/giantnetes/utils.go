@@ -437,8 +437,8 @@ func (u *Utils) getAllWorkloadClusters(ctx context.Context, crdCLient client.Cli
 				// Only backup cluster if it was not marked for delete.
 				// and if the control and infrastructure is ready
 				if cluster.DeletionTimestamp == nil &&
-				cluster.Status.Initialization.ControlPlaneInitialized != nil && *cluster.Status.Initialization.ControlPlaneInitialized &&
-				cluster.Status.Initialization.InfrastructureProvisioned != nil && *cluster.Status.Initialization.InfrastructureProvisioned {
+					cluster.Status.Initialization.ControlPlaneInitialized != nil && *cluster.Status.Initialization.ControlPlaneInitialized &&
+					cluster.Status.Initialization.InfrastructureProvisioned != nil && *cluster.Status.Initialization.InfrastructureProvisioned {
 					clusterList = append(clusterList, Cluster{clusterKey: client.ObjectKey{Name: cluster.Name, Namespace: cluster.Namespace}, provider: CAPI})
 				}
 			}
