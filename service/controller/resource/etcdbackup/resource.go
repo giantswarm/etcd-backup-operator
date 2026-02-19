@@ -5,9 +5,9 @@ import (
 	"github.com/giantswarm/microerror"
 	"github.com/giantswarm/micrologger"
 
-	"github.com/giantswarm/etcd-backup-operator/v4/pkg/giantnetes"
-	"github.com/giantswarm/etcd-backup-operator/v4/pkg/storage"
-	"github.com/giantswarm/etcd-backup-operator/v4/service/controller/resource/etcdbackup/internal/state"
+	"github.com/giantswarm/etcd-backup-operator/v5/pkg/giantnetes"
+	"github.com/giantswarm/etcd-backup-operator/v5/pkg/storage"
+	"github.com/giantswarm/etcd-backup-operator/v5/service/controller/resource/etcdbackup/internal/state"
 )
 
 const (

@@ -9,8 +9,8 @@ import (
 	"github.com/giantswarm/backoff"
 	"github.com/giantswarm/microerror"
 
-	"github.com/giantswarm/etcd-backup-operator/v4/pkg/etcd"
-	"github.com/giantswarm/etcd-backup-operator/v4/pkg/etcd/metrics"
+	"github.com/giantswarm/etcd-backup-operator/v5/pkg/etcd"
+	"github.com/giantswarm/etcd-backup-operator/v5/pkg/etcd/metrics"
 )
 
 func (r *Resource) performBackup(ctx context.Context, backupper etcd.Backupper, instanceName string) (*metrics.BackupAttemptResult, error) {
