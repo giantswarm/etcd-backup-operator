@@ -7,7 +7,9 @@ import (
 	"github.com/giantswarm/microkit/command"
 	microserver "github.com/giantswarm/microkit/server"
 	"github.com/giantswarm/micrologger"
+	"github.com/go-logr/logr"
 	"github.com/spf13/viper"
+	ctrl "sigs.k8s.io/controller-runtime"
 
 	"github.com/giantswarm/etcd-backup-operator/v4/flag"
 	"github.com/giantswarm/etcd-backup-operator/v4/pkg/project"
@@ -28,6 +30,11 @@ func main() {
 
 func mainE(ctx context.Context) error {
 	var err error
+
+	// Initialize controller-runtime logger to suppress the
+	// "log.SetLogger(...) was never called" warning. All operational
+	// logging goes through micrologger, so we discard controller-runtime logs.
+	ctrl.SetLogger(logr.Discard())
 
 	var logger micrologger.Logger
 	{
