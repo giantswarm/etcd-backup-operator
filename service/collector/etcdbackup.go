@@ -13,7 +13,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	capi "sigs.k8s.io/cluster-api/api/core/v1beta2"
 
-	"github.com/giantswarm/etcd-backup-operator/v4/service/controller/key"
+	"github.com/giantswarm/etcd-backup-operator/v5/service/controller/key"
 )
 
 const (

@@ -11,10 +11,10 @@ import (
 	"github.com/spf13/viper"
 	ctrl "sigs.k8s.io/controller-runtime"
 
-	"github.com/giantswarm/etcd-backup-operator/v4/flag"
-	"github.com/giantswarm/etcd-backup-operator/v4/pkg/project"
-	"github.com/giantswarm/etcd-backup-operator/v4/server"
-	"github.com/giantswarm/etcd-backup-operator/v4/service"
+	"github.com/giantswarm/etcd-backup-operator/v5/flag"
+	"github.com/giantswarm/etcd-backup-operator/v5/pkg/project"
+	"github.com/giantswarm/etcd-backup-operator/v5/server"
+	"github.com/giantswarm/etcd-backup-operator/v5/service"
 )
 
 var (

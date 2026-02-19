@@ -3,7 +3,7 @@ package giantnetes
 import (
 	"crypto/tls"
 
-	"github.com/giantswarm/etcd-backup-operator/v4/pkg/etcd/proxy"
+	"github.com/giantswarm/etcd-backup-operator/v5/pkg/etcd/proxy"
 )
 
 type ETCDv3Settings struct {

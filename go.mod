@@ -1,4 +1,4 @@
-module github.com/giantswarm/etcd-backup-operator/v4
+module github.com/giantswarm/etcd-backup-operator/v5
 
 go 1.25.5
 

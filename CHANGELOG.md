@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.0.0] - 2026-02-19
+
 ### Removed
 
 - Remove etcd v2 backup support. No clusters use etcd v2 anymore.
@@ -384,7 +386,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First release.
 
-[Unreleased]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.13.1...HEAD
+[Unreleased]: https://github.com/giantswarm/etcd-backup-operator/compare/v5.0.0...HEAD
+[5.0.0]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.13.1...v5.0.0
 [4.13.1]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.13.0...v4.13.1
 [4.13.0]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.12.0...v4.13.0
 [4.12.0]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.11.0...v4.12.0

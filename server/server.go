@@ -12,9 +12,9 @@ import (
 	"github.com/giantswarm/micrologger"
 	"github.com/spf13/viper"
 
-	"github.com/giantswarm/etcd-backup-operator/v4/pkg/project"
-	"github.com/giantswarm/etcd-backup-operator/v4/server/endpoint"
-	"github.com/giantswarm/etcd-backup-operator/v4/service"
+	"github.com/giantswarm/etcd-backup-operator/v5/pkg/project"
+	"github.com/giantswarm/etcd-backup-operator/v5/server/endpoint"
+	"github.com/giantswarm/etcd-backup-operator/v5/service"
 )
 
 type Config struct {

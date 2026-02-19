@@ -19,8 +19,8 @@ import (
 	"sigs.k8s.io/cluster-api/util/secret"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	"github.com/giantswarm/etcd-backup-operator/v4/pkg/etcd/proxy"
-	"github.com/giantswarm/etcd-backup-operator/v4/service/controller/key"
+	"github.com/giantswarm/etcd-backup-operator/v5/pkg/etcd/proxy"
+	"github.com/giantswarm/etcd-backup-operator/v5/service/controller/key"
 )
 
 const (
