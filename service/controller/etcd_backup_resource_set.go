@@ -10,8 +10,8 @@ import (
 )
 
 func validateETCDBackupResourceSetConfigConfig(config ETCDBackupConfig) error {
-	if !config.SkipManagementClusterBackup && !config.ETCDv2Settings.AreComplete() && !config.ETCDv3Settings.AreComplete() {
-		return microerror.Maskf(invalidConfigError, "Either %T.ETCDv2Settings or %T.ETCDv3Settings must be defined", config, config)
+	if !config.SkipManagementClusterBackup && !config.ETCDv3Settings.AreComplete() {
+		return microerror.Maskf(invalidConfigError, "%T.ETCDv3Settings must be defined", config)
 	}
 	if config.Installation == "" {
 		return microerror.Maskf(invalidConfigError, "%T.Installation must be defined", config)
@@ -34,7 +34,6 @@ func newETCDBackupResourceSet(config ETCDBackupConfig) ([]resource.Interface, er
 		c := etcdbackup.Config{
 			K8sClient:                   config.K8sClient,
 			Logger:                      config.Logger,
-			ETCDv2Settings:              config.ETCDv2Settings,
 			ETCDv3Settings:              config.ETCDv3Settings,
 			EncryptionPwd:               config.EncryptionPwd,
 			Installation:                config.Installation,

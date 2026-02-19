@@ -111,8 +111,7 @@ func (u *Utils) GetTenantClusters(ctx context.Context) ([]ETCDInstance, error) {
 		}
 
 		instances = append(instances, ETCDInstance{
-			Name:   cluster.clusterKey.Name,
-			ETCDv2: ETCDv2Settings{},
+			Name: cluster.clusterKey.Name,
 			ETCDv3: ETCDv3Settings{
 				Endpoints: etcdEndpoint,
 				TLSConfig: tlsConfig,

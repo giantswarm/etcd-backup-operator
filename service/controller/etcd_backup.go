@@ -18,7 +18,6 @@ import (
 type ETCDBackupConfig struct {
 	K8sClient                   k8sclient.Interface
 	Logger                      micrologger.Logger
-	ETCDv2Settings              giantnetes.ETCDv2Settings
 	ETCDv3Settings              giantnetes.ETCDv3Settings
 	EncryptionPwd               string
 	Installation                string
@@ -33,8 +32,8 @@ type ETCDBackup struct {
 }
 
 func validateETCDBackupConfig(config ETCDBackupConfig) error {
-	if !config.SkipManagementClusterBackup && !config.ETCDv2Settings.AreComplete() && !config.ETCDv3Settings.AreComplete() {
-		return microerror.Maskf(invalidConfigError, "Either %T.ETCDv2Settings or %T.ETCDv3Settings must be defined", config, config)
+	if !config.SkipManagementClusterBackup && !config.ETCDv3Settings.AreComplete() {
+		return microerror.Maskf(invalidConfigError, "%T.ETCDv3Settings must be defined", config)
 	}
 	if config.Installation == "" {
 		return microerror.Maskf(invalidConfigError, "%T.Installation must be defined", config)
@@ -101,7 +100,6 @@ func newETCDBackupResourceSets(config ETCDBackupConfig) ([]resource.Interface, e
 		c := ETCDBackupConfig{
 			K8sClient:                   config.K8sClient,
 			Logger:                      config.Logger,
-			ETCDv2Settings:              config.ETCDv2Settings,
 			ETCDv3Settings:              config.ETCDv3Settings,
 			EncryptionPwd:               config.EncryptionPwd,
 			Installation:                config.Installation,

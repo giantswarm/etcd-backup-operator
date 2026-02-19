@@ -4,7 +4,7 @@
 
 The `etcd-backup-operator` takes backups of ETCD instances on both the control plane and tenant clusters.
 
-The operator is meant to be run on the management cluster and can perform both V2 and V3 ETCD backup.
+The operator is meant to be run on the management cluster and performs V3 ETCD backups.
 
 ## Branches
 
@@ -39,7 +39,6 @@ go run -mod=vendor main.go daemon \
   --service.kubernetes.incluster="true" \
   --service.s3.bucket=<S3 bucket> \
   --service.s3.region=<S3 region> \
-  --service.etcdv2.datadir="<Path of the directory where the V2 ETCD data is stored>" \
   --service.etcdv3.cacert=<Path of the ETCD CA file> \
   --service.etcdv3.cert=<Path of the ETCD Cert file> \
   --service.etcdv3.key=<Path of the ETCD Private Key file> \
@@ -86,15 +85,12 @@ When IRSA is enabled, the operator will use the AWS SDK's credential chain to au
 
 #### ETCD connection settings:
 
-- `--service.etcdv2.datadir`: (Optional, see below for details) ETCD v2 Data Dir path.
-- `--service.etcdv3.cert`: (Optional, see below for details) Client certificate for ETCD v3 connection
-- `--service.etcdv3.cacert`: (Optional, see below for details) Client CA certificate for ETCD v3 connection
-- `--service.etcdv3.key`: (Optional, see below for details) Client private key for ETCD v3 connection
-- `--service.etcdv3.endpoints`: (Optional, see below for details) 
+- `--service.etcdv3.cert`: (Required) Client certificate for ETCD v3 connection
+- `--service.etcdv3.cacert`: (Required) Client CA certificate for ETCD v3 connection
+- `--service.etcdv3.key`: (Required) Client private key for ETCD v3 connection
+- `--service.etcdv3.endpoints`: (Required) Endpoints for ETCD v3 connection
 
-Either `service.etcdv2.datadir` or all other fields are mandatory.
-
-You can specify all of them as well (and you'll enable both V2 and V3 backups).
+All four ETCD v3 fields are required when management cluster backup is enabled.
 
 #### Environment variables:
 

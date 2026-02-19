@@ -124,9 +124,7 @@ func (d *ETCDBackup) Collect(ch chan<- prometheus.Metric) error {
 	tenantClusterIds = append(tenantClusterIds, key.ManagementCluster)
 
 	// Iterate over all ETCDBackup objects and select the most recent backup from each cluster.
-	latestV2SuccessMetrics := map[string]v1alpha1.ETCDInstanceBackupStatus{}
 	latestV3SuccessMetrics := map[string]v1alpha1.ETCDInstanceBackupStatus{}
-	latestV2AttemptMetrics := map[string]v1alpha1.ETCDInstanceBackupStatus{}
 	latestV3AttemptMetrics := map[string]v1alpha1.ETCDInstanceBackupStatus{}
 
 	for _, backup := range backups {
@@ -137,16 +135,10 @@ func (d *ETCDBackup) Collect(ch chan<- prometheus.Metric) error {
 				continue
 			}
 
-			if instanceStatus.V2 != nil && instanceStatus.V2.Status == backupStateCompleted {
-				latestV2SuccessMetrics[instanceStatus.Name] = *instanceStatus.V2
-			}
 			if instanceStatus.V3 != nil && instanceStatus.V3.Status == backupStateCompleted {
 				latestV3SuccessMetrics[instanceStatus.Name] = *instanceStatus.V3
 			}
 
-			if instanceStatus.V2 != nil && instanceStatus.V2.Status != backupStateSkipped {
-				latestV2AttemptMetrics[instanceStatus.Name] = *instanceStatus.V2
-			}
 			if instanceStatus.V3 != nil && instanceStatus.V3.Status != backupStateSkipped {
 				latestV3AttemptMetrics[instanceStatus.Name] = *instanceStatus.V3
 			}
@@ -207,16 +199,8 @@ func (d *ETCDBackup) Collect(ch chan<- prometheus.Metric) error {
 		}
 	}
 
-	for clusterName, status := range latestV2SuccessMetrics {
-		sendSuccessMetricsForVersion(clusterName, status, "V2")
-	}
-
 	for clusterName, status := range latestV3SuccessMetrics {
 		sendSuccessMetricsForVersion(clusterName, status, "V3")
-	}
-
-	for clusterName, status := range latestV2AttemptMetrics {
-		sendAttemptMetricsForVersion(clusterName, status, "V2")
 	}
 
 	for clusterName, status := range latestV3AttemptMetrics {

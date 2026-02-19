@@ -9,7 +9,6 @@ type Service struct {
 	Kubernetes                  kubernetes.Kubernetes
 	S3                          S3Uploader
 	SkipManagementClusterBackup string
-	ETCDv2                      ETCDv2Settings
 	ETCDv3                      ETCDv3Settings
 	Installation                string
 	Sentry                      Sentry

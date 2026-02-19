@@ -17,7 +17,6 @@ const (
 type Config struct {
 	K8sClient                   k8sclient.Interface
 	Logger                      micrologger.Logger
-	ETCDv2Settings              giantnetes.ETCDv2Settings
 	ETCDv3Settings              giantnetes.ETCDv3Settings
 	EncryptionPwd               string
 	Installation                string
@@ -30,7 +29,6 @@ type Resource struct {
 	k8sClient    k8sclient.Interface
 	stateMachine state.Machine
 
-	etcdV2Settings              giantnetes.ETCDv2Settings
 	etcdV3Settings              giantnetes.ETCDv3Settings
 	encryptionPwd               string
 	installation                string
@@ -45,8 +43,8 @@ func New(config Config) (*Resource, error) {
 	if config.K8sClient == nil {
 		return nil, microerror.Maskf(invalidConfigError, "%T.k8sClient must not be empty", config)
 	}
-	if !config.SkipManagementClusterBackup && !config.ETCDv2Settings.AreComplete() && !config.ETCDv3Settings.AreComplete() {
-		return nil, microerror.Maskf(invalidConfigError, "Either %T.ETCDv2Settings or %T.ETCDv3Settings must be defined", config, config)
+	if !config.SkipManagementClusterBackup && !config.ETCDv3Settings.AreComplete() {
+		return nil, microerror.Maskf(invalidConfigError, "%T.ETCDv3Settings must be defined", config)
 	}
 	if config.Installation == "" {
 		return nil, microerror.Maskf(invalidConfigError, "%T.Installation must not be empty", config)
@@ -58,7 +56,6 @@ func New(config Config) (*Resource, error) {
 	r := &Resource{
 		logger:                      config.Logger,
 		k8sClient:                   config.K8sClient,
-		etcdV2Settings:              config.ETCDv2Settings,
 		etcdV3Settings:              config.ETCDv3Settings,
 		encryptionPwd:               config.EncryptionPwd,
 		installation:                config.Installation,

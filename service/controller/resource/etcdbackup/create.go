@@ -15,8 +15,6 @@ const (
 	// Global States.
 	backupStateEmpty                    = ""
 	backupStatePending                  = "Pending"
-	backupStateRunningV2BackupRunning   = "V2BackupRunning"
-	backupStateRunningV2BackupCompleted = "V2BackupCompleted"
 	backupStateRunningV3BackupRunning   = "V3BackupRunning"
 	backupStateRunningV3BackupCompleted = "V3BackupCompleted"
 	backupStateCompleted                = "Completed"
@@ -44,8 +42,6 @@ func (r *Resource) configureStateMachine() {
 	sm := state.Machine{
 		backupStateEmpty:                    r.backupEmptyTransition,
 		backupStatePending:                  r.backupPendingTransition,
-		backupStateRunningV2BackupRunning:   r.backupRunningV2BackupRunningTransition,
-		backupStateRunningV2BackupCompleted: r.backupRunningV2BackupCompletedTransition,
 		backupStateRunningV3BackupRunning:   r.backupRunningV3BackupRunningTransition,
 		backupStateRunningV3BackupCompleted: r.backupRunningV3BackupCompletedTransition,
 		backupStateCompleted:                r.backupCompletedTransition,

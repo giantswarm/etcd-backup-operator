@@ -7,7 +7,9 @@ import (
 	"github.com/giantswarm/microkit/command"
 	microserver "github.com/giantswarm/microkit/server"
 	"github.com/giantswarm/micrologger"
+	"github.com/go-logr/logr"
 	"github.com/spf13/viper"
+	ctrl "sigs.k8s.io/controller-runtime"
 
 	"github.com/giantswarm/etcd-backup-operator/v4/flag"
 	"github.com/giantswarm/etcd-backup-operator/v4/pkg/project"
@@ -28,6 +30,11 @@ func main() {
 
 func mainE(ctx context.Context) error {
 	var err error
+
+	// Initialize controller-runtime logger to suppress the
+	// "log.SetLogger(...) was never called" warning. All operational
+	// logging goes through micrologger, so we discard controller-runtime logs.
+	ctrl.SetLogger(logr.Discard())
 
 	var logger micrologger.Logger
 	{
@@ -113,7 +120,6 @@ func mainE(ctx context.Context) error {
 	daemonCommand.PersistentFlags().String(f.Service.S3.Region, "", "AWS S3 Region name.")
 	daemonCommand.PersistentFlags().String(f.Service.S3.Endpoint, "", "Custom AWS S3 Endpoint.")
 	daemonCommand.PersistentFlags().Bool(f.Service.S3.ForcePathStyle, false, "Enable path-style S3 URLs.")
-	daemonCommand.PersistentFlags().String(f.Service.ETCDv2.DataDir, "", "ETCD v2 Data Dir path.")
 	daemonCommand.PersistentFlags().String(f.Service.ETCDv3.Cert, "", "Client certificate for ETCD v3 connection")
 	daemonCommand.PersistentFlags().String(f.Service.ETCDv3.CaCert, "", "Client CA certificate for ETCD v3 connection")
 	daemonCommand.PersistentFlags().String(f.Service.ETCDv3.Key, "", "Client private key for ETCD v3 connection")
