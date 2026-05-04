@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Go: Update dependencies.
+
 ### Removed
 
 - Remove `push-to-app-collection` jobs from CircleCI config, as deployment now moved from collections to MCB using auto upgrade of Flux OciRepository.
