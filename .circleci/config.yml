@@ -7,6 +7,7 @@ workflows:
   build:
     jobs:
       - architect/go-build:
+          context: architect
           name: go-build
           resource_class: large
           binary: etcd-backup-operator
