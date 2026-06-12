@@ -1,9 +1,32 @@
-CVE-2024-0406 until=2026-07-03 # github.com/mholt/archiver/v3@v3.5.1
-CVE-2025-3445 until=2026-07-03 # github.com/mholt/archiver/v3@v3.5.1
-CVE-2026-25680 until=2026-06-28 # golang.org/x/net@v0.54.0
-CVE-2026-25681 until=2026-06-28 # golang.org/x/net@v0.54.0
-CVE-2026-27136 until=2026-06-28 # golang.org/x/net@v0.54.0
-CVE-2026-42502 until=2026-06-28 # golang.org/x/net@v0.54.0
-CVE-2026-42506 until=2026-06-28 # golang.org/x/net@v0.54.0
-CVE-2026-39821 until=2026-06-28 # golang.org/x/net@v0.54.0
-CVE-2026-41178 until=2026-06-28 # go.opentelemetry.io/otel@v1.43.0
+# pkg:golang/github.com/golang-jwt/jwt/v4@v4.4.1
+CVE-2024-51744 until=2026-06-28
+CVE-2025-30204 until=2026-06-28
+
+# pkg:golang/github.com/mholt/archiver/v3@v3.5.1
+CVE-2024-0406 until=2026-06-28
+CVE-2025-3445 until=2026-06-28
+
+# pkg:golang/github.com/nats-io/nats-server/v2@v2.8.4
+CVE-2022-42708 until=2026-06-28
+CVE-2022-42709 until=2026-06-28
+CVE-2023-47090 until=2026-06-28
+CVE-2025-30215 until=2026-06-28
+CVE-2026-27571 until=2026-06-28
+CVE-2026-27889 until=2026-06-28
+CVE-2026-29785 until=2026-06-28
+CVE-2026-33215 until=2026-06-28
+CVE-2026-33216 until=2026-06-28
+CVE-2026-33217 until=2026-06-28
+CVE-2026-33218 until=2026-06-28
+CVE-2026-33219 until=2026-06-28
+CVE-2026-33222 until=2026-06-28
+CVE-2026-33223 until=2026-06-28
+CVE-2026-33246 until=2026-06-28
+CVE-2026-33247 until=2026-06-28
+CVE-2026-33248 until=2026-06-28
+
+# pkg:golang/github.com/yuin/goldmark@v1.2.1
+CVE-2026-5160 until=2026-06-28
+
+# pkg:golang/go.opentelemetry.io/otel@v1.43.0
+CVE-2026-41178 until=2026-06-28
