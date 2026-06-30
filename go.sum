@@ -13,6 +13,8 @@ github.com/blang/semver/v4 v4.0.0 h1:1PFHFE6yCCTv8C1TeyNNarDzntLi7wMI5i/pzqYIsAM
 github.com/blang/semver/v4 v4.0.0/go.mod h1:IbckMUScFkM3pff0VJDNKRiT6TG/YpiHIM2yvyW5YoQ=
 github.com/cenkalti/backoff/v4 v4.3.0 h1:MyRJ/UdXutAwSAT+s3wNd7MfTIcy71VQueUuFK343L8=
 github.com/cenkalti/backoff/v4 v4.3.0/go.mod h1:Y3VNntkOUPxTVeUxJ/G5vcM//AlwfmyYozVcomhLiZE=
+github.com/cenkalti/backoff/v6 v6.0.1 h1:sjqUu1q4wY0FfFEkBmM3bVIHfr1QGq4nATg9M5VWj1U=
+github.com/cenkalti/backoff/v6 v6.0.1/go.mod h1:5WCmPelT2zwAaNETjGJVKHDnZvjQdPsGeHHwm5lIPPI=
 github.com/cespare/xxhash/v2 v2.3.0 h1:UL815xU9SqsFlibzuggzjXhog7bL6oX9BbNZnL2UFvs=
 github.com/cespare/xxhash/v2 v2.3.0/go.mod h1:VGX0DQ3Q6kWi7AoAeZDth3/j3BFtOZR5XLFGgcrjCOs=
 github.com/coreos/go-semver v0.3.1 h1:yi21YpKnrx1gt5R+la8n5WgS0kCrsPp33dmEyHReZr4=
@@ -49,6 +51,8 @@ github.com/giantswarm/apiextensions/v6 v6.6.0 h1:qtsZuxsfigUB6xRd/UygQjh3Oaf54uX
 github.com/giantswarm/apiextensions/v6 v6.6.0/go.mod h1:Wgc2Rx8YAYF2HidjabEvhsj5ADL+RteIC86ofulY+YE=
 github.com/giantswarm/backoff v1.0.1 h1:paqQhjUsibkf+wWFCHsk7VXAkcM1L3ssAe7V7i8twpM=
 github.com/giantswarm/backoff v1.0.1/go.mod h1:RGj8b06J3irMNFRoSiMnngS50K+QbpSvu77sW03bxqQ=
+github.com/giantswarm/backoff/v2 v2.0.0 h1:iACMXgZz6+P+UvmXRmRaqvrMbXnbYYwfs6o3CvTjSBA=
+github.com/giantswarm/backoff/v2 v2.0.0/go.mod h1:xG59650VQshB1uyLTcWMXp7qew6gx+wuGpAcHUOhlHA=
 github.com/giantswarm/exporterkit v1.3.0 h1:AVIJD5R277/m8eDl4agxLXg35KvW2jJWb1W6+jKNAUg=
 github.com/giantswarm/exporterkit v1.3.0/go.mod h1:kf12lufEax8PoU4l2F5HJnlU7dDtarqSTfkIyuQ4QvY=
 github.com/giantswarm/k8sclient/v8 v8.1.0 h1:29pRG4TAdKn4lw+O6hBVvHIPDjrn/ikA8SgHb2TJPGE=

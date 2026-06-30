@@ -8,7 +8,7 @@ require (
 	github.com/dlclark/regexp2/v2 v2.2.2
 	github.com/giantswarm/apiextensions-backup v0.3.1
 	github.com/giantswarm/apiextensions/v6 v6.6.0
-	github.com/giantswarm/backoff v1.0.1
+	github.com/giantswarm/backoff/v2 v2.0.0
 	github.com/giantswarm/exporterkit v1.3.0
 	github.com/giantswarm/k8sclient/v8 v8.1.0
 	github.com/giantswarm/k8smetadata v0.26.0
@@ -38,6 +38,7 @@ require (
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/blang/semver/v4 v4.0.0 // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
+	github.com/cenkalti/backoff/v6 v6.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/coreos/go-systemd/v22 v22.7.0 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
@@ -47,6 +48,7 @@ require (
 	github.com/fsnotify/fsnotify v1.10.1 // indirect
 	github.com/fxamacker/cbor/v2 v2.9.2 // indirect
 	github.com/getsentry/sentry-go v0.46.2 // indirect
+	github.com/giantswarm/backoff v1.0.1 // indirect
 	github.com/giantswarm/to v0.4.2 // indirect
 	github.com/giantswarm/versionbundle v1.2.0 // indirect
 	github.com/go-kit/kit v0.13.0 // indirect
