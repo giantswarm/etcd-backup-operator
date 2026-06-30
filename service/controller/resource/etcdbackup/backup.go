@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/giantswarm/backoff"
+	"github.com/giantswarm/backoff/v2"
 	"github.com/giantswarm/microerror"
 
 	"github.com/giantswarm/etcd-backup-operator/v5/pkg/etcd"
