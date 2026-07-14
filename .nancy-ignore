@@ -2,3 +2,5 @@ CVE-2024-51744 until=2026-07-29 # github.com/golang-jwt/jwt/v4@v4.4.1
 CVE-2025-30204 until=2026-07-29 # github.com/golang-jwt/jwt/v4@v4.4.1
 CVE-2024-0406 until=2026-07-29 # github.com/mholt/archiver/v3@v3.5.1
 CVE-2025-3445 until=2026-07-29 # github.com/mholt/archiver/v3@v3.5.1
+CVE-2026-58209 until=2026-08-09 # github.com/nats-io/nats-server/v2@v2.14.2
+CVE-2026-58210 until=2026-08-09 # github.com/nats-io/nats-server/v2@v2.14.2
