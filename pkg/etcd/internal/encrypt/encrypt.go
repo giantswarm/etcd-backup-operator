@@ -39,7 +39,7 @@ func File(srcPath string, dstPart string, passphrase string) error {
 		return microerror.Mask(err)
 	}
 
-	err = os.WriteFile(dstPart, encData, os.FileMode(0600))
+	err = os.WriteFile(dstPart, encData, os.FileMode(0600)) // #nosec G703
 	if err != nil {
 		return microerror.Mask(err)
 	}
