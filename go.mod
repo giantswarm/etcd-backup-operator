@@ -143,3 +143,5 @@ replace github.com/nats-io/nats-server/v2 v2.8.4 => github.com/nats-io/nats-serv
 replace github.com/yuin/goldmark v1.2.1 => github.com/yuin/goldmark v1.8.2
 
 replace go.opentelemetry.io/otel v1.43.0 => go.opentelemetry.io/otel v1.44.0
+
+replace github.com/rabbitmq/amqp091-go v1.2.0 => github.com/rabbitmq/amqp091-go v1.14.0
