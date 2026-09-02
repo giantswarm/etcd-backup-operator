@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.1.1] - 2026-09-02
+
 ### Changed
 
 - Go: Update dependencies.
@@ -400,7 +402,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First release.
 
-[Unreleased]: https://github.com/giantswarm/etcd-backup-operator/compare/v5.1.0...HEAD
+[Unreleased]: https://github.com/giantswarm/etcd-backup-operator/compare/v5.1.1...HEAD
+[5.1.1]: https://github.com/giantswarm/etcd-backup-operator/compare/v5.1.0...v5.1.1
 [5.1.0]: https://github.com/giantswarm/etcd-backup-operator/compare/v5.0.0...v5.1.0
 [5.0.0]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.13.1...v5.0.0
 [4.13.1]: https://github.com/giantswarm/etcd-backup-operator/compare/v4.13.0...v4.13.1
