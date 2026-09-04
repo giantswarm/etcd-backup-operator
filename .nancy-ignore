@@ -11,3 +11,4 @@ CVE-2026-58208 until=2026-09-30 # github.com/nats-io/nats-server/v2@v2.14.2
 CVE-2026-58209 until=2026-09-30 # github.com/nats-io/nats-server/v2@v2.14.2
 CVE-2026-56864 until=2026-09-30 # golang.org/x/mod@v0.38.0
 CVE-2026-56865 until=2026-09-30 # golang.org/x/mod@v0.38.0
+CVE-2026-81870 until=2026-10-04 # go.opentelemetry.io/otel/exporters/otlp/otlptrace@v1.44.0
