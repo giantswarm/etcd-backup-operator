@@ -5,7 +5,7 @@ go 1.27.1
 require (
 	github.com/aws/aws-sdk-go v1.55.8
 	github.com/coreos/go-semver v0.3.1
-	github.com/dlclark/regexp2/v2 v2.7.1
+	github.com/dlclark/regexp2/v2 v2.7.2
 	github.com/giantswarm/apiextensions-backup v0.3.1
 	github.com/giantswarm/apiextensions/v6 v6.6.0
 	github.com/giantswarm/backoff/v2 v2.0.0
