@@ -1,13 +1,48 @@
 CVE-2024-51744 until=2026-10-30 # github.com/golang-jwt/jwt/v4@v4.4.1
 CVE-2025-30204 until=2026-10-30 # github.com/golang-jwt/jwt/v4@v4.4.1
-CVE-2026-81870 until=2026-10-04 # go.opentelemetry.io/otel/exporters/otlp/otlptrace@v1.44.0
 CVE-2025-3445 until=2026-10-30 # github.com/mholt/archiver/v3@v3.5.1
 CVE-2024-0406 until=2026-10-30 # github.com/mholt/archiver/v3@v3.5.1
-CVE-2026-58211 until=2026-10-30 # github.com/nats-io/nats-server/v2@v2.14.2
-CVE-2026-58214 until=2026-10-30 # github.com/nats-io/nats-server/v2@v2.14.2
+CVE-2026-58211 until=2026-11-27 # github.com/nats-io/nats-server/v2@v2.8.4 since=2026-10-28
+CVE-2026-58214 until=2026-11-27 # github.com/nats-io/nats-server/v2@v2.8.4 since=2026-10-28
 CVE-2026-58254 until=2026-10-30 # github.com/nats-io/nats-server/v2@v2.14.2
-CVE-2026-58207 until=2026-10-30 # github.com/nats-io/nats-server/v2@v2.14.2
-CVE-2026-58208 until=2026-10-30 # github.com/nats-io/nats-server/v2@v2.14.2
-CVE-2026-58209 until=2026-10-30 # github.com/nats-io/nats-server/v2@v2.14.2
-CVE-2026-58210 until=2026-10-30 # github.com/nats-io/nats-server/v2@v2.14.2
+CVE-2026-58207 until=2026-11-27 # github.com/nats-io/nats-server/v2@v2.8.4 since=2026-10-28
+CVE-2026-58208 until=2026-11-27 # github.com/nats-io/nats-server/v2@v2.8.4 since=2026-10-28
+CVE-2026-58209 until=2026-11-27 # github.com/nats-io/nats-server/v2@v2.8.4 since=2026-10-28
+CVE-2026-58210 until=2026-11-27 # github.com/nats-io/nats-server/v2@v2.8.4 since=2026-10-28
 CVE-2026-84445 until=2026-10-30 # google.golang.org/grpc@v1.84.0
+CVE-2026-116585 until=2026-11-27 # github.com/go-jose/go-jose/v4@v4.1.4 since=2026-10-28
+CVE-2026-116586 until=2026-11-27 # github.com/go-jose/go-jose/v4@v4.1.4 since=2026-10-28
+CVE-2026-115804 until=2026-11-27 # github.com/hashicorp/consul/api@v1.14.0 since=2026-10-28
+CVE-2022-42709 until=2026-11-27 # github.com/nats-io/nats-server/v2@v2.8.4 since=2026-10-28
+CVE-2026-27571 until=2026-11-27 # github.com/nats-io/nats-server/v2@v2.8.4 since=2026-10-28
+CVE-2026-33217 until=2026-11-27 # github.com/nats-io/nats-server/v2@v2.8.4 since=2026-10-28
+CVE-2026-33247 until=2026-11-27 # github.com/nats-io/nats-server/v2@v2.8.4 since=2026-10-28
+CVE-2026-58250 until=2026-11-27 # github.com/nats-io/nats-server/v2@v2.8.4 since=2026-10-28
+CVE-2026-58252 until=2026-11-27 # github.com/nats-io/nats-server/v2@v2.8.4 since=2026-10-28
+CVE-2022-42708 until=2026-11-27 # github.com/nats-io/nats-server/v2@v2.8.4 since=2026-10-28
+CVE-2023-47090 until=2026-11-27 # github.com/nats-io/nats-server/v2@v2.8.4 since=2026-10-28
+CVE-2025-30215 until=2026-11-27 # github.com/nats-io/nats-server/v2@v2.8.4 since=2026-10-28
+CVE-2026-33216 until=2026-11-27 # github.com/nats-io/nats-server/v2@v2.8.4 since=2026-10-28
+CVE-2026-33218 until=2026-11-27 # github.com/nats-io/nats-server/v2@v2.8.4 since=2026-10-28
+CVE-2026-33219 until=2026-11-27 # github.com/nats-io/nats-server/v2@v2.8.4 since=2026-10-28
+CVE-2026-33246 until=2026-11-27 # github.com/nats-io/nats-server/v2@v2.8.4 since=2026-10-28
+CVE-2026-33215 until=2026-11-27 # github.com/nats-io/nats-server/v2@v2.8.4 since=2026-10-28
+CVE-2026-33222 until=2026-11-27 # github.com/nats-io/nats-server/v2@v2.8.4 since=2026-10-28
+CVE-2026-33223 until=2026-11-27 # github.com/nats-io/nats-server/v2@v2.8.4 since=2026-10-28
+CVE-2026-33248 until=2026-11-27 # github.com/nats-io/nats-server/v2@v2.8.4 since=2026-10-28
+CVE-2026-58213 until=2026-11-27 # github.com/nats-io/nats-server/v2@v2.8.4 since=2026-10-28
+CVE-2026-58251 until=2026-11-27 # github.com/nats-io/nats-server/v2@v2.8.4 since=2026-10-28
+CVE-2026-58253 until=2026-11-27 # github.com/nats-io/nats-server/v2@v2.8.4 since=2026-10-28
+CVE-2026-27889 until=2026-11-27 # github.com/nats-io/nats-server/v2@v2.8.4 since=2026-10-28
+CVE-2026-29785 until=2026-11-27 # github.com/nats-io/nats-server/v2@v2.8.4 since=2026-10-28
+CVE-2026-77412 until=2026-11-27 # github.com/rabbitmq/amqp091-go@v1.2.0 since=2026-10-28
+CVE-2026-77404 until=2026-11-27 # github.com/rabbitmq/amqp091-go@v1.2.0 since=2026-10-28
+CVE-2026-77405 until=2026-11-27 # github.com/rabbitmq/amqp091-go@v1.2.0 since=2026-10-28
+CVE-2026-77406 until=2026-11-27 # github.com/rabbitmq/amqp091-go@v1.2.0 since=2026-10-28
+CVE-2026-77408 until=2026-11-27 # github.com/rabbitmq/amqp091-go@v1.2.0 since=2026-10-28
+CVE-2026-77410 until=2026-11-27 # github.com/rabbitmq/amqp091-go@v1.2.0 since=2026-10-28
+CVE-2026-77411 until=2026-11-27 # github.com/rabbitmq/amqp091-go@v1.2.0 since=2026-10-28
+CVE-2026-79921 until=2026-11-27 # github.com/rabbitmq/amqp091-go@v1.2.0 since=2026-10-28
+CVE-2026-77403 until=2026-11-27 # github.com/rabbitmq/amqp091-go@v1.2.0 since=2026-10-28
+CVE-2026-77407 until=2026-11-27 # github.com/rabbitmq/amqp091-go@v1.2.0 since=2026-10-28
+CVE-2026-77409 until=2026-11-27 # github.com/rabbitmq/amqp091-go@v1.2.0 since=2026-10-28
