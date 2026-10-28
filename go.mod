@@ -25,7 +25,7 @@ require (
 	github.com/spf13/viper v1.21.0
 	go.etcd.io/etcd/client/v3 v3.7.3
 	golang.org/x/crypto/openpgp v0.1.0-deprecated
-	google.golang.org/grpc v1.84.0
+	google.golang.org/grpc v1.85.0
 	k8s.io/api v0.37.1
 	k8s.io/apimachinery v0.37.1
 	k8s.io/client-go v0.37.1
