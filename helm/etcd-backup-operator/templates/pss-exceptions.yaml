@@ -1,10 +1,13 @@
+{{- if and .Values.kyvernoPolicyExceptions.enabled .Values.kyvernoPolicyExceptions.legacy.enabled }}
 apiVersion: kyverno.io/v2
 kind: PolicyException
 metadata:
   annotations:
     "helm.sh/hook": "pre-install,pre-upgrade"
+  labels:
+    policy.giantswarm.io/migrated-to-cel: "true"
   name: {{ include "resource.default.name" . }}-exceptions
-  namespace: {{ include "resource.default.namespace" . }}
+  namespace: kube-system
 spec:
   exceptions:
   - policyName: disallow-host-namespaces
@@ -40,8 +43,10 @@ kind: PolicyException
 metadata:
   annotations:
     "helm.sh/hook": "pre-install,pre-upgrade"
+  labels:
+    policy.giantswarm.io/migrated-to-cel: "true"
   name: {{ include "resource.default.name" . }}-scheduler-exceptions
-  namespace: {{ include "resource.default.namespace" . }}
+  namespace: kube-system
 spec:
   exceptions:
   - policyName: disallow-privilege-escalation
@@ -78,3 +83,4 @@ spec:
         - {{ include "resource.default.namespace" . }}
         names:
         - {{ include "resource.default.name" . }}-scheduler*
+{{- end }}

@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add a `policies.kyverno.io/v1` PolicyException next to each `kyverno.io/v2` and `kyverno.io/v2beta1` one, so the exceptions also apply to the CEL (ValidatingPolicy) versions of the policies. The CEL ones are always rendered; set `kyvernoPolicyExceptions.legacy.enabled: false` to stop rendering the legacy ones, or `kyvernoPolicyExceptions.enabled: false` to render none.
+- Label the legacy PolicyExceptions with `policy.giantswarm.io/migrated-to-cel: "true"`, to mark them as migrated to CEL.
+
+### Changed
+
+- Move the PolicyExceptions from the release namespace to `kube-system`, as the `giantswarm` namespace is going away.
+
 ### Fixed
 
 - The `helm.sh/chart` label is valid for long chart versions: the 63-character cut trims the whole trailing run of `-`, `.` and `_`.
