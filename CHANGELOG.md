@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.1.3] - 2026-11-26
+
 ### Added
 
 - Add a `policies.kyverno.io/v1` PolicyException next to each `kyverno.io/v2` and `kyverno.io/v2beta1` one, so the exceptions also apply to the CEL (ValidatingPolicy) versions of the policies. The CEL ones are always rendered; set `kyvernoPolicyExceptions.legacy.enabled: false` to stop rendering the legacy ones, or `kyvernoPolicyExceptions.enabled: false` to render none.
@@ -421,7 +423,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First release.
 
-[Unreleased]: https://github.com/giantswarm/etcd-backup-operator/compare/v5.1.2...HEAD
+[Unreleased]: https://github.com/giantswarm/etcd-backup-operator/compare/v5.1.3...HEAD
+[5.1.3]: https://github.com/giantswarm/etcd-backup-operator/compare/v5.1.2...v5.1.3
 [5.1.2]: https://github.com/giantswarm/etcd-backup-operator/compare/v5.1.1...v5.1.2
 [5.1.1]: https://github.com/giantswarm/etcd-backup-operator/compare/v5.1.0...v5.1.1
 [5.1.0]: https://github.com/giantswarm/etcd-backup-operator/compare/v5.0.0...v5.1.0
