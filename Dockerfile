@@ -11,6 +11,6 @@ ARG KUBECTL_VERSION=v1.29.6
 ADD --chmod=755 https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/${TARGETOS}/${TARGETARCH}/kubectl /usr/local/bin/kubectl
 
 COPY create-cr.sh /usr/local/bin/create-cr.sh
-COPY etcd-backup-operator /etcd-backup-operator
+COPY etcd-backup-operator-${TARGETOS}-${TARGETARCH} /etcd-backup-operator
 
 ENTRYPOINT [ "/etcd-backup-operator" ]
