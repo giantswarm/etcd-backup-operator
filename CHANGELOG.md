@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Copy the binary built for the image's architecture in the `Dockerfile`, so the `linux/arm64` image no longer ships the amd64 binary.
+
 ## [5.1.3] - 2026-11-26
 
 ### Added
